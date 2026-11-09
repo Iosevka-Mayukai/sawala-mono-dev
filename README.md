@@ -1,133 +1,238 @@
-<p align="center"> <img src="images/grand-title.light.svg#gh-light-mode-only" title="Iosevka Grand Title"><img src="images/grand-title.dark.svg#gh-dark-mode-only" title="Iosevka Grand Title"/> </p>
+# Sawala Mono
+<!-- markdownlint-disable  -->
+[![Build Font](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/build.yml/badge.svg)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/build.yml)
+[![License: SIL OFL 1.1](https://img.shields.io/badge/License-OFL%201.1-blue.svg)](https://scripts.sil.org/OFL)
+[![GitHub release](https://img.shields.io/github/v/release/Iosevka-Mayukai/sawala-mono-dev?include_prereleases)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases)
 
-------------
+A clean, ergonomic, and highly legible coding font custom-built on top of [Iosevka](https://github.com/be5invis/Iosevka), crafted specifically for focused programming sessions, code reviews, and modern terminal environments.
 
-<p align="center"><a href="https://github.com/be5invis/Iosevka/releases#gh-light-mode-only"><img src="images/button-release.light.svg#gh-light-mode-only" title="Release"></a><a href="https://github.com/be5invis/Iosevka/releases#gh-dark-mode-only"><img src="images/button-release.dark.svg#gh-dark-mode-only" title="Release"></a> <a href="https://be5invis.github.io/Iosevka/customizer#gh-light-mode-only"><img src="images/button-customize.light.svg#gh-light-mode-only" title="Customizer"></a><a href="https://be5invis.github.io/Iosevka/customizer#gh-dark-mode-only"><img src="images/button-customize.dark.svg#gh-dark-mode-only" title="Customizer"></a> <a href="https://be5invis.github.io/Iosevka/specimen#gh-light-mode-only"><img src="images/button-specimen.light.svg#gh-light-mode-only" title="Specimen"></a><a href="https://be5invis.github.io/Iosevka/specimen#gh-dark-mode-only"><img src="images/button-specimen.dark.svg#gh-dark-mode-only" title="Specimen"></a></p>
+---
 
-**Iosevka** \[ˌjɔˈseβ.kʰa\] is an *open-source*, *sans-serif* + *slab-serif*, *monospace* + *quasi‑proportional* typeface family, designed for *writing code*, using in *terminals*, and preparing *technical documents*.
+## Table of Contents
+
+- [Sawala Mono](#sawala-mono)
+  - [Table of Contents](#table-of-contents)
+  - [Philosophy \& Story Behind the Name](#philosophy--story-behind-the-name)
+  - [Font Variants](#font-variants)
+  - [Installation](#installation)
+    - [Pre-built Binaries (GitHub Releases)](#pre-built-binaries-github-releases)
+    - [Platform Installation Steps](#platform-installation-steps)
+  - [Configuration](#configuration)
+    - [Visual Studio Code / VSCodium](#visual-studio-code--vscodium)
+    - [JetBrains IDEs (IntelliJ IDEA, WebStorm, PyCharm)](#jetbrains-ides-intellij-idea-webstorm-pycharm)
+    - [Neovim / Neovide](#neovim--neovide)
+    - [Alacritty](#alacritty)
+    - [Kitty](#kitty)
+    - [WezTerm](#wezterm)
+    - [Windows Terminal](#windows-terminal)
+  - [Building from Source](#building-from-source)
+    - [Prerequisites](#prerequisites)
+    - [Method A: GitHub Actions (Automated CI)](#method-a-github-actions-automated-ci)
+    - [Method B: Containerized Docker Build (Recommended)](#method-b-containerized-docker-build-recommended)
+    - [Method C: Native Local Build](#method-c-native-local-build)
+  - [Architecture \& Customization](#architecture--customization)
+  - [License \& Acknowledgments](#license--acknowledgments)
+
+---
+
+## Philosophy & Story Behind the Name
+
+**Sawala Mono** derives its identity from the intersection of regional cultural heritage and modern software engineering practices:
+
+- **Developer-Centric Philosophy:** In the **Sundanese** language, ***sawala*** means *discussion*, *deliberation*, or *intellectual exchange*. In modern software engineering, code is written not merely for compilers, but primarily for humans to read, review, and reason about—through pull requests, peer reviews, pair programming, and architectural RFCs. **Sawala Mono** embodies this collaborative spirit by delivering uncompromising legibility so ideas and logic flow effortlessly.
+- **Global Phonetic Harmony:** While rooted in traditional Sundanese vocabulary, its open-syllable phonetics (`Sa-wa-la`) make it smooth and natural to pronounce worldwide alongside timeless monospace staples like *Iosevka* and *Cascadia*.
+- **Clean & Distinct Namespace:** Designed as a conflict-free, first-class typeface across operating systems, package managers, and text editors.
+
+---
+
+## Font Variants
+
+| Variant            | Description                                                                       | Recommended Environments                              |
+| :----------------- | :-------------------------------------------------------------------------------- | :---------------------------------------------------- |
+| **Sawala Mono**    | Standard variant with rich programming ligatures (`=>`, `!==`, `->`, `::`, etc.). | Modern IDEs (VS Code, JetBrains IntelliJ / WebStorm). |
+| **Sawala Mono NL** | *No Ligatures* variant for strict symbolic separation.                            | Developers preferring literal operator glyphs.        |
+| **Sawala Mono NF** | *Nerd Font* patched variant featuring full Powerline and developer icons.         | Terminal emulators, Neovim, Tmux, Starship prompt.    |
+
+---
 
 ## Installation
 
-### Installing from GitHub Releases
+### Pre-built Binaries (GitHub Releases)
 
-1. Download your font package from [releases](https://github.com/be5invis/Iosevka/releases).
-  * For Linux users you could use the following command to download all the TTC packages in the latest release:
+1. Download the latest release `.zip` archive from the [GitHub Releases](https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases) page.
+2. Extract the downloaded archive.
+3. Follow the installation steps below for your operating system.
+
+### Platform Installation Steps
+
+- **Windows**:
+  - Select all `.ttf` files $\to$ Right-click $\to$ Select **"Install for all users"** (recommended on Windows 10/11 to avoid per-user permission issues in Java runtimes and JetBrains IDEs).
+- **macOS**:
+  - Open **Font Book** (`Cmd + Space` $\to$ `Font Book`).
+  - Drag and drop the extracted `.ttf` files into the Font Book window.
+- **Linux**:
+  - Copy the `.ttf` files to your user fonts directory and refresh the font cache:
     ```bash
-    curl -s 'https://api.github.com/repos/be5invis/Iosevka/releases/latest' | jq -r ".assets[] | .browser_download_url" | grep PkgTTC-Iosevka | xargs -n 1 curl -L -O --fail --silent --show-error
+    mkdir -p ~/.local/share/fonts/SawalaMono
+    cp *.ttf ~/.local/share/fonts/SawalaMono/
+    fc-cache -f -v
     ```
-2. Quit all your editors / programs.
-3. Unarchive the font package and you will see the font files.
-4. Take actions depending on your OS:
-    * **Windows**: Select the font files and drag into font [settings](ms-settings:fonts) / font control panel page.  
-      * On Windows 10 1809 or newer, the default font installation is per-user, and it may cause compatibility issues for some applications, mostly written in Java. To cope with this, right click and select “Install for all users” instead. [Ref.](https://youtrack.jetbrains.com/issue/JRE-1166?p=IDEA-200145)
-    * **macOS**: [Follow instructions here](http://support.apple.com/kb/HT2509).
-    * **Linux** : Copy the font files to your fonts directory then run `sudo fc-cache`.
 
-### Installing via Package Managers
+---
 
-*Disclaimer: This repository does not maintain any package manager distribution. The packages listed below may not always be up-to-date.*
+## Configuration
 
-  * **macOS**
-    * Standard distribution in Homebrew:
-      ```bash
-      brew install --cask font-iosevka
-      ```
-    * Search for other variants using `brew search font-iosevka` and install what you want.
-    * Customizable install using Homebrew: see [robertgzr/homebrew-tap](https://github.com/robertgzr/homebrew-tap).
-  * **Linux**
-    * Arch Linux: Install one of the [ttc-iosevka packages](https://archlinux.org/packages/?q=ttc-iosevka).
-    * Ubuntu Linux: Install one of the [fonts-iosevka packages](https://aiei.ch/deb/fonts-iosevka/).
-    * Void Linux: Install the font with `xbps-install font-iosevka`.
-    * Fedora: Install the font(s) from [the COPR here](https://copr.fedorainfracloud.org/coprs/peterwu/iosevka/). Run `dnf search iosevka` to discover available fonts and `dnf install` to install the chosen one(s).
-    * openSUSE Tumbleweed: [iosevka-fonts](https://software.opensuse.org/package/iosevka-fonts) package produces many variants, run `zypper se 'iosevka*fonts'` to discover available fonts, and `zypper in` to install the chosen one(s).
-  * **FreeBSD**: The font can be installed with `pkg install iosevka`.
-  * **OpenBSD**: Run `pkg_info -Q iosevka` to see which Iosevka packages are available. Use `pkg_add` to install the chosen package(s).
+### Visual Studio Code / VSCodium
 
-## Features
+Add the following configuration to your `settings.json`:
 
-In the official package, Iosevka provides 6 monospace subfamilies (sans-serif and slab-serif, each in the 3 spacings Default, Term and Fixed) and 2 quasi-proportional subfamilies (Aile (sans-serif) and Etoile (slab-serif)). In all the monospace subfamilies, 9 weights (Thin to Heavy), 2 widths (Normal and Extended), and 3 slopes (Upright, Italic and Oblique) are included. In the quasi-proportional subfamilies, the quantity of widths is reduced to 1.
+```json
+{
+  "editor.fontFamily": "'Sawala Mono', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.5
+}
+```
 
-![Weights sample](images/weights.light.svg#gh-light-mode-only)![Weights sample](images/weights.dark.svg#gh-dark-mode-only)
+> [!TIP]
+> If you are using the **Sawala Mono NL** (*No Ligatures*) variant, set `"editor.fontLigatures": false`.
 
-All versions include the same ranges of characters: Latin letters, Greek letters (including Polytonic), some Cyrillic letters, IPA symbols and common punctuations and some symbols. You can check out the full list [here](http://be5invis.github.io/Iosevka/specimen).
+### JetBrains IDEs (IntelliJ IDEA, WebStorm, PyCharm)
 
-![Languages Sample](images/languages.light.svg#gh-light-mode-only)![Languages Sample](images/languages.dark.svg#gh-dark-mode-only)
+1. Open **Settings / Preferences** (`Ctrl + Alt + S` on Windows/Linux, `Cmd + ,` on macOS).
+2. Navigate to **Editor** $\to$ **Font**.
+3. Set **Font** to `Sawala Mono`.
+4. Ensure **Enable ligatures** is checked (or unchecked if using `Sawala Mono NL`).
+5. Recommended font size: `13.5` or `14` with line spacing `1.2`–`1.3`.
 
-<!-- BEGIN Section-Language-List -->
-<!-- THIS SECTION IS AUTOMATICALLY GENERATED. DO NOT EDIT. -->
+### Neovim / Neovide
 
-248 Supported Languages: 
+For Neovim GUI clients (such as Neovide), configure your `init.lua`:
 
-Abkhazian, Afar, Afrikaans, Aghem, Akan, Akoose, Albanian, Anii, Aragonese, Armenian, Asturian, Asu, Atsam, Azerbaijani, Bafia, Baluchi (bal_latn), Bambara, Basaa, Bashkir, Basque, Belarusian, Bemba, Bena, Betawi, Bosnian, Breton, Bulgarian, Buriat, Caddo, Catalan, Cebuano, Central Atlas Tamazight, Chechen, Chickasaw, Chiga, Chinese (zh_latn), Choctaw, Church Slavic, Chuvash, Colognian, Cornish, Corsican, Croatian, Czech, Danish, Duala, Dutch, Embu, English, Erzya, Esperanto, Estonian, Ewe, Ewondo, Faroese, Filipino, Finnish, French, Friulian, Fula, Ga, Galician, Ganda, German, Greek, Guarani, Gusii, Haitian Creole, Hausa, Hawaiian, Hindi (Latin), Hungarian, Icelandic, Ido, Igbo, Inari Sami, Indonesian, Interlingua, Interlingue, Inuktitut (iu_latn), Irish, Italian, Javanese, Jju, Jola-Fonyi, Kabuverdianu, Kabyle, Kaingang, Kako, Kalaallisut, Kalenjin, Kamba, Kara-Kalpak, Kazakh, Kenyang, Kikuyu, Kinyarwanda, Konkani (kok_latn), Koyra Chiini, Koyraboro Senni, Kpelle, Kurdish, Kuvi, Kwasio, Kyrgyz, Kʼicheʼ, Lakota, Langi, Latgalian, Latin, Latvian, Laz, Ligurian, Lingala, Lithuanian, Lojban, Lombard, Low German, Lower Sorbian, Luba-Katanga, Lule Sami, Luo, Luxembourgish, Luyia, Macedonian, Machame, Makhuwa, Makhuwa-Meetto, Makonde, Malagasy, Malay, Maltese, Manx, Mapuche, Masai, Meru, Metaʼ, Mi'kmaw, Mohawk, Moksha, Mongolian, Morisyen, Mundang, Muscogee, Māori, Nama, Navajo, Ngiemboon, Ngomba, Nheengatu, Nigerian Pidgin, North Ndebele, Northern Frisian, Northern Sami, Northern Sotho, Norwegian, Norwegian Bokmål, Norwegian Nynorsk, Nuer, Nyanja, Nyankole, Obolo, Occitan, Okanagan, Oromo, Ossetic, Pali, Papiamento, Piedmontese, Pijin, Polish, Portuguese, Prussian, Quechua, Qʼeqchiʼ, Riffian, Romanian, Romansh, Rombo, Rundi, Russian, Rwa, Saho, Samburu, Samogitian, Sango, Sangu, Sardinian, Scottish Gaelic, Sena, Serbian, Shambala, Shona, Sicilian, Sidamo, Silesian, Skolt Sami, Slovak, Slovenian, Soga, Somali, South Ndebele, Southern Sami, Southern Sotho, Spanish, Sundanese, Swahili, Swati, Swedish, Swiss German, Tachelhit (shi_latn), Taita, Tajik, Taroko, Tasawaq, Tatar, Teso, Tok Pisin, Toki Pona, Tongan, Tsonga, Tswana, Turkish, Turkmen, Tuvinian, Tyap, Ukrainian, Upper Sorbian, Uzbek, Vai (vai_latn), Venda, Venetian, Vietnamese, Volapük, Vunjo, Walloon, Walser, Warlpiri, Welsh, Western Frisian, Wolof, Xhosa, Yakut, Yangben, Yoruba, Zarma, Zhuang, Zulu
+```lua
+-- init.lua (Neovim GUI / Neovide)
+vim.o.guifont = "Sawala Mono:h14"
+```
 
-<!-- END Section-Language-List -->
+### Alacritty
 
-### Stylistic Sets
+Add to your `alacritty.toml`:
 
-Monospace Iosevka contains various stylistic sets to change the shape of certain characters. Enabling corresponded OpenType feature to enable.
+```toml
+[font.normal]
+family = "Sawala Mono"
+style = "Regular"
 
-<table><tr><td><h2><a href="doc/stylistic-sets.md">View list of stylistic sets of Iosevka.</a></h2></td></tr></table>
+[font.bold]
+family = "Sawala Mono"
+style = "Bold"
 
+[font.italic]
+family = "Sawala Mono"
+style = "Italic"
 
-### Character Variants
+[font]
+size = 14.0
+```
 
-Alongside stylistic sets, Monospace Iosevka can also be configured to cherry-pick variants for each character using OpenType. The variants are shown below. To enable, assign the feature tag to the variant index. For example, setting `cv26` to `6` will enable single-storey `a`.
+### Kitty
 
-**Caution :**  Certain software may limit the quantity of OpenType features and drop some of them if the feature list is too long. Please validate your feature configuration to ensure that it worked in your software.
+Add to your `kitty.conf`:
 
-<table><tr><td><h2><a href="doc/character-variants.md">View list of character variants of Iosevka.</a></h2></td></tr></table>
+```conf
+font_family      Sawala Mono
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+font_size        14.0
+```
 
-### Ligations
+### WezTerm
 
-Monospace subfamilies support ligations. Iosevka’s default ligation set is assigned to `calt` feature, though not all of them are enabled by default.
+Add to your `wezterm.lua`:
 
-<!-- BEGIN Section-OT-Ligation-Tags-1 -->
-<!-- THIS SECTION IS AUTOMATICALLY GENERATED. DO NOT EDIT. -->
+```lua
+local wezterm = require 'wezterm'
+local config = wezterm.config_builder()
 
-<table>
-<tr>
-<td><code>calt off</td>
-<td>Ligation Off</td>
-</tr>
-<tr>
-<td colspan="2"><img src="images/ligset-calt-0.light.svg#gh-light-mode-only"/><img src="images/ligset-calt-0.dark.svg#gh-dark-mode-only"/></td>
-</tr>
-<tr>
-<td><code>calt</code></td>
-<td>Default setting in text editors</td>
-</tr>
-<tr>
-<td colspan="2"><img src="images/ligset-calt-1.light.svg#gh-light-mode-only"/><img src="images/ligset-calt-1.dark.svg#gh-dark-mode-only"/></td>
-</tr>
-<tr>
-<td><code>dlig</code></td>
-<td>Discretionary ligatures</td>
-</tr>
-<tr>
-<td colspan="2"><img src="images/ligset-dlig-1.light.svg#gh-light-mode-only"/><img src="images/ligset-dlig-1.dark.svg#gh-dark-mode-only"/></td>
-</tr>
-</table>
+config.font = wezterm.font('Sawala Mono')
+config.font_size = 14.0
 
-<!-- END Section-OT-Ligation-Tags-1 -->
+return config
+```
 
-Iosevka supports Language-Specific Ligations, which is the ligation set enabled only under certain languages. These ligation sets are assigned to custom feature tags. To use them, you need to turn **off** `calt` and enable the corresponded feature. The feature list is:
+### Windows Terminal
 
-<table><tr><td><h2><a href="doc/language-specific-ligation-sets.md">View list of language-specific ligations.</a></h2></td></tr></table>
+Add to your `settings.json` under `profiles.defaults`:
 
-Please note that, due to the complex interactions when forming ligations, cherry-picking ligation groups will require a custom Iosevka build. The instructions could be seen below.
+```json
+"profiles": {
+  "defaults": {
+    "font": {
+      "face": "Sawala Mono",
+      "size": 12
+    }
+  }
+}
+```
+
+---
 
 ## Building from Source
 
-<table><tr><td><h2><a href="doc/custom-build.md">Read instructions.</a></h2></td></tr></table>
+Sawala Mono compiles using containerized Docker runners and the official Iosevka parametric build engine.
 
-## For Chinese, Japanese and Korean (CJK) users...
+### Prerequisites
 
-→ [Sarasa Gothic](https://github.com/be5invis/Sarasa-Gothic).
+- [Docker Desktop](https://www.docker.com/) (recommended for isolated, reproducible builds), OR
+- [Node.js](https://nodejs.org/) (`>= 16.0.0`), `npm`, and [`ttfautohint`](https://www.freetype.org/ttfautohint/) installed on the host system.
 
-## Mirrors
+### Method A: GitHub Actions (Automated CI)
 
-- TUNA (CN): https://mirrors.tuna.tsinghua.edu.cn/github-release/be5invis/Iosevka
-- NJU (CN): https://mirrors.nju.edu.cn/github-release/be5invis/Iosevka
+1. Edit your typographical parameters in [`private-build-plans.toml`](private-build-plans.toml) and push to the repository.
+2. In GitHub, navigate to the **Actions** tab.
+3. In the left sidebar, select **Build Sawala Mono Font**.
+4. Click **Run workflow**, choose your branch (`dev` or `main`), configure parameters (variant and format), and trigger the build.
+5. Once completed, download the compiled archive (`Sawala-Mono-Packages`) from the workflow **Artifacts** or the auto-generated **GitHub Releases**.
+
+### Method B: Containerized Docker Build (Recommended)
+
+Run the build locally inside a self-contained Docker container:
+
+```bash
+# 1. Build the local Iosevka compiler container image
+docker build -t iosevka-builder docker
+
+# 2. Compile TTF packages using local private-build-plans.toml
+docker run --rm -v "${PWD}:/work" --entrypoint bash iosevka-builder:latest -c "npm ci && npm run build -- ttf::SawalaMono"
+```
+
+Compiled binaries will be generated inside `./dist/SawalaMono/TTF/`.
+
+### Method C: Native Local Build
+
+If your host environment has Node.js and `ttfautohint` installed:
+
+```bash
+# Install dependencies
+npm ci
+
+# Compile TrueType font package
+npm run build -- ttf::SawalaMono
+```
+
 ---
 
-![Family Matrix](images/matrix.light.svg#gh-light-mode-only)![Family Matrix](images/matrix.dark.svg#gh-dark-mode-only)
+## Architecture & Customization
+
+- **Plan Configuration:** Typographical features, glyph variant selections, and weight/slope/width matrices are declaratively configured in [`private-build-plans.toml`](private-build-plans.toml).
+- **Architecture Documentation:** For an in-depth breakdown of the font compiler engine, Clean Architecture seams, and Verda task DAG, read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+- **Upstream References:** Explore character variant identifiers in [`doc/character-variants.md`](doc/character-variants.md) and custom build options in [`doc/custom-build.md`](doc/custom-build.md).
+
+---
+
+## License & Acknowledgments
+
+- **License:** Sawala Mono is released under the [SIL Open Font License 1.1](LICENSE.md). You may freely use, modify, and redistribute this font family for personal and commercial projects.
+- **Engine Heritage:** Built upon the parametric font generation engine of [Iosevka](https://github.com/be5invis/Iosevka), created with distinction by [Belleve Invis](https://github.com/be5invis).

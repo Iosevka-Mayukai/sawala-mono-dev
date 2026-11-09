@@ -44,7 +44,7 @@ two = "curly-neck-serifless"
 u = "toothless-rounded-serifless"
 v = "straight-serifless"
 y = "straight-turn-serifless"
-zero = "oval-tall-reverse-slashed"
+zero = "tall-reverse-slashed"
 
 [buildPlans.SawalaMono.variants.italic]
 a = "single-storey-earless-corner-tailed"

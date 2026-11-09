@@ -3,6 +3,8 @@
 
 > **Project Description:** Iosevka Sawala Mono is a customized, developer-centric monospace coding typeface built upon the modular Iosevka font engine. Derived from the Sundanese word *sawala* (meaning "discussion", "deliberation", or "intellectual exchange"), it embodies the philosophy that code is written not merely for machines, but to be read, reviewed, and reasoned about by human developers. The project's primary goal is to craft and maintain an ergonomic, highly legible font family with clean aesthetics, tailored ligatures, and distinct distributions—including standard `Sawala Mono`, `Sawala Mono NL` (No Ligatures), and `Sawala Mono NF` (Nerd Font).
 
+> **Architecture Documentation:** The canonical repository architecture map, Clean Architecture seams, and speed-tiered verification commands are formally documented in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
 ---
 
 ## Communication
@@ -757,7 +759,7 @@ To prevent infinite loops during the Draft ➔ Audit ➔ Update cycle, all speci
 
 - **Active Memory Path:** `.agents/instructions/memory.instructions.md`
 - **Managed by:** `/to-memory` skill
-- **Last Recorded:** 2026-09-09
+- **Last Recorded:** 2026-11-09
 
 ---
 
