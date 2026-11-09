@@ -2,7 +2,10 @@
 <!-- markdownlint-disable  -->
 [![Build Font](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/build.yml/badge.svg)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/build.yml)
 [![License: SIL OFL 1.1](https://img.shields.io/badge/License-OFL%201.1-blue.svg)](https://scripts.sil.org/OFL)
+[![Status: In Development](https://img.shields.io/badge/Status-Private%20Development-orange.svg)](https://github.com/Iosevka-Mayukai/sawala-mono-dev)
+<!-- Live public release badge (enable once repository visibility is changed to public):
 [![GitHub release](https://img.shields.io/github/v/release/Iosevka-Mayukai/sawala-mono-dev?include_prereleases)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases)
+-->
 
 ![Sawala Mono Banner](sawala-mono-hero-img.jpg)
 
