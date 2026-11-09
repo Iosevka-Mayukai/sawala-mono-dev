@@ -20,18 +20,13 @@ on:
       create_release:
         description: 'Publish as a GitHub Release?'
         required: false
-        default: false
+        default: true
         type: boolean
-  push:
-    branches:
-      - main
-      - dev
-    tags:
-      - 'v*'
-    paths:
-      - 'private-build-plans.toml'
-      - '.github/workflows/build.yml'
-      - 'docker/**'
+      version:
+        description: 'Release version tag (e.g. v1.0.0, or leave empty for auto date timestamp)'
+        required: false
+        default: ''
+        type: string
 
 permissions:
   contents: write
@@ -100,12 +95,17 @@ jobs:
       - name: Package Archives (ZIP)
         run: |
           mkdir -p archives
+          DATE_TAG=$(date +'%Y%m%d')
+          CUSTOM_VER="${{ github.event.inputs.version }}"
+          SUFFIX="${CUSTOM_VER:-$DATE_TAG}"
+
           cd dist
           for font_dir in */; do
             font_name="${font_dir%/}"
             if [ -d "$font_name" ]; then
-              echo "Packaging $font_name into ZIP..."
-              zip -r "../archives/${font_name}.zip" "$font_name"
+              ARCHIVE_NAME="${font_name}-${SUFFIX}.zip"
+              echo "Packaging $font_name into ../archives/${ARCHIVE_NAME}..."
+              zip -r "../archives/${ARCHIVE_NAME}" "$font_name"
             fi
           done
           cd ..
@@ -121,8 +121,12 @@ jobs:
       - name: Create GitHub Release
         if: ${{ github.event.inputs.create_release == 'true' || startsWith(github.ref, 'refs/tags/v') }}
         run: |
-          RELEASE_TAG="${GITHUB_REF_NAME}"
-          if [ "${RELEASE_TAG}" = "main" ] || [ -z "${RELEASE_TAG}" ]; then
+          CUSTOM_VER="${{ github.event.inputs.version }}"
+          if [ -n "$CUSTOM_VER" ]; then
+            RELEASE_TAG="$CUSTOM_VER"
+          elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            RELEASE_TAG="${GITHUB_REF_NAME}"
+          else
             RELEASE_TAG="v$(date +'%Y.%m.%d-%H%M%S')"
           fi
 

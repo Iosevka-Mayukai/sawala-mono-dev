@@ -2,52 +2,57 @@
 # Reference: https://github.com/be5invis/Iosevka/blob/master/doc/custom-build.md
 
 [buildPlans.SawalaMono]
-family = "Sawala Mono"
-spacing = "normal"
-serifs = "sans"
-noCvSs = true
 exportGlyphNames = false
-noLigation = true
+family = "Sawala Mono"
+noCvSs = true
+serifs = "sans"
+spacing = "normal"
 
 [buildPlans.SawalaMono.variants.design]
-one = "no-base"
-eight = "two-circles"
-nine = "straight-bar"
-zero = "reverse-slashed"
+a = "double-storey-toothless-corner"
+ampersand = "upper-open"
+at = "threefold"
+b = "flat-bottom-serifless"
+capital-a = "straight-serifless"
 capital-b = "more-asymmetric-serifless"
 capital-g = "flat-bottom-serifless-hooked"
+capital-m = "hanging-serifless"
 capital-u = "toothless-rounded-serifless"
-a = "double-storey-flat-bottom-serifless"
-b = "flat-bottom-serifless"
+capital-w = "straight-serifless"
 d = "flat-bottom-serifless"
+dollar = "through"
+eight = "two-circles"
 f = "flat-hook-serifless"
+five = "oblique-arched-serifless"
+four = "semi-open-serifless"
 g = "double-storey"
 i = "serifed"
 k = "straight-serifless"
 l = "serifed"
 m = "earless-corner-double-arch-serifless"
 n = "earless-corner-straight-serifless"
+nine = "straight-bar"
+one = "no-base"
 p = "flat-top-serifless"
+percent = "rings-continuous-slash"
 q = "flat-top-straight-serifless"
 r = "serifed"
+seven = "bend-serifless"
 t = "flat-hook"
+three = "flat-top-serifless"
+two = "curly-neck-serifless"
 u = "toothless-rounded-serifless"
+v = "straight-serifless"
 y = "straight-turn-serifless"
-ampersand = "upper-open"
-at = "threefold"
-dollar = "through"
-percent = "rings-continuous-slash"
+zero = "oval-tall-reverse-slashed"
 
 [buildPlans.SawalaMono.variants.italic]
-one = "no-base"
-nine = "open-contour"
-zero = "reverse-slashed"
-capital-b = "standard-serifless"
-capital-g = "flat-bottom-serifless-hooked"
-capital-u = "toothless-rounded-serifless"
 a = "single-storey-earless-corner-tailed"
 b = "flat-bottom-serifless"
 c = "serifless"
+capital-b = "standard-serifless"
+capital-g = "flat-bottom-serifless-hooked"
+capital-u = "toothless-rounded-serifless"
 d = "flat-bottom-serifless"
 f = "flat-hook-tailed"
 g = "single-storey-flat-top-serifless"
@@ -57,31 +62,34 @@ k = "cursive-serifless"
 l = "serifed-semi-tailed"
 m = "earless-corner-double-arch-serifless"
 n = "earless-rounded-straight-serifless"
+nine = "open-contour"
+one = "no-base"
 p = "flat-top-serifless"
 q = "flat-top-straight-serifless"
-r = "serifless"
+r = "flat-top-serifless"
 t = "flat-hook"
 u = "toothless-rounded-serifless"
 y = "cursive-serifless"
+zero = "reverse-slashed"
 
 [buildPlans.SawalaMono.widths.Normal]
-shape = 500
-menu = 5
 css = "normal"
+menu = 5
+shape = 500
 
 [buildPlans.SawalaMono.widths.SemiExtended]
-shape = 548
-menu = 6
 css = "semi-expanded"
+menu = 6
+shape = 548
 
 [buildPlans.SawalaMono.slopes.Upright]
 angle = 0
-shape = "upright"
-menu = "upright"
 css = "normal"
+menu = "upright"
+shape = "upright"
 
 [buildPlans.SawalaMono.slopes.Italic]
 angle = 9.4
-shape = "italic"
-menu = "italic"
 css = "italic"
+menu = "italic"
+shape = "italic"
