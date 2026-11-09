@@ -9,7 +9,7 @@
 
 ![Sawala Mono Banner](sawala-mono-hero-img.jpg)
 
-A clean, ergonomic, and highly legible coding font custom-built on top of [Iosevka](https://github.com/be5invis/Iosevka), crafted specifically for focused programming sessions, code reviews, and modern terminal environments.
+A clean, ergonomic monospace coding typeface built on top of [Iosevka](https://github.com/be5invis/Iosevka), customized for focused programming sessions, terminal workflows, and code reviews.
 
 ---
 
@@ -19,7 +19,6 @@ A clean, ergonomic, and highly legible coding font custom-built on top of [Iosev
 - [Font Variants](#font-variants)
 - [Installation](#installation)
   - [Pre-built Binaries (GitHub Releases)](#pre-built-binaries-github-releases)
-  - [Platform Installation Steps](#platform-installation-steps)
 - [Configuration](#configuration)
   - [Visual Studio Code / VSCodium](#visual-studio-code--vscodium)
   - [JetBrains IDEs (IntelliJ IDEA, WebStorm, PyCharm)](#jetbrains-ides-intellij-idea-webstorm-pycharm)
@@ -41,11 +40,13 @@ A clean, ergonomic, and highly legible coding font custom-built on top of [Iosev
 
 ## Philosophy & Story Behind the Name
 
-**Sawala Mono** derives its identity from the intersection of regional cultural heritage and modern software engineering practices:
+**Sawala Mono** draws its name from the **Sundanese** word ***sawala***, meaning *discussion*, *deliberation*, or *intellectual exchange*.
 
-- **Developer-Centric Philosophy:** In the **Sundanese** language, ***sawala*** means *discussion*, *deliberation*, or *intellectual exchange*. In modern software engineering, code is written not merely for compilers, but primarily for humans to read, review, and reason about—through pull requests, peer reviews, pair programming, and architectural RFCs. **Sawala Mono** embodies this collaborative spirit by delivering uncompromising legibility so ideas and logic flow effortlessly.
-- **Global Phonetic Harmony:** While rooted in traditional Sundanese vocabulary, its open-syllable phonetics (`Sa-wa-la`) make it smooth and natural to pronounce worldwide alongside timeless monospace staples like *Iosevka* and *Cascadia*.
-- **Clean & Distinct Namespace:** Designed as a conflict-free, first-class typeface across operating systems, package managers, and text editors.
+In modern software development, code is written for people first and compilers second. We spend far more time reading, discussing, and reviewing code in pull requests, pair programming sessions, and architecture reviews than actually typing it out. Sawala Mono embraces that collaborative reality with glyph choices and proportions tuned for effortless legibility during long sessions.
+
+- **Human-Centric Reading:** High-distinction glyph shapes (such as clear slashed zeros, distinct brackets, and unambiguous punctuation) keep symbols crisp even at small font sizes.
+- **Natural Pronunciation:** The open three-syllable name (`Sa-wa-la`) is easy to pronounce globally and sits comfortably alongside monospace staples like *Iosevka*, *Fira*, and *Cascadia*.
+- **Dedicated Family Namespace:** Registered under its own font family name so it installs cleanly side-by-side with upstream Iosevka without font naming conflicts.
 
 ---
 
@@ -65,22 +66,15 @@ A clean, ergonomic, and highly legible coding font custom-built on top of [Iosev
 
 1. Download the latest release `.zip` archive from the [GitHub Releases](https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases) page.
 2. Extract the downloaded archive.
-3. Follow the installation steps below for your operating system.
-
-### Platform Installation Steps
-
-- **Windows**:
-  - Select all `.ttf` files $\to$ Right-click $\to$ Select **"Install for all users"** (recommended on Windows 10/11 to avoid per-user permission issues in Java runtimes and JetBrains IDEs).
-- **macOS**:
-  - Open **Font Book** (`Cmd + Space` $\to$ `Font Book`).
-  - Drag and drop the extracted `.ttf` files into the Font Book window.
-- **Linux**:
-  - Copy the `.ttf` files to your user fonts directory and refresh the font cache:
-    ```bash
-    mkdir -p ~/.local/share/fonts/SawalaMono
-    cp *.ttf ~/.local/share/fonts/SawalaMono/
-    fc-cache -f -v
-    ```
+3. Install the font files:
+   - **Windows:** Select all `.ttf` files $\to$ right-click $\to$ select **"Install for all users"** (recommended on Windows 10/11 to avoid per-user permission issues in Java runtimes and JetBrains IDEs).
+   - **macOS:** Open **Font Book** (`Cmd + Space` $\to$ `Font Book`), then drag and drop the extracted `.ttf` files into the window.
+   - **Linux:** Copy the `.ttf` files to your user fonts directory and refresh the font cache:
+     ```bash
+     mkdir -p ~/.local/share/fonts/SawalaMono
+     cp *.ttf ~/.local/share/fonts/SawalaMono/
+     fc-cache -f -v
+     ```
 
 ---
 
@@ -108,7 +102,7 @@ Add the following configuration to your `settings.json`:
 2. Navigate to **Editor** $\to$ **Font**.
 3. Set **Font** to `Sawala Mono`.
 4. Ensure **Enable ligatures** is checked (or unchecked if using `Sawala Mono NL`).
-5. Recommended font size: `13.5` or `14` with line spacing `1.2`–`1.3`.
+5. Recommended font size: `13.5` or `14` with line spacing `1.2` to `1.3`.
 
 ### Neovim / Neovide
 
@@ -221,7 +215,7 @@ You can build Sawala Mono entirely in the cloud with zero local toolchain setup 
    - Click **Run workflow** to start the job.
 
 5. **Download Your Compiled Fonts:**
-   - When the build job completes (~5–10 minutes depending on runner queue), open the run summary.
+   - When the build job completes (~5-10 minutes depending on runner queue), open the run summary.
    - Scroll down to the **Artifacts** section to download the generated `Sawala-Mono-Packages.zip`.
    - If release publishing was enabled, your packaged zip will also be available on your repository's **Releases** page.
 
@@ -238,7 +232,7 @@ To patch an existing release with programming and developer glyphs (Powerline, F
    - Click the **Run workflow** dropdown and configure the parameters:
      - **GitHub Release Tag to patch (`release_tag`)**: Enter the target release tag (e.g., `v1.0.0` or `latest` from your repository releases).
      - **Nerd Font patch preset (`patch_mode`)**: Choose `complete` (~10,000+ developer and powerline glyphs) or `default` (Powerline core only).
-     - **Font scope to patch (`font_scope`)**: Choose `core` (8 essential coding weights in ~6–8 mins) or `all` (all 36 weights).
+     - **Font scope to patch (`font_scope`)**: Choose `core` (8 essential coding weights in ~6-8 mins) or `all` (all 36 weights).
    - Click **Run workflow** to initiate the containerized patching pipeline.
 
 3. **Download Patched Fonts:**
@@ -282,5 +276,14 @@ npm run build -- ttf::SawalaMono
 
 ## License & Acknowledgments
 
-- **License:** Sawala Mono is released under the [SIL Open Font License 1.1](LICENSE.md). You may freely use, modify, and redistribute this font family for personal and commercial projects.
-- **Engine Heritage:** Built upon the parametric font generation engine of [Iosevka](https://github.com/be5invis/Iosevka), created with distinction by [Belleve Invis](https://github.com/be5invis).
+### License
+
+Sawala Mono is distributed under the [SIL Open Font License 1.1](LICENSE.md). You are free to use, modify, and redistribute this font family for personal and commercial projects.
+
+### Acknowledgments & Heartfelt Thanks
+
+Sawala Mono is built upon the remarkable foundation created by the open-source typography community:
+
+- **[Iosevka](https://github.com/be5invis/Iosevka)** and its creator, **[Belleve Invis](https://github.com/be5invis)**: Deepest gratitude to Belleve for conceiving and crafting such an ingenious, fully parametric font engine. Designing a monospace typeface with hundreds of weights, slopes, and meticulously engineered OpenType ligature features, while maintaining it as a generous open-source work of art over many years, is a monumental achievement in software and typographic engineering.
+- **The Iosevka Contributors & Developer Community**: Sincere appreciation to the many developers and typographers contributing to upstream Iosevka. Their testing, bug reports, scripts, language expansions, and glyph refinements ensure the engine stays rock-solid across operating systems.
+- **[Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)**: Special thanks to Ryan L. McIntyre and the Nerd Fonts contributors for providing the standalone containerized patching engine that enables `Sawala Mono NF` to seamlessly bundle developer icons and Powerline glyphs.
