@@ -12,29 +12,27 @@ A clean, ergonomic, and highly legible coding font custom-built on top of [Iosev
 
 ## Table of Contents
 
-- [Sawala Mono](#sawala-mono)
-  - [Table of Contents](#table-of-contents)
-  - [Philosophy \& Story Behind the Name](#philosophy--story-behind-the-name)
-  - [Font Variants](#font-variants)
-  - [Installation](#installation)
-    - [Pre-built Binaries (GitHub Releases)](#pre-built-binaries-github-releases)
-    - [Platform Installation Steps](#platform-installation-steps)
-  - [Configuration](#configuration)
-    - [Visual Studio Code / VSCodium](#visual-studio-code--vscodium)
-    - [JetBrains IDEs (IntelliJ IDEA, WebStorm, PyCharm)](#jetbrains-ides-intellij-idea-webstorm-pycharm)
-    - [Neovim / Neovide](#neovim--neovide)
-    - [Alacritty](#alacritty)
-    - [Kitty](#kitty)
-    - [WezTerm](#wezterm)
-    - [Windows Terminal](#windows-terminal)
-  - [Building from Source](#building-from-source)
-    - [Prerequisites](#prerequisites)
-    - [Method A: GitHub Actions (Automated CI)](#method-a-github-actions-automated-ci)
-    - [Method B: Generating Nerd Font (Sawala Mono NF)](#method-b-generating-nerd-font-sawala-mono-nf)
-    - [Method C: Containerized Docker Build (Recommended)](#method-c-containerized-docker-build-recommended)
-    - [Method D: Native Local Build](#method-d-native-local-build)
-  - [Architecture \& Customization](#architecture--customization)
-  - [License \& Acknowledgments](#license--acknowledgments)
+- [Philosophy & Story Behind the Name](#philosophy--story-behind-the-name)
+- [Font Variants](#font-variants)
+- [Installation](#installation)
+  - [Pre-built Binaries (GitHub Releases)](#pre-built-binaries-github-releases)
+  - [Platform Installation Steps](#platform-installation-steps)
+- [Configuration](#configuration)
+  - [Visual Studio Code / VSCodium](#visual-studio-code--vscodium)
+  - [JetBrains IDEs (IntelliJ IDEA, WebStorm, PyCharm)](#jetbrains-ides-intellij-idea-webstorm-pycharm)
+  - [Neovim / Neovide](#neovim--neovide)
+  - [Alacritty](#alacritty)
+  - [Kitty](#kitty)
+  - [WezTerm](#wezterm)
+  - [Windows Terminal](#windows-terminal)
+- [Building from Source](#building-from-source)
+  - [Prerequisites](#prerequisites)
+  - [Method A: GitHub Actions on Your Fork (Automated Cloud CI)](#method-a-github-actions-on-your-fork-automated-cloud-ci)
+  - [Method B: Generating Nerd Font (Sawala Mono NF) on Your Fork](#method-b-generating-nerd-font-sawala-mono-nf-on-your-fork)
+  - [Method C: Containerized Docker Build (Recommended)](#method-c-containerized-docker-build-recommended)
+  - [Method D: Native Local Build](#method-d-native-local-build)
+- [Architecture & Customization](#architecture--customization)
+- [License & Acknowledgments](#license--acknowledgments)
 
 ---
 
@@ -191,25 +189,57 @@ Sawala Mono compiles using containerized Docker runners and the official Iosevka
 - [Docker Desktop](https://www.docker.com/) (recommended for isolated, reproducible builds), OR
 - [Node.js](https://nodejs.org/) (`>= 16.0.0`), `npm`, and [`ttfautohint`](https://www.freetype.org/ttfautohint/) installed on the host system.
 
-### Method A: GitHub Actions (Automated CI)
+### Method A: GitHub Actions on Your Fork (Automated Cloud CI)
 
-1. Edit your typographical parameters in [`private-build-plans.toml`](private-build-plans.toml) and push to the repository.
-2. In GitHub, navigate to the **Actions** tab.
-3. In the left sidebar, select **Build Sawala Mono Font**.
-4. Click **Run workflow**, choose your branch (`dev` or `main`), configure parameters (variant and format), and trigger the build.
-5. Once completed, download the compiled archive (`Sawala-Mono-Packages`) from the workflow **Artifacts** or the auto-generated **GitHub Releases**.
+You can build Sawala Mono entirely in the cloud with zero local toolchain setup by running the workflow in your own GitHub fork:
 
-### Method B: Generating Nerd Font (Sawala Mono NF)
+1. **Fork the Repository:**
+   Click the **Fork** button at the top right of this repository to create a copy under your personal or organization GitHub account.
 
-To patch an existing release with programming glyph icons using Docker:
+2. **Enable GitHub Actions on Your Fork:**
+   - By default, GitHub disables Actions workflows on newly forked repositories for security.
+   - In your forked repository, navigate to the **Actions** tab.
+   - Click the green button: **"I understand my workflows, go ahead and enable them"**.
+   - *(Optional for Automated GitHub Releases)* Go to **Settings** $\to$ **Actions** $\to$ **General** $\to$ **Workflow permissions**, select **"Read and write permissions"**, and click **Save**. This allows GitHub Actions to automatically publish release tags and attach packaged ZIP archives.
 
-1. In GitHub, navigate to the **Actions** tab.
-2. In the left sidebar, select **Patch Nerd Font**.
-3. Click **Run workflow** and configure:
-   - **GitHub Release Tag to patch**: e.g., `v1.0.0` or `latest` (fetches pre-built TTFs from that release).
-   - **Nerd Font patch preset**: `complete` (~10,000+ glyphs) or `default` (Powerline core).
-   - **Font scope to patch**: `core` (8 essential coding weights in ~6–8 mins) or `all` (all 36 weights).
-4. Click **Run workflow**. Upon completion, `SawalaMono-NF-<tag>.zip` is attached directly to the specified GitHub Release and uploaded to workflow Artifacts.
+3. **(Optional) Customize Font Parameters:**
+   - Modify glyph designs, weights, or ligation variants in [`private-build-plans.toml`](private-build-plans.toml).
+   - Commit and push your changes to your fork's branch.
+
+4. **Trigger the Build:**
+   - Go to the **Actions** tab in your forked repository.
+   - In the left sidebar, select **Build Sawala Mono Font**.
+   - Click the **Run workflow** dropdown button on the right:
+     - **Branch**: Select your working branch (e.g. `main` or `dev`).
+     - **Variant to build**: `SawalaMono` (or `all` to compile all plans).
+     - **Format output**: `ttf`, `woff2`, or `contents`.
+     - **Publish as a GitHub Release?**: `true` (if you want an automated GitHub Release created) or `false`.
+     - **Release version tag**: Enter a custom version tag (e.g. `v1.0.0`) or leave empty for an automatic timestamp tag.
+   - Click **Run workflow** to start the job.
+
+5. **Download Your Compiled Fonts:**
+   - When the build job completes (~5–10 minutes depending on runner queue), open the run summary.
+   - Scroll down to the **Artifacts** section to download the generated `Sawala-Mono-Packages.zip`.
+   - If release publishing was enabled, your packaged zip will also be available on your repository's **Releases** page.
+
+### Method B: Generating Nerd Font (Sawala Mono NF) on Your Fork
+
+To patch an existing release with programming and developer glyphs (Powerline, Font Awesome, Octicons, devicons) using the containerized Nerd Font patcher workflow:
+
+1. **Ensure GitHub Actions is Enabled:**
+   Verify that workflows are enabled in your forked repository (see Step 2 of Method A above).
+
+2. **Trigger the Patcher Workflow:**
+   - In your forked repository, navigate to the **Actions** tab.
+   - In the left sidebar, select **Patch Nerd Font**.
+   - Click the **Run workflow** dropdown and configure the parameters:
+     - **GitHub Release Tag to patch (`release_tag`)**: Enter the target release tag (e.g., `v1.0.0` or `latest` from your repository releases).
+     - **Nerd Font patch preset (`patch_mode`)**: Choose `complete` (~10,000+ developer and powerline glyphs) or `default` (Powerline core only).
+     - **Font scope to patch (`font_scope`)**: Choose `core` (8 essential coding weights in ~6–8 mins) or `all` (all 36 weights).
+   - Click **Run workflow** to initiate the containerized patching pipeline.
+
+3. **Download Patched Fonts:**
+   - Once the patching pipeline finishes, the workflow automatically attaches `SawalaMono-NF-<tag>.zip` directly to the specified GitHub Release and uploads it to the workflow **Artifacts** (`Sawala-Mono-NF-Packages`).
 
 ### Method C: Containerized Docker Build (Recommended)
 
