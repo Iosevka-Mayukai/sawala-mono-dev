@@ -1,0 +1,202 @@
+name: Patch Nerd Font
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'GitHub Release Tag to patch (e.g. v1.0.0, or latest)'
+        required: true
+        default: 'latest'
+        type: string
+      patch_mode:
+        description: 'Nerd Font patch preset'
+        required: true
+        default: 'complete'
+        type: choice
+        options:
+          - complete
+          - default
+      font_scope:
+        description: 'Font scope to patch'
+        required: true
+        default: 'core'
+        type: choice
+        options:
+          - core
+          - all
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    name: Patch Font with Nerd Fonts Patcher
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Resolve Target Release Tag
+        id: resolve-tag
+        env:
+          INPUT_TAG_RAW: ${{ github.event.inputs.release_tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          INPUT_TAG="${INPUT_TAG_RAW:-latest}"
+          if [ "$INPUT_TAG" = "latest" ]; then
+            RESOLVED_TAG=$(gh release view --json tagName -q .tagName)
+            if [ -z "$RESOLVED_TAG" ]; then
+              echo "::error::No existing GitHub release found to patch."
+              exit 1
+            fi
+          else
+            RESOLVED_TAG="$INPUT_TAG"
+            if ! gh release view "$RESOLVED_TAG" --json tagName >/dev/null 2>&1; then
+              echo "::error::Target release tag '$RESOLVED_TAG' not found."
+              exit 1
+            fi
+          fi
+
+          echo "Target Release Tag: $RESOLVED_TAG"
+          echo "target_tag=$RESOLVED_TAG" >> $GITHUB_OUTPUT
+
+      - name: Download & Extract Base Release Archive
+        env:
+          TARGET_TAG: ${{ steps.resolve-tag.outputs.target_tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p raw_archives in_raw in out archives
+
+          echo "Downloading base font archives for release: $TARGET_TAG"
+          gh release download "$TARGET_TAG" --pattern "*SawalaMono*.zip" --dir raw_archives
+
+          ZIP_COUNT=$(find raw_archives -name "*.zip" | wc -l)
+          if [ "$ZIP_COUNT" -eq 0 ]; then
+            echo "::error::No SawalaMono zip archive found in release $TARGET_TAG."
+            exit 1
+          fi
+
+          echo "Extracting base font archives..."
+          for z in raw_archives/*.zip; do
+            echo "Unzipping $z..."
+            unzip -q -o "$z" -d in_raw/
+          done
+
+          # Consolidate all extracted TTFs
+          find in_raw -type f -name "*.ttf" -exec cp {} in_raw/ \;
+
+      - name: Filter Font Scope
+        env:
+          SCOPE_RAW: ${{ github.event.inputs.font_scope }}
+        run: |
+          SCOPE="${SCOPE_RAW:-core}"
+          echo "Selected Font Scope: $SCOPE"
+
+          mkdir -p in
+          if [ "$SCOPE" = "core" ]; then
+            echo "Filtering core developer coding weights (Normal width: Regular, Italic, Medium, MediumItalic, SemiBold, SemiBoldItalic, Bold, BoldItalic)..."
+            CORE_PATTERNS=(
+              "SawalaMono-Regular.ttf"
+              "SawalaMono-Italic.ttf"
+              "SawalaMono-Medium.ttf"
+              "SawalaMono-MediumItalic.ttf"
+              "SawalaMono-SemiBold.ttf"
+              "SawalaMono-SemiBoldItalic.ttf"
+              "SawalaMono-Bold.ttf"
+              "SawalaMono-BoldItalic.ttf"
+            )
+
+            for font_file in "${CORE_PATTERNS[@]}"; do
+              MATCH=$(find in_raw -name "$font_file" | head -n 1)
+              if [ -n "$MATCH" ] && [ -f "$MATCH" ]; then
+                echo "Found core font: $MATCH"
+                cp "$MATCH" in/
+              else
+                echo "Warning: Core font $font_file not found in extracted archive."
+              fi
+            done
+          else
+            echo "Selecting all extracted TrueType font files..."
+            find in_raw -type f -name "*.ttf" -exec cp {} in/ \;
+          fi
+
+          STAGED_COUNT=$(find in -type f -name "*.ttf" | wc -l)
+          echo "Total fonts staged for patching: $STAGED_COUNT"
+          if [ "$STAGED_COUNT" -eq 0 ]; then
+            echo "::error::Zero TrueType (.ttf) font files found to patch."
+            exit 1
+          fi
+
+          echo "Staged font inventory:"
+          ls -lh in/
+
+      - name: Run Containerized Nerd Font Patcher
+        env:
+          PATCH_MODE_RAW: ${{ github.event.inputs.patch_mode }}
+          WORKSPACE_PATH: ${{ github.workspace }}
+        run: |
+          PATCH_MODE="${PATCH_MODE_RAW:-complete}"
+          echo "Selected Patch Mode: $PATCH_MODE"
+
+          EXTRA_FLAGS=""
+          if [ "$PATCH_MODE" = "complete" ]; then
+            EXTRA_FLAGS="--complete"
+          fi
+
+          echo "Running nerdfonts/patcher Docker container with PN=2, --mono, and $EXTRA_FLAGS..."
+          mkdir -p out
+
+          docker run --rm \
+            -v "$WORKSPACE_PATH/in:/in" \
+            -v "$WORKSPACE_PATH/out:/out" \
+            -e "PN=2" \
+            nerdfonts/patcher:latest \
+            $EXTRA_FLAGS --mono
+
+      - name: Fix Workspace Permissions
+        if: always()
+        env:
+          WORKSPACE_PATH: ${{ github.workspace }}
+        run: |
+          sudo chown -R $USER:$USER "$WORKSPACE_PATH"
+
+      - name: Verify Patched Output & Package Archive
+        env:
+          TARGET_TAG: ${{ steps.resolve-tag.outputs.target_tag }}
+        run: |
+          PATCHED_COUNT=$(find out -type f -name "*.ttf" | wc -l)
+          echo "Total patched fonts generated: $PATCHED_COUNT"
+
+          if [ "$PATCHED_COUNT" -eq 0 ]; then
+            echo "::error::Docker patcher did not produce any .ttf font files."
+            exit 1
+          fi
+
+          echo "Patched font inventory:"
+          ls -lh out/
+
+          ARCHIVE_NAME="SawalaMono-NF-${TARGET_TAG}.zip"
+          echo "Packaging patched fonts into archives/${ARCHIVE_NAME}..."
+          mkdir -p archives
+          cd out
+          zip -r "../archives/${ARCHIVE_NAME}" ./*.ttf
+          cd ..
+
+          ls -lh archives/
+
+      - name: Upload Font Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sawala-Mono-NF-Packages
+          path: archives/*.zip
+          if-no-files-found: error
+
+      - name: Upload Nerd Font Archive to GitHub Release
+        env:
+          TARGET_TAG: ${{ steps.resolve-tag.outputs.target_tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Uploading archives/*.zip to GitHub Release $TARGET_TAG..."
+          gh release upload "$TARGET_TAG" archives/*.zip --clobber

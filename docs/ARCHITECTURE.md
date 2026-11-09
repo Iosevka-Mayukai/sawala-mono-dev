@@ -37,7 +37,7 @@ This document serves as the canonical architectural map of the repository. It ou
 | **Font Assembly & Serialization** | `ot-builder` (v1.8.1), `otb-ttc-bundle` (v1.8.1), `harfbuzzjs` (v1.6.4), `ttfautohint` | `packages/font/package.json` |
 | **Linter & Formatter** | Biome v2.6.2 | `biome.json` |
 | **Containerization** | Docker (`node:lts-slim` + `ttfautohint`) | `docker/Dockerfile`, `docker/build.sh` |
-| **CI / CD Pipeline** | GitHub Actions Workflow | `.github/workflows/build.yml` |
+| **CI / CD Pipeline** | GitHub Actions Workflows | `.github/workflows/build.yml`, `.github/workflows/patch-nerd-font.yml` |
 | **Workspace Architecture** | npm workspaces monorepo (`packages/*`, `tools/*`) | `package.json` |
 
 ---
@@ -237,6 +237,7 @@ Frameworks & Drivers (Build Runners, External Tools, Container)
 - **Linter & Formatter Config:** `biome.json` — Governs code formatting and linting rules across ES modules.
 - **Container Build Context:** `docker/Dockerfile` and `docker/build.sh` — Defines the portable Linux build environment with `ttfautohint`.
 - **CI/CD Pipeline Entry Point:** `.github/workflows/build.yml` — Orchestrates container builds and publishes font release archives.
+- **Nerd Font Patch Pipeline:** `.github/workflows/patch-nerd-font.yml` — Decoupled containerized patcher pipeline using Docker (`nerdfonts/patcher:latest`) to generate and attach `Sawala Mono NF` assets.
 
 ---
 
@@ -288,3 +289,4 @@ Frameworks & Drivers (Build Runners, External Tools, Container)
   - **Coupling to Baseline `build-plans.toml`:** The build engine tightly couples plan resolution with `build-plans.toml`. As recorded in ADR-0001, deleting this file breaks the engine; any future decoupling will require patching `verdafile.mjs:155-170`.
 - **Recent Architecture Decisions:**
   - [ADR-0001: Retention of `build-plans.toml` and `tools/` Workspaces](adr/0001-retain-build-plans-and-tools.md) — Documented decision to preserve essential workspace structures and the baseline TOML manifest while purging auxiliary bloat.
+  - [ADR-0002: Standalone Containerized Nerd Font Patching Pipeline](adr/0002-standalone-nerd-font-patcher.md) — Documented decision to decouple Nerd Font generation into a dedicated on-demand Docker workflow targeting existing GitHub Releases.

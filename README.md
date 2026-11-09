@@ -28,8 +28,9 @@ A clean, ergonomic, and highly legible coding font custom-built on top of [Iosev
   - [Building from Source](#building-from-source)
     - [Prerequisites](#prerequisites)
     - [Method A: GitHub Actions (Automated CI)](#method-a-github-actions-automated-ci)
-    - [Method B: Containerized Docker Build (Recommended)](#method-b-containerized-docker-build-recommended)
-    - [Method C: Native Local Build](#method-c-native-local-build)
+    - [Method B: Generating Nerd Font (Sawala Mono NF)](#method-b-generating-nerd-font-sawala-mono-nf)
+    - [Method C: Containerized Docker Build (Recommended)](#method-c-containerized-docker-build-recommended)
+    - [Method D: Native Local Build](#method-d-native-local-build)
   - [Architecture \& Customization](#architecture--customization)
   - [License \& Acknowledgments](#license--acknowledgments)
 
@@ -196,7 +197,19 @@ Sawala Mono compiles using containerized Docker runners and the official Iosevka
 4. Click **Run workflow**, choose your branch (`dev` or `main`), configure parameters (variant and format), and trigger the build.
 5. Once completed, download the compiled archive (`Sawala-Mono-Packages`) from the workflow **Artifacts** or the auto-generated **GitHub Releases**.
 
-### Method B: Containerized Docker Build (Recommended)
+### Method B: Generating Nerd Font (Sawala Mono NF)
+
+To patch an existing release with programming glyph icons using Docker:
+
+1. In GitHub, navigate to the **Actions** tab.
+2. In the left sidebar, select **Patch Nerd Font**.
+3. Click **Run workflow** and configure:
+   - **GitHub Release Tag to patch**: e.g., `v1.0.0` or `latest` (fetches pre-built TTFs from that release).
+   - **Nerd Font patch preset**: `complete` (~10,000+ glyphs) or `default` (Powerline core).
+   - **Font scope to patch**: `core` (8 essential coding weights in ~6–8 mins) or `all` (all 36 weights).
+4. Click **Run workflow**. Upon completion, `SawalaMono-NF-<tag>.zip` is attached directly to the specified GitHub Release and uploaded to workflow Artifacts.
+
+### Method C: Containerized Docker Build (Recommended)
 
 Run the build locally inside a self-contained Docker container:
 
@@ -210,7 +223,7 @@ docker run --rm -v "${PWD}:/work" --entrypoint bash iosevka-builder:latest -c "n
 
 Compiled binaries will be generated inside `./dist/SawalaMono/TTF/`.
 
-### Method C: Native Local Build
+### Method D: Native Local Build
 
 If your host environment has Node.js and `ttfautohint` installed:
 
