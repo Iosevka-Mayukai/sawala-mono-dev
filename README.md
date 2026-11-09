@@ -4,6 +4,8 @@
 [![License: SIL OFL 1.1](https://img.shields.io/badge/License-OFL%201.1-blue.svg)](https://scripts.sil.org/OFL)
 [![GitHub release](https://img.shields.io/github/v/release/Iosevka-Mayukai/sawala-mono-dev?include_prereleases)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases)
 
+![Sawala Mono Banner](sawala-mono-hero-img.jpg)
+
 A clean, ergonomic, and highly legible coding font custom-built on top of [Iosevka](https://github.com/be5invis/Iosevka), crafted specifically for focused programming sessions, code reviews, and modern terminal environments.
 
 ---
