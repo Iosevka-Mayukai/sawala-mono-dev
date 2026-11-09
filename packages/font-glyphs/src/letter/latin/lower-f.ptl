@@ -1,0 +1,256 @@
+$$include '../../meta/macros.ptl'
+
+import [mix fallback SuffixCfg] from "@iosevka/util"
+import [MathSansSerif] from "@iosevka/glyph/relation"
+
+glyph-module
+
+glyph-block Letter-Latin-Lower-F : begin
+	glyph-block-import CommonShapes
+	glyph-block-import Common-Derivatives
+	glyph-block-import Mark-Adjustment : LeaningAnchor
+	glyph-block-import Letter-Shared : CreateAccentedComposition
+	glyph-block-import Letter-Shared-Shapes : FlatHookDepth DiagTail
+	glyph-block-import Letter-Shared-Shapes : LetterBarOverlay PalatalHook
+
+	define CH-NONE          0
+	define CH-SERIF         1
+	define CH-EXTENSION     2
+	define CH-HOOK          3
+	define CH-DIAGONAL-HOOK 4
+
+	define pNarrowFSide : mix 1 para.advanceScaleF 1.5
+
+	define dfN : DivFrame 1
+	define dfF : DivFrame para.advanceScaleF 1 0.75
+
+	glyph-block-export ySmallFBarPos
+	define ySmallFBarPos : [mix 0 XH DesignParameters.fBarPosToXH] + Stroke * DesignParameters.fbarStrokeAdj
+
+	define [SetPalatalHookPos barLeft] : glyph-proc
+		set-base-anchor 'palatalHookPos' (barLeft + [HSwToV Stroke] + [PalatalHook.adviceGap Stroke]) 0
+
+	define [SmallFBottomSerif df] : glyph-proc
+		local l : [mix df.leftSB df.rightSB 0.020] + SerifShiftS
+		local r : [mix df.leftSB df.rightSB 0.875] + SerifShiftS
+		include : dispiro
+			widths.lhs
+			flat l 0
+			curl r 0
+		set-base-anchor 'palatalHookPos' r 0
+
+	define [NarrowBottomSerif df] : glyph-proc
+		local jut : Math.max MidJutCenter : mix [HSwToV HalfStroke] LongJut df.adws
+		include : HSerif.mb df.middle 0 jut
+		set-base-anchor 'palatalHookPos' (df.middle + jut + SerifShiftS) 0
+
+	define [StdFShapeT sink df offset barleft sw] : sink
+		widths.lhs sw
+		g4 [Math.max (barleft + offset + [HSwToV : 2.125 * sw]) (df.rightSB + RBalance2 - (OX - O) - offset)] (Ascender - Hook * 0.75)
+		HookStart (Ascender - offset) (sw -- sw)
+		flat (barleft + offset) (Ascender - ArchDepthA * 0.8)
+		[if offset corner curl] (barleft + offset) 0 [heading Downward]
+		if offset { [corner (df.rightSB + RBalance2 - (OX - O) - offset) 0] } {}
+
+	define [SmallFDownExtension barLeft] : VBar.l barLeft [mix 0 Descender 0.9] TINY
+
+	define [SmallFDownHook df barRight counterHookLeft] : begin
+		local hd : FlatHookDepth df
+		return : dispiro
+			widths.lhs
+			flat counterHookLeft Descender
+			curl [Math.max (barRight - hd.x) (counterHookLeft + TINY)] Descender
+			archv.superness DesignParameters.tightHookSuperness
+			flat barRight [Math.min 0 (Descender + hd.y)] [heading Upward]
+			curl barRight TINY [heading Upward]
+
+	glyph-block-export SmallFDiagonalTail
+	define [SmallFDiagonalTail df barLeft] : begin
+		local xBarMiddle : barLeft + [HSwToV HalfStroke]
+		return : dispiro
+			widths.center
+			flat xBarMiddle TINY [heading Downward]
+			DiagTail.L xBarMiddle Descender ([DiagTail.StdDepth df Stroke] - HalfStroke) Stroke
+
+	glyph-block-export StdSmallFBarLeftPos
+	define [StdSmallFBarLeftPos barAtCenter] : [mix SB RightSB : if barAtCenter 0.45 0.35] - [HSwToV : Stroke * [if barAtCenter 0.45 0.25]]
+
+	glyph-block-export StdSmallFBarLeftPos0
+	define [StdSmallFBarLeftPos0] : [mix SB RightSB 0.35] - [HSwToV QuarterStroke]
+
+	define [StandardFShape df m bh counterHook] : glyph-proc
+		local barAtCenter : (counterHook === CH-HOOK) || (counterHook === CH-DIAGONAL-HOOK)
+		local crossLeft  : mix 0        df.leftSB  m
+		local crossRight : mix df.width df.rightSB m
+		local barLeft0 : StdSmallFBarLeftPos0
+		local barLeft : StdSmallFBarLeftPos barAtCenter
+		local barRight : barLeft + [HSwToV Stroke]
+
+		include : LeaningAnchor.Above.Hook barLeft (df.rightSB + barLeft - barLeft0)
+		set-base-anchor 'overlay' (barLeft + [HSwToV HalfStroke]) (bh / 2)
+
+		include : StdFShapeT dispiro df 0 barLeft0 Stroke
+		include : Translate (barLeft - barLeft0) 0
+		include : HCrossBar.top SB [mix df.leftSB df.rightSB m] bh
+
+		include : match counterHook
+			[Just CH-NONE]          : SetPalatalHookPos barLeft
+			[Just CH-SERIF]         : SmallFBottomSerif df
+			[Just CH-EXTENSION]     : SmallFDownExtension barLeft
+			[Just CH-HOOK]          : SmallFDownHook df barRight [Math.max SB : barRight - (crossRight - barLeft)]
+			[Just CH-DIAGONAL-HOOK] : SmallFDiagonalTail df barLeft
+
+	define [NarrowStdFShapeT sink df offset barleft sw] : begin
+		local pAdaptive : if (para.advanceScaleF < 1) ((1 - df.adws) / (1 - para.advanceScaleF)) 0
+		local hookScale : mix 0.9 1.0 pAdaptive
+		local hookRight : mix barleft (df.rightSB + RBalance2 - (OX - O)) hookScale
+		local swTerminal : mix sw [df.adviceStroke 2.75] [mix 0.35 0.1 pAdaptive]
+		return : sink
+			widths.lhs sw
+			g4 [Math.max (barleft + offset + [HSwToV : 2.125 * sw]) (hookRight - offset)] (Ascender - Hook * 0.75)
+			HookStart (Ascender - offset) (sw -- sw) (swTerminal -- swTerminal)
+			flat (barleft + offset) (Ascender - ArchDepthA * 0.8)
+			[if offset corner curl] (barleft + offset) 0 [heading Downward]
+			if offset { [corner (hookRight - offset) 0] } {}
+
+	define [NarrowStdFShape df m bh counterHook] : glyph-proc
+		local barAtCenter : (counterHook === CH-HOOK) || (counterHook === CH-DIAGONAL-HOOK)
+		local crossLeft  : mix 0        df.leftSB  m
+		local crossRight : mix df.width df.rightSB m
+		local barLeft0 : [mix df.leftSB df.rightSB 0.35] - [HSwToV QuarterStroke]
+		local barLeft : [mix df.leftSB df.rightSB : if barAtCenter 0.45 0.35] - [HSwToV : Stroke * [if barAtCenter 0.45 0.25]]
+		local barRight : barLeft + [HSwToV Stroke]
+
+		include : LeaningAnchor.Above.Hook barLeft ([mix barLeft (df.rightSB + barLeft - barLeft0) 0.75])
+		set-base-anchor 'overlay' (barLeft + [HSwToV HalfStroke]) (bh / 2)
+
+		include : NarrowStdFShapeT dispiro df 0 barLeft0 Stroke
+		include : Translate (barLeft - barLeft0) 0
+
+		local pAdaptive : if (para.advanceScaleF < 1) ((1 - df.adws) / (1 - para.advanceScaleF)) 0
+		local stdCrossRight : mix df.leftSB df.rightSB m
+		local narrowCrossRight : mix barLeft stdCrossRight [mix 0.85 1.4 pAdaptive]
+		local narrowCrossLeft : mix df.leftSB barLeft [mix 0.5 0.375 pAdaptive]
+		include : HCrossBar.top narrowCrossLeft narrowCrossRight bh
+
+		include : match counterHook
+			[Just CH-NONE]          : SetPalatalHookPos barLeft
+			[Just CH-SERIF]         : SmallFBottomSerif df
+			[Just CH-EXTENSION]     : SmallFDownExtension barLeft
+			[Just CH-HOOK]          : SmallFDownHook df barRight [Math.max df.leftSB : barRight - 0.75 * (crossRight - barLeft)]
+			[Just CH-DIAGONAL-HOOK] : SmallFDiagonalTail df barLeft
+
+	define [NarrowFShape clcStyle] : function [df m bh counterHook] : glyph-proc
+		local topHookExt : match clcStyle
+			[Just 1] Width
+			[Just 2] Jut
+			[Just 3] Jut
+			[Just 4] Jut
+			__       0
+		local topHookHdExt : match clcStyle
+			[Just 1] 1
+			__       0
+		local crossBarExt : match clcStyle
+			[Just 1] Jut
+			[Just 2] Jut
+			[Just 4] Jut
+			__       0
+
+		local barAtCenter : (counterHook === CH-HOOK) || (counterHook === CH-DIAGONAL-HOOK)
+		local crossLeft  : mix 0        df.leftSB  m
+		local crossRight : mix df.width df.rightSB m
+		local barLeft : if barAtCenter
+			df.middle - [HSwToV HalfStroke]
+			[mix crossLeft crossRight 0.42] - [HSwToV : 0.375 * Stroke]
+		local barRight : barLeft + [HSwToV Stroke]
+		local hd : FlatHookDepth df
+
+		set-base-anchor 'overlay' (barLeft + [HSwToV HalfStroke]) (bh / 2)
+		include : LeaningAnchor.Above.Hook barLeft (crossRight + topHookExt)
+
+		include : dispiro
+			widths.lhs
+			flat (crossRight + topHookExt) Ascender
+			curl [Math.min (barLeft + hd.x * (1 + topHookHdExt)) (crossRight - TINY)] Ascender
+			archv.superness DesignParameters.tightHookSuperness
+			flat barLeft [Math.max XH (Ascender - hd.y)]
+			curl barLeft 0 [heading Downward]
+		include : HCrossBar.top crossLeft (crossRight + crossBarExt) bh
+
+		include : match counterHook
+			[Just CH-NONE]          : SetPalatalHookPos barLeft
+			[Just CH-SERIF]         : NarrowBottomSerif df
+			[Just CH-EXTENSION]     : SmallFDownExtension barLeft
+			[Just CH-HOOK]          : SmallFDownHook df barRight (barRight - (crossRight - barLeft))
+			[Just CH-DIAGONAL-HOOK] : SmallFDiagonalTail df barLeft
+
+	define SmallFConfig : SuffixCfg.weave
+		object # body
+			""                                { StandardFShape      dfN }
+			narrow                            { NarrowStdFShape     dfF }
+			flatHook                          { [NarrowFShape 0]    dfF }
+			flatHookCLC1                      { [NarrowFShape 1]    dfF }
+			flatHookCLC2                      { [NarrowFShape 2]    dfF }
+			flatHookCLC3                      { [NarrowFShape 3]    dfF }
+			flatHookCLC4                      { [NarrowFShape 4]    dfF }
+		function [body] : object # hooks
+			serifless                         { [if body pNarrowFSide 0.95]    CH-NONE          'b'  }
+			serifed                           { [if body pNarrowFSide 0.95]    CH-SERIF         'b'  }
+			extended                          { [if body pNarrowFSide 0.95]    CH-EXTENSION     'bp' }
+			tailed                            { [if body pNarrowFSide 1.00]    CH-HOOK          'bp' }
+			diagonalTailed                    { [if body pNarrowFSide 1.00]    CH-DIAGONAL-HOOK 'bp' }
+		object # crossbar
+			""                                ySmallFBarPos
+			crossbarAtXHeight                 XH
+			crossbarAtHalfAscenderHeight      ([mix 0 Ascender 0.5] + HalfStroke)
+
+	foreach { suffix { { Body df } { pBar ch mk } yBar } } [Object.entries SmallFConfig] : do
+		create-glyph "f.\(suffix)" : glyph-proc
+			set-width df.width
+			include : df.markSet.(mk)
+			include : Body df pBar yBar ch
+			currentGlyph.copyBaseAnchorIfAbsent 'leaningAbove' 'above'
+
+		create-glyph "fPalatalHook.\(suffix)" : glyph-proc
+			include [refer-glyph "f.\(suffix)"] AS_BASE ALSO_METRICS
+			local attach : currentGlyph.gizmo.unapply          currentGlyph.baseAnchors.overlay
+			local pos    : currentGlyph.gizmo.unapplyIfPresent currentGlyph.baseAnchors.palatalHookPos
+			include : PalatalHook.r
+				xLink   -- attach.x
+				x       -- [if pos pos.x : attach.x + (RightSB - SB) / 2]
+				y       -- [if pos pos.y 0]
+				refSw   -- [AdviceStroke : if pos 2 3]
+				maskOut -- [if pos [no-shape] [intersection [MaskBelow 0] [MaskLeft : attach.x + [HSwToV HalfStroke]]]]
+
+	select-variant 'f' 'f'
+	link-reduced-variant 'f/sansSerif' 'f' MathSansSerif
+	select-variant 'fHookBottom' 0x192  (shapeFrom -- 'f')
+	select-variant 'fLenis'      0xAB35 (shapeFrom -- 'f')
+
+	select-variant 'fPalatalHook' 0x1D82 (follow -- 'f')
+	select-variant 'fLenisPalatalHook'   (follow -- 'fLenis') (shapeFrom -- 'fPalatalHook')
+
+	select-variant 'f/phoneticLeft' (shapeFrom -- 'f')
+	select-variant 'f/compLigLeft1' (shapeFrom -- 'f')
+	select-variant 'f/compLigLeft2' (shapeFrom -- 'f')
+	select-variant 'f/compLigLeft3' (shapeFrom -- 'f')
+	select-variant 'f/compLigLeft4' (shapeFrom -- 'f')
+
+	CreateAccentedComposition 'fTildeOver' 0x1D6E 'f' 'tildeOver'
+	CreateAccentedComposition 'fDot'       0x1E1F 'f' 'dotAbove'
+
+	CreateAccentedComposition 'fLenisTildeOver' null 'fLenis' 'tildeOver'
+	CreateAccentedComposition 'fLenisDot'       null 'fLenis' 'dotAbove'
+
+	glyph-block-import Letter-Blackboard : BBS BBD
+	create-glyph 'mathbb/f' 0x1D557 : glyph-proc
+		include : MarkSet.b
+		local barLeft : [mix SB RightSB 0.35] - [HSwToV : 0.25 * BBD]
+		include : StdFShapeT dispiro [DivFrame 1] 0 barLeft BBS
+		include : intersection
+			VBar.l (barLeft + BBD) 0 Ascender BBS
+			StdFShapeT spiro-outline [DivFrame 1] 1 barLeft BBS
+		include : difference
+			HCrossBar.top SB [mix SB RightSB 0.95] ySmallFBarPos BBS
+			Rect Ascender 0 barLeft (barLeft + BBD)
+		include : HBar.b barLeft (barLeft + BBD) 0 BBS

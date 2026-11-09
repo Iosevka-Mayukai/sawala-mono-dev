@@ -1,0 +1,848 @@
+$$include '../../meta/macros.ptl'
+
+extern isFinite
+
+import [mix linreg clamp fallback SuffixCfg] from "@iosevka/util"
+
+glyph-module
+
+glyph-block Letter-Cyrillic-Ze : begin
+	glyph-block-import CommonShapes
+	glyph-block-import Common-Derivatives
+	glyph-block-import Mark-Shared-Metrics : markFine markMiddle
+	glyph-block-import Mark-Adjustment : ExtendBelowBaseAnchors
+	glyph-block-import Letter-Shared : CreateTurnedLetter
+	glyph-block-import Letter-Shared-Shapes : SerifedArcStart SerifedArcEnd SerifFrame
+	glyph-block-import Letter-Shared-Shapes : InwardSlabArcStart InwardSlabArcEnd
+	glyph-block-import Letter-Shared-Shapes : ArcStartSerif ArcEndSerif
+	glyph-block-import Letter-Shared-Shapes : RetroflexHook CyrDescender
+	glyph-block-import Letter-Shared-Shapes : UpwardHookShape RhoticHookShape
+	glyph-block-import Letter-Latin-S : AdviceSArchDepth SNeck
+
+	define SLAB-NONE       0
+	define SLAB-CLASSICAL  1
+	define SLAB-INWARD     2
+	define FLAT-CONNECTION 3
+	define OPEN-HALF       4
+	define OPEN-VERTICAL   5
+	define CLOSED-CIRCLE   6
+	define CLOSED-ROUND    7
+	define CLOSED-STEM     8
+
+	define StdBlend 0.65
+	define VolBlend 0.56
+
+	glyph-block-export CyrZe
+	define flex-params [CyrZe] : namespace
+		local-parameter : slabTop
+		local-parameter : slabBot
+		local-parameter : top
+		local-parameter : bot
+		local-parameter : left      -- SB
+		local-parameter : right     -- RightSB
+		local-parameter : blend     -- StdBlend
+		local-parameter : hook      -- Hook
+		local-parameter : hookBot   -- hook
+		local-parameter : stroke    -- [AdviceStroke2 2 3 : top - bot]
+		local-parameter : xOverflow -- [HSwToV stroke]
+		local-parameter : xo        -- OX
+		local-parameter : yo        -- O
+		local-parameter : barPos    -- OverlayPos
+		local-parameter : ada       -- SmallArchDepthA
+		local-parameter : adb       -- SmallArchDepthB
+
+		export : define [Dim] : begin
+			local midx : mix (right - ([HSwToV stroke] - xOverflow)) (left + ([HSwToV stroke] - xOverflow)) blend
+			local midy : mix bot top barPos
+			local fine : stroke * CThin
+			local shoulderFine : ShoulderFine * (stroke / Stroke)
+			return : object stroke midx midy fine shoulderFine
+
+		define [UpperShapeT sink] : begin
+			define [object stroke midx midy fine shoulderFine] : Dim
+			local middle : mix left right 0.5
+			return : sink
+				match slabTop
+					[Just SLAB-CLASSICAL] : SerifedArcStart.LtrRhs left top stroke hook (o -- yo)
+					[Just SLAB-INWARD] : InwardSlabArcStart.LtrRhs left top stroke hook (o -- yo)
+					[Just FLAT-CONNECTION] : list
+						flat (left + TINY) top [widths.rhs.heading stroke Rightward]
+						curl [Arch.adjust-x.top middle stroke] top [heading Rightward]
+						archv
+					[Just OPEN-VERTICAL] : flat right top [widths.rhs.heading stroke Downward]
+					([Just CLOSED-CIRCLE] || [Just CLOSED-ROUND]) : list
+						flat (left + [if (slabTop === CLOSED-CIRCLE) xo 0]) midy [widths.rhs stroke]
+						curl (left + [if (slabTop === CLOSED-CIRCLE) xo 0]) [Math.max (top - ada) (midy + TINY)]
+						Arch.rhs top (sw -- stroke) (o -- yo)
+					[Just CLOSED-STEM] : list
+						flat (left + [HSwToV : stroke - shoulderFine]) midy [widths.rhs shoulderFine]
+						curl (left + [HSwToV : stroke - shoulderFine]) [Math.max (top - ada) (midy + TINY)]
+						Arch.rhs top (sw -- stroke) (swBefore -- shoulderFine) (o -- yo)
+					__ : list
+						g4   (left - xo) (top - hook) [widths.rhs stroke]
+						HookStart top (sw -- stroke) (o -- yo)
+				[if (slabTop === OPEN-VERTICAL) curl g4] right [YSmoothMidR top (midy - stroke / 2) ada adb]
+				arcvh
+				flat middle (midy + (stroke / 2 - fine)) [widths.heading 0 fine Leftward]
+				curl midx   (midy + (stroke / 2 - fine)) [heading Leftward]
+
+		define [LowerShapeT sink] : begin
+			define [object stroke midx midy fine shoulderFine] : Dim
+			local middle : mix left right 0.5
+			return : sink
+				flat midx   (midy - (stroke / 2 - fine)) [widths.heading 0 fine Rightward]
+				curl middle (midy - (stroke / 2 - fine)) [heading Rightward]
+				archv
+				if (slabBot === OPEN-HALF)
+					g4.down.end (right - xo * 2) [YSmoothMidR (midy + stroke / 2) bot ada adb] [widths.rhs.heading stroke Downward]
+					[if (slabBot === OPEN-VERTICAL) flat g4] (right - xo * 2) [YSmoothMidR (midy + stroke / 2) bot ada adb] [widths.rhs stroke]
+				match slabBot
+					[Just SLAB-CLASSICAL] : SerifedArcEnd.RtlRhs left bot stroke hookBot (o -- yo)
+					[Just SLAB-INWARD] : InwardSlabArcEnd.RtlRhs left bot stroke hookBot (o -- yo)
+					[Just FLAT-CONNECTION] : list
+						arcvh
+						flat [Arch.adjust-x.bot middle stroke] bot [heading Leftward]
+						curl (left + TINY) bot [heading Leftward]
+					[Just OPEN-HALF] : list
+					[Just OPEN-VERTICAL] : curl (right - xo * 2) bot [heading Downward]
+					([Just CLOSED-CIRCLE] || [Just CLOSED-ROUND]) : list
+						Arch.rhs bot (sw -- stroke) (o -- yo)
+						flat (left + [if (slabBot === CLOSED-CIRCLE) xo 0]) [Math.min (bot + adb) (midy - TINY)]
+						curl (left + [if (slabBot === CLOSED-CIRCLE) xo 0]) midy
+					[Just CLOSED-STEM] : list
+						Arch.rhs bot (sw -- stroke) (swAfter -- shoulderFine) (o -- yo)
+						flat (left + [HSwToV : stroke - shoulderFine]) [Math.min (bot + adb) (midy - TINY)] [widths.rhs shoulderFine]
+						curl (left + [HSwToV : stroke - shoulderFine]) midy
+					__ : list
+						HookEnd bot (sw -- stroke) (o -- yo)
+						g4   (left + xo) (bot + hookBot)
+
+		export : define [UpperShape] : UpperShapeT dispiro
+
+		export : define [LowerShape] : LowerShapeT dispiro
+
+		define [LowerShapeTailed ess] : begin
+			define [object stroke midx midy fine] : Dim
+			local middle : mix left right 0.5
+			local mockWidth : (right - left) + 2 * SB
+			local mockHeight : (midy + stroke / 2) - (bot + Descender)
+			local adb2 : AdviceSArchDepth mockHeight (+1) stroke
+			return : dispiro
+				flat midx   (midy - (stroke / 2 - fine)) [widths.heading 0 fine Rightward]
+				curl middle (midy - (stroke / 2 - fine)) [heading Rightward]
+				archv
+				g4   (right - xo * 2) ((midy + stroke / 2) - adb2) [widths.rhs stroke]
+				~~~ [SNeck [DivFrame (mockWidth / Width) 2] mockHeight stroke ess]
+				g4   (left  + xo) ((bot + Descender) + adb2) [widths.lhs stroke]
+				HookEnd (bot + Descender) (sw -- stroke) (o -- yo)
+				g4   (right - xo) ((bot + Descender) + hookBot)
+
+		export : define [Shape] : union
+			UpperShapeT dispiro
+			LowerShapeT dispiro
+
+		export : define [ShapeMask] : union
+			UpperShapeT spiro-outline
+			LowerShapeT spiro-outline
+
+		export : define [CapitalKsiBaseShape] : union
+			UpperShapeT dispiro
+			LowerShapeTailed (stroke * EssRatioUpper)
+
+		export : define [SmallKsiBaseShape] : union
+			UpperShapeT dispiro
+			LowerShapeTailed (stroke * EssRatioLower)
+
+		export : define [AutoStartSerifL] : begin
+			define [object stroke] : Dim
+			return : match slabTop
+				[Just SLAB-CLASSICAL] : ArcStartSerif.L       left top stroke hook
+				[Just SLAB-INWARD]    : ArcStartSerif.InwardL left top stroke hook
+				__ : glyph-proc
+
+		export : define [AutoEndSerifL] : begin
+			define [object stroke] : Dim
+			return : match slabBot
+				[Just SLAB-CLASSICAL] : ArcEndSerif.L         left bot stroke hookBot
+				[Just SLAB-INWARD]    : ArcEndSerif.InwardL   left bot stroke hookBot
+				__ : glyph-proc
+
+	define flex-params [CyrRevZe] : namespace
+		local-parameter : slabTop
+		local-parameter : slabBot
+		local-parameter : top
+		local-parameter : bot
+		local-parameter : left      -- SB
+		local-parameter : right     -- RightSB
+		local-parameter : blend     -- StdBlend
+		local-parameter : hook      -- Hook
+		local-parameter : hookBot   -- hook
+		local-parameter : stroke    -- [AdviceStroke2 2 3 : top - bot]
+		local-parameter : xOverflow -- [HSwToV stroke]
+		local-parameter : xo        -- OX
+		local-parameter : yo        -- O
+		local-parameter : barPos    -- OverlayPos
+		local-parameter : ada       -- SmallArchDepthA
+		local-parameter : adb       -- SmallArchDepthB
+
+		export : define [Dim] : begin
+			local midx : mix (left + ([HSwToV stroke] - xOverflow)) (right - ([HSwToV stroke] - xOverflow)) blend
+			local midy : mix bot top barPos
+			local fine : stroke * CThin
+			local shoulderFine : ShoulderFine * (stroke / Stroke)
+			return : object stroke midx midy fine shoulderFine
+
+		export : define [UpperShape] : begin
+			define [object stroke midx midy fine shoulderFine] : Dim
+			local middle : mix left right 0.5
+			return : dispiro
+				match slabTop
+					[Just SLAB-CLASSICAL] : SerifedArcStart.RtlLhs right top stroke hook (o -- yo)
+					[Just SLAB-INWARD] : InwardSlabArcStart.RtlLhs right top stroke hook (o -- yo)
+					[Just FLAT-CONNECTION] : list
+						flat (right - TINY) top [widths.lhs.heading stroke Leftward]
+						curl [Arch.adjust-x.top middle stroke] top [heading Leftward]
+						archv
+					[Just OPEN-VERTICAL] : flat left top [widths.lhs.heading stroke Downward]
+					([Just CLOSED-CIRCLE] || [Just CLOSED-ROUND]) : list
+						flat (right - [if (slabTop === CLOSED-CIRCLE) xo 0]) midy [widths.lhs stroke]
+						curl (right - [if (slabTop === CLOSED-CIRCLE) xo 0]) [Math.max (top - adb) (midy + TINY)]
+						Arch.lhs top (sw -- stroke) (o -- yo)
+					[Just CLOSED-STEM] : list
+						flat (right - [HSwToV : stroke - shoulderFine]) midy [widths.lhs shoulderFine]
+						curl (right - [HSwToV : stroke - shoulderFine]) [Math.max (top - adb) (midy + TINY)]
+						Arch.lhs top (sw -- stroke) (swBefore -- shoulderFine) (o -- yo)
+					__ : list
+						g4   (right + xo) (top - hook) [widths.lhs]
+						HookStart top (sw -- stroke) (o -- yo)
+				[if (slabTop === OPEN-VERTICAL) curl g4] left [YSmoothMidL top (midy - stroke / 2) ada adb]
+				arcvh
+				flat Middle (midy + (stroke / 2 - fine)) [widths.heading fine 0 Rightward]
+				curl midx   (midy + (stroke / 2 - fine)) [heading Rightward]
+
+		export : define [LowerShape] : begin
+			define [object stroke midx midy fine shoulderFine] : Dim
+			local middle : mix left right 0.5
+			return : dispiro
+				flat midx   (midy - (stroke / 2 - fine)) [widths.heading fine 0 Leftward]
+				curl Middle (midy - (stroke / 2 - fine)) [heading Leftward]
+				archv
+				[if (slabBot === OPEN-VERTICAL) flat g4] (left + xo * 2) [YSmoothMidL (midy + stroke / 2) bot ada adb] [widths.lhs stroke]
+				match slabBot
+					[Just SLAB-CLASSICAL] : SerifedArcEnd.LtrLhs right bot stroke hookBot (o -- yo)
+					[Just SLAB-INWARD] : InwardSlabArcEnd.LtrLhs right bot stroke hookBot (o -- yo)
+					[Just FLAT-CONNECTION] : list
+						arcvh
+						flat [Arch.adjust-x.bot middle stroke] bot [heading Rightward]
+						curl (right - TINY) bot [heading Rightward]
+					[Just OPEN-VERTICAL] : curl (left + xo * 2) bot [heading Downward]
+					([Just CLOSED-CIRCLE] || [Just CLOSED-ROUND]) : list
+						Arch.lhs bot (sw -- stroke) (o -- yo)
+						flat (right - [if (slabBot === CLOSED-CIRCLE) xo 0]) [Math.min (bot + ada) (midy - TINY)]
+						curl (right - [if (slabBot === CLOSED-CIRCLE) xo 0]) midy
+					[Just CLOSED-STEM] : list
+						Arch.lhs bot (sw -- stroke) (swAfter -- shoulderFine) (o -- yo)
+						flat (right - [HSwToV : stroke - shoulderFine]) [Math.min (bot + ada) (midy - TINY)] [widths.lhs shoulderFine]
+						curl (right - [HSwToV : stroke - shoulderFine]) midy
+					__ : list
+						HookEnd bot (sw -- stroke) (o -- yo)
+						g4   (right - xo) (bot + hookBot)
+
+		export : define [Shape] : union [UpperShape] [LowerShape]
+
+		export : define [AutoStartSerifR] : begin
+			define [object stroke] : Dim
+			return : match slabTop
+				[Just SLAB-CLASSICAL] : ArcStartSerif.R       right top stroke hook
+				[Just SLAB-INWARD]    : ArcStartSerif.InwardR right top stroke hook
+				__ : glyph-proc
+
+		export : define [AutoEndSerifR] : begin
+			define [object stroke] : Dim
+			return : match slabBot
+				[Just SLAB-CLASSICAL] : ArcEndSerif.R         right bot stroke hookBot
+				[Just SLAB-INWARD]    : ArcEndSerif.InwardR   right bot stroke hookBot
+				__ : glyph-proc
+
+	glyph-block-export ZeConfig
+	define ZeConfig : SuffixCfg.weave
+		object # height
+			""                      { 0         'capital' 'e' }
+			tall                    { Descender 'capDesc' 'p' }
+		object # serifs
+			serifless               { SLAB-NONE      SLAB-NONE      }
+			bottomSerifed           { SLAB-NONE      SLAB-CLASSICAL }
+			bottomInwardSerifed     { SLAB-NONE      SLAB-INWARD    }
+			unilateralSerifed       { SLAB-CLASSICAL SLAB-NONE      }
+			bilateralSerifed        { SLAB-CLASSICAL SLAB-CLASSICAL }
+			unilateralInwardSerifed { SLAB-INWARD    SLAB-NONE      }
+			bilateralInwardSerifed  { SLAB-INWARD    SLAB-INWARD    }
+			hybridSerifed1          { SLAB-INWARD    SLAB-CLASSICAL }
+
+	foreach { suffix { { bottom mkCap mkXH } { slabTop slabBot } } } [Object.entries ZeConfig] : do
+		create-glyph "cyrl/Ze.\(suffix)" : glyph-proc
+			include : MarkSet.(mkCap)
+			local ze : CyrZe slabTop slabBot CAP bottom
+				hook   -- Hook
+				barPos -- [if bottom 0.55 0.52]
+				ada    -- ArchDepthA
+				adb    -- ArchDepthB
+			define [object midy] : ze.Dim
+			set-base-anchor 'overlay' Middle midy
+			set-base-anchor 'strike'  Middle midy
+			include : union [ze.Shape] [ze.AutoStartSerifL] [ze.AutoEndSerifL]
+
+		create-glyph "cyrl/ze.\(suffix)" : glyph-proc
+			include : MarkSet.(mkXH)
+			local ze : CyrZe slabTop slabBot XH bottom
+				hook   -- SHook
+				barPos -- [if bottom 0.55 0.52]
+				ada    -- SmallArchDepthA
+				adb    -- SmallArchDepthB
+			define [object midy] : ze.Dim
+			set-base-anchor 'overlay' Middle midy
+			set-base-anchor 'strike'  Middle midy
+			include : union [ze.Shape] [ze.AutoStartSerifL] [ze.AutoEndSerifL]
+
+		create-glyph "cyrl/Dhe.\(suffix)" : glyph-proc
+			include [refer-glyph "cyrl/Ze.\(suffix)"] AS_BASE ALSO_METRICS
+			local desc : bottom - LongVJut + QuarterStroke
+			include : ExtendBelowBaseAnchors desc
+			local zeNoO : CyrZe slabTop slabBot CAP bottom
+				hook   -- Hook
+				xo     -- 0
+				yo     -- 0
+				barPos -- [if bottom 0.55 0.52]
+				ada    -- ArchDepthA
+				adb    -- ArchDepthB
+			include : difference
+				VBar.m [Arch.adjust-x.bot Middle] desc (bottom + O + Stroke) VJutStroke
+				zeNoO.ShapeMask
+
+		create-glyph "cyrl/dhe.\(suffix)" : glyph-proc
+			include [refer-glyph "cyrl/ze.\(suffix)"] AS_BASE ALSO_METRICS
+			local desc : bottom - LongVJut + QuarterStroke
+			include : ExtendBelowBaseAnchors desc
+			local zeNoO : CyrZe slabTop slabBot XH bottom
+				hook   -- SHook
+				xo     -- 0
+				yo     -- 0
+				barPos -- [if bottom 0.55 0.52]
+				ada    -- SmallArchDepthA
+				adb    -- SmallArchDepthB
+			include : difference
+				VBar.m [Arch.adjust-x.bot Middle] desc (bottom + O + Stroke) VJutStroke
+				zeNoO.ShapeMask
+
+		create-glyph "cyrl/zeRhoticHook.\(suffix)" : glyph-proc
+			local df : include : DivFrame para.advanceScaleM 1
+			include : df.markSet.(mkXH)
+			local subDf : DivFrame (0.75 * para.advanceScaleM) 2
+			local stroke : subDf.adviceStroke2 2 3 (XH - bottom)
+			local ze : CyrZe slabTop slabBot XH bottom
+				left   -- subDf.leftSB
+				right  -- subDf.rightSB
+				hook   -- SHook
+				stroke -- stroke
+				barPos -- [if bottom 0.55 0.52]
+				ada    -- [subDf.archDepthAOf SmallArchDepth stroke]
+				adb    -- [subDf.archDepthBOf SmallArchDepth stroke]
+			define [object midy] : ze.Dim
+			set-base-anchor 'overlay' subDf.middle midy
+			set-base-anchor 'strike'  subDf.middle midy
+			include : union [ze.Shape] [ze.AutoStartSerifL] [ze.AutoEndSerifL]
+			include : RhoticHookShape (subDf.rightSB - [HSwToV : 1.25 * markFine]) df.width [mix bottom XH 0.825] [mix bottom XH 0.2]
+
+		create-glyph "cyrl/revZe.\(suffix)" : glyph-proc
+			include : MarkSet.(mkCap)
+			local revZe : CyrRevZe slabTop slabBot CAP bottom
+				hook   -- Hook
+				barPos -- [if bottom 0.55 0.52]
+				ada    -- ArchDepthA
+				adb    -- ArchDepthB
+			define [object midy] : revZe.Dim
+			set-base-anchor 'overlay' Middle midy
+			set-base-anchor 'strike'  Middle midy
+			include : union [revZe.Shape] [revZe.AutoStartSerifR] [revZe.AutoEndSerifR]
+
+		create-glyph "cyrl/revze.\(suffix)" : glyph-proc
+			include : MarkSet.(mkXH)
+			local revZe : CyrRevZe slabTop slabBot XH bottom
+				hook   -- SHook
+				barPos -- [if bottom 0.55 0.52]
+				ada    -- SmallArchDepthA
+				adb    -- SmallArchDepthB
+			define [object midy] : revZe.Dim
+			set-base-anchor 'overlay' Middle midy
+			set-base-anchor 'strike'  Middle midy
+			include : union [revZe.Shape] [revZe.AutoStartSerifR] [revZe.AutoEndSerifR]
+
+		create-glyph "cyrl/revzeBar.\(suffix)" : glyph-proc
+			include : MarkSet.(mkXH)
+			local revZe : CyrRevZe slabTop slabBot XH bottom
+				blend  -- (1 + (0.7 * (SB - 0)) / (RightSB - SB))
+				hook   -- SHook
+				barPos -- [if bottom 0.55 0.52]
+				ada    -- SmallArchDepthA
+				adb    -- SmallArchDepthB
+			define [object midy] : revZe.Dim
+			set-base-anchor 'overlay' Middle midy
+			set-base-anchor 'strike'  Middle midy
+			include : union [revZe.Shape] [revZe.AutoStartSerifR] [revZe.AutoEndSerifR] : dispiro
+				widths.center OverlayStroke
+				flat [mix 0 SB 0.3] midy
+				curl Middle         midy [heading Rightward]
+
+		if (!bottom) : begin
+			create-glyph "tresillo.\(suffix)" : glyph-proc
+				include : MarkSet.b
+				local revZe : CyrRevZe slabTop slabBot Ascender 0
+					hook   -- SHook
+					barPos -- 0.55
+					ada    -- SmallArchDepthA
+					adb    -- SmallArchDepthB
+				define [object midy] : revZe.Dim
+				set-base-anchor 'overlay' Middle midy
+				set-base-anchor 'strike'  Middle midy
+				include : union [revZe.Shape] [revZe.AutoStartSerifR] [revZe.AutoEndSerifR]
+
+			if (!slabBot) : begin
+				create-glyph "cyrl/DzjeKomi.\(suffix)" : glyph-proc
+					include : MarkSet.capital
+					local ze : CyrZe slabTop OPEN-VERTICAL CAP 0
+						hook -- Hook
+						ada  -- ArchDepthA
+						adb  -- ArchDepthB
+					define [object midy] : ze.Dim
+					set-base-anchor 'overlay' Middle midy
+					set-base-anchor 'strike'  Middle midy
+					include : union [ze.Shape] [ze.AutoStartSerifL]
+					include : CyrDescender.rSideJut (RightSB - OX * 2) 0
+
+				create-glyph "cyrl/dzjeKomi.\(suffix)" : glyph-proc
+					include : MarkSet.e
+					local ze : CyrZe slabTop OPEN-VERTICAL XH 0
+						hook -- SHook
+						ada  -- SmallArchDepthA
+						adb  -- SmallArchDepthB
+					define [object midy] : ze.Dim
+					set-base-anchor 'overlay' Middle midy
+					set-base-anchor 'strike'  Middle midy
+					include : union [ze.Shape] [ze.AutoStartSerifL]
+					include : CyrDescender.rSideJut (RightSB - OX * 2) 0
+
+				create-glyph "cyrl/ZjeKomi.\(suffix)" : glyph-proc
+					local df : include : DivFrame para.advanceScaleMM 3
+					include : df.markSet.capital
+
+					local xm : df.middle + [HSwToV : 0.5 * df.mvs]
+					local ze : CyrZe slabTop OPEN-HALF CAP 0
+						left   -- df.leftSB
+						right  -- xm
+						hook   -- Hook
+						stroke -- df.mvs
+						ada    -- ArchDepthA
+						adb    -- ArchDepthB
+					define [object stroke midy] : ze.Dim
+					set-base-anchor 'overlay' [mix df.leftSB xm 0.5] midy
+					set-base-anchor 'strike'  [mix df.leftSB xm 0.5] midy
+					include : union [ze.Shape] [ze.AutoStartSerifL]
+					include : UpwardHookShape
+						left   -- (xm - OX * 2 - [HSwToV stroke])
+						right  -- df.rightSB
+						ybegin -- [YSmoothMidR (midy + stroke / 2) 0 ArchDepthA ArchDepthB]
+						yend   -- (CAP / 2 + HalfStroke)
+						ada    -- (ArchDepthA * (2 / df.hPack) * df.adws)
+						adb    -- (ArchDepthB * (2 / df.hPack) * df.adws)
+						sw     -- stroke
+					if SLAB : begin
+						local sf2 : [SerifFrame.fromDf df (CAP / 2 + HalfStroke) 0].slice 1 2
+						include sf2.rt.full
+
+				create-glyph "cyrl/zjeKomi.\(suffix)" : glyph-proc
+					local df : include : DivFrame para.advanceScaleMM 3
+					include : df.markSet.e
+
+					local xm : df.middle + [HSwToV : 0.5 * df.mvs]
+					local ze : CyrZe slabTop OPEN-HALF XH 0
+						left   -- df.leftSB
+						right  -- xm
+						hook   -- SHook
+						stroke -- df.mvs
+						ada    -- SmallArchDepthA
+						adb    -- SmallArchDepthB
+					define [object stroke midy] : ze.Dim
+					set-base-anchor 'overlay' [mix df.leftSB xm 0.5] midy
+					set-base-anchor 'strike'  [mix df.leftSB xm 0.5] midy
+					include : union [ze.Shape] [ze.AutoStartSerifL]
+					include : UpwardHookShape
+						left   -- (xm - OX * 2 - [HSwToV stroke])
+						right  -- df.rightSB
+						ybegin -- [YSmoothMidR (midy + stroke / 2) 0 SmallArchDepthA SmallArchDepthB]
+						yend   -- (XH / 2 + HalfStroke)
+						ada    -- (ArchDepthA * (2 / df.hPack) * df.adws)
+						adb    -- (ArchDepthB * (2 / df.hPack) * df.adws)
+						sw     -- stroke
+					if SLAB : begin
+						local sf2 : [SerifFrame.fromDf df (XH / 2 + HalfStroke) 0].slice 1 2
+						include sf2.rt.full
+
+				create-glyph "cyrl/Ksi/base.\(suffix)" : glyph-proc
+					include : MarkSet.capDesc
+					local ze : CyrZe slabTop SLAB-NONE CAP 0
+						hook -- Hook
+						ada  -- ArchDepthA
+						adb  -- ArchDepthB
+					define [object midy] : ze.Dim
+					set-base-anchor 'overlay' Middle midy
+					set-base-anchor 'strike'  Middle midy
+					include : union [ze.CapitalKsiBaseShape] [ze.AutoStartSerifL]
+
+				create-glyph "cyrl/ksi/base.\(suffix)" : glyph-proc
+					include : MarkSet.p
+					local ze : CyrZe slabTop SLAB-NONE XH 0
+						hook -- SHook
+						ada  -- SmallArchDepthA
+						adb  -- SmallArchDepthB
+					define [object midy] : ze.Dim
+					set-base-anchor 'overlay' Middle midy
+					set-base-anchor 'strike'  Middle midy
+					include : union [ze.SmallKsiBaseShape] [ze.AutoStartSerifL]
+
+	select-variant 'cyrl/Ze' 0x417
+	select-variant 'cyrl/ze' 0x437
+	select-variant 'cyrl/ze.BGR' (shapeFrom -- 'cyrl/ze')
+
+	select-variant 'cyrl/Dhe' 0x498 (follow -- 'cyrl/Ze')
+	select-variant 'cyrl/dhe' 0x499 (follow -- 'cyrl/ze')
+
+	select-variant 'cyrl/revZe' 0x510
+	select-variant 'cyrl/revze' 0x511
+
+	select-variant 'latn/Epsilon' 0x190 (shapeFrom -- 'cyrl/revZe')
+	select-variant 'latn/epsilon' 0x25B (shapeFrom -- 'cyrl/revze')
+	alias 'grek/epsilon' 0x3B5 'cyrl/revze.serifless'
+
+	select-variant 'latn/epsilonBar' 0x1DF44 (shapeFrom -- 'cyrl/revzeBar') (follow -- 'latn/epsilon')
+
+	CreateTurnedLetter 'latn/turnepsilon' 0x1D08 'latn/epsilon' HalfAdvance (XH / 2)
+
+	select-variant 'latn/revEpsilon' 0xA7AB (shapeFrom -- 'cyrl/Ze')
+	select-variant 'latn/revepsilon' 0x25C  (shapeFrom -- 'cyrl/ze')
+	select-variant 'latn/revepsilonRhoticHook' 0x25D (shapeFrom -- 'cyrl/zeRhoticHook') (follow -- 'latn/revepsilon')
+
+	select-variant 'cyrl/ZjeKomi'  0x504 (follow -- 'cyrl/Ze/topSerif')
+	select-variant 'cyrl/zjeKomi'  0x505 (follow -- 'cyrl/ze/topSerif')
+	select-variant 'cyrl/DzjeKomi' 0x506 (follow -- 'cyrl/Ze/topSerif')
+	select-variant 'cyrl/dzjeKomi' 0x507 (follow -- 'cyrl/ze/topSerif')
+
+	select-variant 'cyrl/Ksi/base' (follow -- 'cyrl/Ze/topSerif')
+	select-variant 'cyrl/ksi/base' (follow -- 'cyrl/ze/topSerif')
+
+	select-variant 'Tresillo' 0xA72A (follow -- 'C') (shapeFrom -- 'cyrl/revZe')
+	select-variant 'tresillo' 0xA72B (follow -- 'c')
+
+	derive-multi-part-glyphs 'cyrl/Dhe.BSH' null { 'cyrl/Ze' 'invCommaBelow' } : lambda [srcs gr] : glyph-proc
+		local { base mark } srcs
+		define baseGlyph : query-glyph base
+		include : with-transform
+			ApparentTranslate
+				[Arch.adjust-x.bot Middle]    - markMiddle
+				baseGlyph.baseAnchors.below.y + AccentClearance
+			refer-glyph mark
+		include [refer-glyph base] AS_BASE ALSO_METRICS
+		include : ExtendBelowBaseAnchors (baseGlyph.baseAnchors.below.y - AccentHeight)
+
+	derive-multi-part-glyphs 'cyrl/dhe.BSH' null { 'cyrl/ze' 'invCommaBelow' } : lambda [srcs gr] : glyph-proc
+		local { base mark } srcs
+		define baseGlyph : query-glyph base
+		include : with-transform
+			ApparentTranslate
+				[Arch.adjust-x.bot Middle]    - markMiddle
+				baseGlyph.baseAnchors.below.y + AccentClearance
+			refer-glyph mark
+		include [refer-glyph base] AS_BASE ALSO_METRICS
+		include : ExtendBelowBaseAnchors (baseGlyph.baseAnchors.below.y - AccentHeight)
+
+	select-variant 'latn/epsilon/descBase' (shapeFrom -- 'cyrl/revze')
+	derive-composites 'latn/epsilonRetroflexHook' 0x1D93 'latn/epsilon/descBase'
+		RetroflexHook.r RightSB 0 (refSw -- [AdviceStroke2 2 3 XH])
+
+	select-variant 'latn/revepsilon/descBase' (shapeFrom -- 'cyrl/ze')
+	derive-composites 'latn/revepsilonRetroflexHook' 0x1D94 'latn/revepsilon/descBase'
+		RetroflexHook.l SB 0 (refSw -- [AdviceStroke2 2 3 XH])
+
+	create-glyph 'voicedLaryngealSpirant' 0x1D24 : glyph-proc
+		include : MarkSet.b
+		local blend 0.505
+		local midGap : Math.max
+			[mix 0 Ascender 0.000] + [AdviceStroke2 3 12 (Ascender - 0)]
+			[mix 0 Ascender 0.125] - [AdviceStroke2 3  6 (XH       - 0)]
+		local strokeV : AdviceStroke 4
+		local ze : CyrZe SLAB-NONE SLAB-NONE Ascender midGap
+			blend -- blend
+			hook  -- Hook
+			ada   -- ArchDepthA
+			adb   -- ArchDepthB
+		local dimUpper : ze.Dim
+
+		local revZe : CyrRevZe SLAB-NONE SLAB-NONE (Ascender - midGap) 0
+			blend -- blend
+			hook  -- Hook
+			ada   -- ArchDepthA
+			adb   -- ArchDepthB
+		local dimLower : revZe.Dim
+		include : union [revZe.LowerShape] [ze.UpperShape] : Rect
+			dimUpper.midy + dimUpper.stroke / 2
+			dimLower.midy - dimLower.stroke / 2
+			Middle - [HSwToV : 0.5 * strokeV]
+			Middle + [HSwToV : 0.5 * strokeV]
+
+	do "Closed Epsilon"
+		create-glyph 'latn/epsilonClosed' 0x29A : glyph-proc
+			include : MarkSet.e
+			local revZe : CyrRevZe CLOSED-CIRCLE CLOSED-CIRCLE XH 0
+				blend     -- 0.7
+				hook      -- SHook
+				xOverflow -- 0
+				ada       -- SmallArchDepthA
+				adb       -- SmallArchDepthB
+			include : revZe.Shape
+
+		create-glyph 'latn/revepsilonClosed' 0x25E : glyph-proc
+			include : MarkSet.e
+			local ze : CyrZe CLOSED-CIRCLE CLOSED-CIRCLE XH 0
+				blend     -- 0.7
+				hook      -- SHook
+				xOverflow -- 0
+				ada       -- SmallArchDepthA
+				adb       -- SmallArchDepthB
+			include : ze.Shape
+
+	do "Volapuk OE"
+		create-glyph 'OeVolapuk' 0xA79C : glyph-proc
+			include : MarkSet.capital
+			local revZe : CyrRevZe CLOSED-CIRCLE CLOSED-CIRCLE CAP 0
+				blend     -- VolBlend
+				hook      -- Hook
+				xOverflow -- 0
+				ada       -- ArchDepthA
+				adb       -- ArchDepthB
+			include : revZe.Shape
+
+		create-glyph 'oeVolapuk' 0xA79D : glyph-proc
+			include : MarkSet.e
+			local revZe : CyrRevZe CLOSED-CIRCLE CLOSED-CIRCLE XH 0
+				blend     -- VolBlend
+				hook      -- SHook
+				xOverflow -- 0
+				ada       -- SmallArchDepthA
+				adb       -- SmallArchDepthB
+			include : revZe.Shape
+
+	do "Volapuk AE"
+		glyph-block-import Letter-Latin-Lower-A : SingleStorey
+
+		define [FullBarBody df top bar hook ada adb] : glyph-proc
+			local revZe : CyrRevZe CLOSED-STEM CLOSED-STEM top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : bar df top stroke
+
+		define [TopCutBody df top bar hook ada adb] : glyph-proc
+			local revZe : CyrRevZe CLOSED-STEM CLOSED-STEM top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : bar df (top - HalfStroke) stroke
+			include : spiro-outline
+				corner  df.rightSB                     top
+				corner  df.rightSB                    (top - HalfStroke)
+				corner (df.rightSB - [HSwToV stroke]) (top - HalfStroke)
+
+		define [FlatTopBody df top bar hook ada adb] : glyph-proc
+			local revZe : CyrRevZe FLAT-CONNECTION CLOSED-STEM top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : bar df top stroke
+
+		define [EarlessCornerBody df top bar hook ada adb] : glyph-proc
+			local revZe : CyrRevZe SLAB-INWARD CLOSED-STEM top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : bar df (top - DToothlessRise) stroke
+
+		define [EarlessRoundedBody df top bar hook ada adb] : glyph-proc
+			local revZe : CyrRevZe CLOSED-ROUND CLOSED-STEM top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : bar df (top - adb) stroke
+
+		define SingleStoreyConfig : object
+			singleStoreySerifless               { FullBarBody        SingleStorey.SeriflessBar     }
+			singleStoreyTopCutSerifless         { TopCutBody         SingleStorey.SeriflessBar     }
+			singleStoreyFlatTopSerifless        { FlatTopBody        SingleStorey.SeriflessBar     }
+			singleStoreyEarlessCornerSerifless  { EarlessCornerBody  SingleStorey.SeriflessBar     }
+			singleStoreyEarlessRoundedSerifless { EarlessRoundedBody SingleStorey.SeriflessBar     }
+
+			singleStoreySerifed                 { FullBarBody        SingleStorey.BottomSerifedBar }
+			singleStoreyTopCutSerifed           { TopCutBody         SingleStorey.BottomSerifedBar }
+			singleStoreyFlatTopSerifed          { FlatTopBody        SingleStorey.BottomSerifedBar }
+			singleStoreyEarlessCornerSerifed    { EarlessCornerBody  SingleStorey.BottomSerifedBar }
+			singleStoreyEarlessRoundedSerifed   { EarlessRoundedBody SingleStorey.BottomSerifedBar }
+
+			singleStoreyDoubleSerifed           { FullBarBody        SingleStorey.DoubleSerifedBar }
+			singleStoreyFlatTopDoubleSerifed    { FlatTopBody        SingleStorey.DoubleSerifedBar }
+
+			singleStoreyTailed                  { FullBarBody        SingleStorey.TailedBar        }
+			singleStoreyTopCutTailed            { TopCutBody         SingleStorey.TailedBar        }
+			singleStoreyFlatTopTailed           { FlatTopBody        SingleStorey.TailedBar        }
+			singleStoreyEarlessCornerTailed     { EarlessCornerBody  SingleStorey.TailedBar        }
+			singleStoreyEarlessRoundedTailed    { EarlessRoundedBody SingleStorey.TailedBar        }
+
+			singleStoreyTailedSerifed           { FullBarBody        SingleStorey.TailedSerifedBar }
+			singleStoreyFlatTopTailedSerifed    { FlatTopBody        SingleStorey.TailedSerifedBar }
+
+		foreach { suffix { body bar } } [Object.entries SingleStoreyConfig] : do
+			create-glyph "AeVolapuk/base.\(suffix)" : glyph-proc
+				local df : include : DivFrame 1
+				include : df.markSet.capital
+				include : body df CAP bar Hook ArchDepthA ArchDepthB
+			create-glyph "aeVolapuk/base.\(suffix)" : glyph-proc
+				local df : include : DivFrame 1
+				include : df.markSet.e
+				include : body df XH bar SHook SmallArchDepthA SmallArchDepthB
+
+		select-variant 'AeVolapuk.slab.upright' (shapeFrom -- 'AeVolapuk/base') (follow -- 'a/singleStorey.slab.upright')
+		select-variant 'AeVolapuk.slab.italic'  (shapeFrom -- 'AeVolapuk/base') (follow -- 'a/singleStorey.slab.italic')
+		orthographic-italic 'AeVolapuk.slab' null
+		select-variant 'AeVolapuk.sans' (shapeFrom -- 'AeVolapuk/base') (follow -- 'a/singleStorey.sans')
+		orthographic-slab SLAB 'AeVolapuk' 0xA79A
+
+		select-variant 'aeVolapuk.slab.upright' (shapeFrom -- 'aeVolapuk/base') (follow -- 'a/singleStorey.slab.upright')
+		select-variant 'aeVolapuk.slab.italic'  (shapeFrom -- 'aeVolapuk/base') (follow -- 'a/singleStorey.slab.italic')
+		orthographic-italic 'aeVolapuk.slab' null
+		select-variant 'aeVolapuk.sans' (shapeFrom -- 'aeVolapuk/base') (follow -- 'a/singleStorey.sans')
+		orthographic-slab SLAB 'aeVolapuk' 0xA79B
+
+		alias 'aRoundTop.italic' null [if SLAB 'aeVolapuk.slab.italic' 'aeVolapuk.sans']
+
+	do "Volapuk UE"
+		glyph-block-import Letter-Latin-U : USerifs
+		glyph-block-import Letter-Shared-Shapes : RightwardTailedBar
+
+		define [UToothed df top slab hook ada adb] : glyph-proc
+			set-base-anchor 'trailing' df.rightSB 0
+			local revZe : CyrRevZe OPEN-VERTICAL CLOSED-STEM top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : VBar.r df.rightSB 0 top stroke
+			include : slab df top stroke
+
+		define [UTailed df top slab hook ada adb] : glyph-proc
+			set-base-anchor 'trailing' (df.rightSB + SideJut) 0
+			local revZe : CyrRevZe OPEN-VERTICAL CLOSED-STEM top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : RightwardTailedBar df.rightSB 0 top stroke
+			include : slab df top stroke
+
+		define [UFlatBottom df top slab hook ada adb] : glyph-proc
+			local revZe : CyrRevZe OPEN-VERTICAL FLAT-CONNECTION top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : VBar.r df.rightSB 0 top stroke
+			include : slab df top stroke
+
+		define [UToothlessCorner df top slab hook ada adb] : glyph-proc
+			local revZe : CyrRevZe OPEN-VERTICAL SLAB-INWARD top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : VBar.r df.rightSB DToothlessRise top stroke
+			include : slab df top stroke
+
+		define [UToothlessRounded df top slab hook ada adb] : glyph-proc
+			local revZe : CyrRevZe OPEN-VERTICAL CLOSED-ROUND top 0
+				blend     -- VolBlend
+				hook      -- hook
+				xOverflow -- 0
+				ada       -- ada
+				adb       -- adb
+			define [object stroke] : revZe.Dim
+			include : revZe.Shape
+			include : VBar.r df.rightSB ada top stroke
+			include : slab df top stroke
+
+		define SmallUConfig : SuffixCfg.weave
+			object # body
+				toothed           UToothed
+				tailed            UTailed
+				flatBottom        UFlatBottom
+				toothlessCorner   UToothlessCorner
+				toothlessRounded  UToothlessRounded
+			function [body] : object # serifs
+				serifless            { no-shape            no-shape            }
+				bottomRightSerifed   { USerifs.BottomRight USerifs.BottomRight }
+				motionSerifed : match body
+					([Just 'toothed'] || [Just 'flatBottom']) { USerifs.MotionToothed   USerifs.MotionToothed   }
+					__                                        { USerifs.MotionToothless USerifs.MotionToothless }
+				serifed : match body
+					([Just 'toothed'] || [Just 'flatBottom']) { USerifs.Toothed         USerifs.SmallToothed    }
+					__                                        { USerifs.Toothless       USerifs.SmallToothless  }
+
+		foreach { suffix { Base { USlabs LSlabs } } } [Object.entries SmallUConfig] : do
+			create-glyph "UeVolapuk.\(suffix)" : glyph-proc
+				local df : include : DivFrame 1
+				include : df.markSet.capital
+				include : Base df CAP USlabs Hook ArchDepthA ArchDepthB
+			create-glyph "ueVolapuk.\(suffix)" : glyph-proc
+				local df : include : DivFrame 1
+				include : df.markSet.e
+				include : Base df XH LSlabs SHook SmallArchDepthA SmallArchDepthB
+
+		select-variant 'UeVolapuk' 0xA79E (follow -- 'u')
+		select-variant 'ueVolapuk' 0xA79F (follow -- 'u')

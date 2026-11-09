@@ -1,0 +1,74 @@
+$$include '../../meta/macros.ptl'
+
+import [mix linreg clamp fallback] from "@iosevka/util"
+import [MathSansSerif] from "@iosevka/glyph/relation"
+
+glyph-module
+
+glyph-block Letter-Greek-Lower-Gamma : begin
+	glyph-block-import CommonShapes
+	glyph-block-import Common-Derivatives
+	glyph-block-import Letter-Blackboard : BBS BBD BBBarLeft
+
+	alias 'grek/gamma.straightSerifless' null 'cyrl/ue.straightSerifless'
+	alias 'grek/gamma.straightSerifed'   null 'cyrl/ue.straightMotionSerifed'
+
+	alias 'grek/gamma.curlySerifless' null 'cyrl/ue.curlySerifless'
+	alias 'grek/gamma.curlySerifed'   null 'cyrl/ue.curlyMotionSerifed'
+
+	define [GammaBaseShape df k ltOvershoot] : glyph-proc
+		local xMid : [mix df.leftSB df.rightSB 0.46] + [HSwToV HalfStroke]
+		local xStart : df.leftSB + [HSwToV : k * Stroke]
+		local yStart : XH - ltOvershoot
+		include : dispiro
+			g4   xStart yStart [widths.rhs]
+			bezControls 0.33 0.17 1 0.62 6 important
+			flat xMid 0
+			curl xMid Descender [heading Downward]
+
+		include : dispiro
+			widths.rhs
+			flat df.rightSB      XH        [heading Downward]
+			curl df.rightSB [mix XH 0 0.1] [heading Downward]
+			quadControls 0 0.3 6
+			g4   xMid 0 [widths.rhs (Stroke * 0.9)]
+
+	create-glyph 'grek/gamma.casualSerifless' : glyph-proc
+		local df : include : DivFrame 1
+		include : df.markSet.p
+		include : GammaBaseShape df 0.4 O
+
+	create-glyph 'grek/gamma.casualSerifed' : glyph-proc
+		local df : include : DivFrame 1
+		include : df.markSet.p
+		include : difference
+			GammaBaseShape df 0.75 0
+			Rect XH (XH - Stroke) 0 (df.leftSB + [HSwToV HalfStroke])
+		include : HSerif.lt (df.leftSB + [HSwToV QuarterStroke]) XH (SideJut + [HSwToV QuarterStroke])
+		
+	select-variant 'grek/gamma' 0x3B3
+	link-reduced-variant 'grek/gamma/sansSerif' 'grek/gamma' MathSansSerif
+
+	create-glyph 'mathbb/grek/gamma' 0x213D : glyph-proc
+		include : MarkSet.p
+
+		local cor : DiagCorDs (XH - Descender) (RightSB - SB) BBD
+		local swEqv : 2 * BBS + BBD
+		local xMid : [mix SB RightSB 0.46] + [HSwToV : 0.46 * swEqv]
+		local xStart : SB + [HSwToV : 0.4 * swEqv]
+
+		include : HBar.t (xStart - BBD) (xStart + (cor - 1) * BBD) XH        BBS
+		include : HBar.b (xMid   - BBD) (xMid)                     Descender BBS
+
+		foreach {ob ot} [items-of {{ 0 (cor - 1) } { (-1) (-1) }}] : include : dispiro
+			g4 (xStart + ot * BBD) XH [widths.rhs.heading BBS Downward]
+			bezControls 0.33 0.17 1 0.62 6 important
+			flat (xMid + ob * BBD) 0
+			curl (xMid + ob * BBD) Descender [heading Downward]
+
+		include : dispiro
+			widths.rhs BBS
+			flat RightSB XH [heading Downward]
+			curl RightSB (XH * 0.9) [heading Downward]
+			quadControls 0 0.3 6
+			g4   xMid 0 [widths.rhs : BBS * 0.9]

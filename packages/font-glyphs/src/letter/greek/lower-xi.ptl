@@ -1,0 +1,144 @@
+$$include '../../meta/macros.ptl'
+
+import [mix linreg clamp fallback SuffixCfg] from "@iosevka/util"
+import [Box] from "@iosevka/geometry/box"
+import [DesignParameters] from "../../meta/aesthetics.mjs"
+
+glyph-module
+
+glyph-block Letter-Greek-Lower-Xi : begin
+	glyph-block-import CommonShapes
+	glyph-block-import Common-Derivatives
+	glyph-block-import Mark-Adjustment : ExtendBelowBaseAnchors
+	glyph-block-import Letter-Arc-Hook : Flat
+	glyph-block-import Letter-Shared-Shapes : CyrDescender CyrTailDescender
+
+	define SHAPE-ROUNDED  0
+	define SHAPE-FLAT-TOP 1
+
+	define TAIL-CURLY                 0
+	define TAIL-STRAIGHT              1
+	define TAIL-DIAGONAL              2
+	define TAIL-STRAIGHT-SHARP-CORNER 3
+	define TAIL-DIAGONAL-SHARP-CORNER 4
+
+	define pyBar 0.55
+
+	define TailBot : (-LongVJut) + QuarterStroke
+	define [TailBendX] : [Math.max (0.5 * Hook) : HSwToV Stroke] + [Math.max TightBendInnerRadius : HSwToV QuarterStroke]
+	define [TailBendY] : [Math.max (0.5 * Hook)          Stroke] + [Math.max TightBendInnerRadius          QuarterStroke]
+
+	define [CurlyTailKnots xLowerArcLeft] : begin
+		local yCurlMid : mix Descender Stroke 0.5
+		local hookIn : Math.max
+			(Stroke - yCurlMid) * 1.1
+			[HSwToV Stroke] + [Math.max TightBendInnerDiameter HalfStroke]
+		return : list
+			arcvh 16
+			g4   [mix (xLowerArcLeft + [HSwToV Stroke]) (RightSB - [HSwToV Stroke]) 0.6] 0 [heading Rightward]
+			archv 16
+			g4.down.mid (RightSB - [HSwToV Stroke]) yCurlMid [heading Downward]
+			arcvh 16
+			flat                    (RightSB - hookIn)      (Descender + Stroke)
+			curl [Math.min Middle : (RightSB - hookIn) - 1] (Descender + Stroke)
+
+	define [StraightTailKnots yHoriz xDown wHoriz] : begin
+		local xTurn : xDown - [TailBendX]
+		local yCorner : yHoriz - [TailBendY]
+		return : list
+			arcvh.superness DesignParameters.tightHookSuperness
+			flat [Math.min (xTurn - TanSlope * Stroke) : Arch.adjust-x.bot [mix SB RightSB 0.55] Stroke] yHoriz wHoriz
+			curl xTurn yHoriz [heading Rightward]
+			archv.superness DesignParameters.tightHookSuperness
+			flat xDown yCorner [heading Downward]
+			curl xDown TailBot [heading Downward]
+
+	define [DiagonalTailKnots yHoriz xDown wHoriz] : begin
+		local xTurn : xDown - [TailBendX]
+		local yCorner : yHoriz - [TailBendY]
+		local xDiagEnd : xDown + [mix 0 Descender 0.24]
+		return : list
+			arcvh.superness DesignParameters.tightHookSuperness
+			flat [Math.min (xTurn - TanSlope * Stroke) : Arch.adjust-x.bot [mix SB RightSB 0.55] Stroke] yHoriz wHoriz
+			curl xTurn yHoriz [heading Rightward]
+			archv.superness DesignParameters.tightHookSuperness
+			flat xDown yCorner [widths.rhs Stroke]
+			curl xDiagEnd TailBot
+
+	define [LowerXiShape shape tail] : glyph-proc
+		local adaTop : ArchDepthAOf : ArchDepth * (1 - pyBar)
+		local adbTop : ArchDepthBOf : ArchDepth * (1 - pyBar)
+		local adaBot : ArchDepthAOf : ArchDepth * (0 + pyBar)
+		local adbBot : ArchDepthBOf : ArchDepth * (0 + pyBar)
+
+		local fineMid : Stroke * CThin
+		local fineTop : Stroke * CThinB
+		local xBarStart : mix SB RightSB : match shape
+			[Just SHAPE-ROUNDED]  0.625
+			[Just SHAPE-FLAT-TOP] 0.750
+		local xBarEnd : mix SB RightSB : match shape
+			[Just SHAPE-ROUNDED]  0.750
+			[Just SHAPE-FLAT-TOP] 0.850
+		local yBarTop : mix Stroke Ascender pyBar
+		local yBarBot : yBarTop - Stroke
+
+		local xUpperArcLeft : match shape
+			[Just SHAPE-ROUNDED]  :      SB                + 0
+			[Just SHAPE-FLAT-TOP] : [mix SB RightSB 0.075] + OX
+		local xLowerArcLeft : match shape
+			[Just SHAPE-ROUNDED]  :      SB                + OX * 2
+			[Just SHAPE-FLAT-TOP] : [mix SB RightSB 0.025] + OX * 2
+
+		local box : new Box yBarTop 0 xLowerArcLeft RightSB
+		local Arc : Flat box (sw -- Stroke)
+
+		include : match shape
+			[Just SHAPE-FLAT-TOP] : HBar.t SB RightSB Ascender
+			__                    : glyph-proc
+
+		include : dispiro
+			match shape
+				[Just SHAPE-ROUNDED] : list
+					g4   (RightSB + O) (Ascender - Hook) [widths.lhs]
+					HookStart Ascender
+				[Just SHAPE-FLAT-TOP] : list
+					flat                    xBarEnd    ((Ascender - Stroke) + fineTop) [widths.lhs fineTop]
+					curl [Arch.adjust-x.top xBarStart] ((Ascender - Stroke) + fineTop) [widths.lhs fineTop]
+					archv 16
+			g4   xUpperArcLeft [YSmoothMidL Ascender yBarBot adaTop adbTop] [widths.lhs]
+			arcvh 16
+			flat [Arch.adjust-x.bot xBarStart] (yBarTop - fineMid) [widths.lhs.heading fineMid Rightward]
+			curl                    xBarEnd    (yBarTop - fineMid) [widths.lhs.heading fineMid Rightward]
+		include : dispiro
+			flat                    xBarEnd    (yBarBot + fineMid) [widths.lhs.heading fineMid Leftward]
+			curl [Arch.adjust-x.top xBarStart] (yBarBot + fineMid) [widths.lhs.heading fineMid Leftward]
+			archv 16
+			g4   xLowerArcLeft [mix 0 [YSmoothMidL yBarTop 0 adaBot adbBot] 0.9] [widths.lhs]
+			match tail
+				[Just TAIL-CURLY] : CurlyTailKnots xLowerArcLeft
+				[Just TAIL-STRAIGHT] : StraightTailKnots Stroke RightSB [widths.rhs.heading Stroke Rightward]
+				[Just TAIL-DIAGONAL] : DiagonalTailKnots Stroke RightSB [widths.rhs.heading Stroke Rightward]
+				__ : Arc.hookEndR
+		include : match tail
+			([Just TAIL-STRAIGHT] || [Just TAIL-DIAGONAL]) : ExtendBelowBaseAnchors TailBot
+			[Just TAIL-STRAIGHT-SHARP-CORNER] : CyrDescender.r     RightSB 0 RightSB
+			[Just TAIL-DIAGONAL-SHARP-CORNER] : CyrTailDescender.r RightSB 0 RightSB
+			__ : begin [glyph-proc]
+
+	define LowerXiConfig : SuffixCfg.weave
+		object
+			flatTop                   SHAPE-FLAT-TOP
+			rounded                   SHAPE-ROUNDED
+		object
+			""                      { TAIL-CURLY                 'bp' }
+			straightTail            { TAIL-STRAIGHT              'b'  }
+			diagonalTail            { TAIL-DIAGONAL              'b'  }
+			straightTailSharpCorner { TAIL-STRAIGHT-SHARP-CORNER 'b'  }
+			diagonalTailSharpCorner { TAIL-DIAGONAL-SHARP-CORNER 'b'  }
+
+	foreach { suffix { shape { tail mk } } } [Object.entries LowerXiConfig] : do
+		create-glyph "grek/xi.\(suffix)" : glyph-proc
+			include : MarkSet.(mk)
+			include : LowerXiShape shape tail
+
+	select-variant 'grek/xi' 0x3BE

@@ -1,0 +1,136 @@
+$$include '../../meta/macros.ptl'
+
+import [mix linreg clamp fallback] from "@iosevka/util"
+import [Box] from "@iosevka/geometry/box"
+import [DesignParameters] from "../../meta/aesthetics.mjs"
+
+glyph-module
+
+glyph-block Letter-Greek-Lower-Final-Sigma : begin
+	glyph-block-import CommonShapes
+	glyph-block-import Common-Derivatives
+	glyph-block-import Mark-Adjustment : ExtendBelowBaseAnchors
+	glyph-block-import Letter-Arc-Hook : Flat
+	glyph-block-import Letter-Shared-Shapes : CyrDescender CyrTailDescender
+
+	define TAIL-CURLY                 0
+	define TAIL-STRAIGHT              1
+	define TAIL-DIAGONAL              2
+	define TAIL-STRAIGHT-SHARP-CORNER 3
+	define TAIL-DIAGONAL-SHARP-CORNER 4
+
+	define TailBot : (-LongVJut) + QuarterStroke
+	define [TailBendX] : [Math.max (0.5 * Hook) : HSwToV Stroke] + [Math.max TightBendInnerRadius : HSwToV QuarterStroke]
+	define [TailBendY] : [Math.max (0.5 * Hook)          Stroke] + [Math.max TightBendInnerRadius          QuarterStroke]
+
+	define [CurlyTailKnots] : begin
+		local yCurlMid : mix Descender Stroke : StrokeWidthBlend 0.5 0.49
+		local hookIn : Math.max HookX
+			[HSwToV Stroke] + [Math.max TightBendInnerDiameter : HSwToV HalfStroke]
+		return : list
+			arcvh
+			g4 [Arch.adjust-x.bot Middle] 0
+			alsoThru 0.5 0.1353
+			g4.down.mid (RightSB - [HSwToV Stroke] + OX) yCurlMid [heading Downward]
+			arcvh
+			flat (RightSB - hookIn + OX) (Descender + Stroke)
+			curl [Math.min (RightSB - hookIn + OX - 1) [mix SB RightSB 0.5]] (Descender + Stroke)
+
+	define [StraightTailKnots yHoriz xDown wHoriz] : begin
+		local xTurn : xDown - [TailBendX]
+		local yCorner : yHoriz - [TailBendY]
+		return : list
+			arcvh.superness DesignParameters.tightHookSuperness
+			flat [Math.min (xTurn - TanSlope * Stroke) : Arch.adjust-x.bot [mix SB RightSB 0.55] Stroke] yHoriz wHoriz
+			curl xTurn yHoriz [heading Rightward]
+			archv.superness DesignParameters.tightHookSuperness
+			flat xDown yCorner [heading Downward]
+			curl xDown TailBot [heading Downward]
+
+	define [DiagonalTailKnots yHoriz xDown wHoriz] : begin
+		local xTurn : xDown - [TailBendX]
+		local yCorner : yHoriz - [TailBendY]
+		local xDiagEnd : xDown + [mix 0 Descender 0.24]
+		return : list
+			arcvh.superness DesignParameters.tightHookSuperness
+			flat [Math.min (xTurn - TanSlope * Stroke) : Arch.adjust-x.bot [mix SB RightSB 0.55] Stroke] yHoriz wHoriz
+			curl xTurn yHoriz [heading Rightward]
+			archv.superness DesignParameters.tightHookSuperness
+			flat xDown yCorner [widths.rhs Stroke]
+			curl xDiagEnd TailBot
+
+	define [FinalSigmaShape tail] : glyph-proc
+		local box : new Box XH 0 SB RightSB
+		local Arc : Flat box (sw -- Stroke)
+		include : dispiro
+			widths.lhs
+			g4 RightSB (XH - Hook)
+			HookStart XH
+			flatside.ld SB 0 XH SmallArchDepthA SmallArchDepthB
+			match tail
+				[Just TAIL-CURLY] : CurlyTailKnots
+				[Just TAIL-STRAIGHT] : StraightTailKnots Stroke RightSB [widths.rhs.heading Stroke Rightward]
+				[Just TAIL-DIAGONAL] : DiagonalTailKnots Stroke RightSB [widths.rhs.heading Stroke Rightward]
+				__ : Arc.hookEndR
+		include : match tail
+			([Just TAIL-STRAIGHT] || [Just TAIL-DIAGONAL]) : ExtendBelowBaseAnchors TailBot
+			[Just TAIL-STRAIGHT-SHARP-CORNER] : CyrDescender.r     RightSB 0 RightSB
+			[Just TAIL-DIAGONAL-SHARP-CORNER] : CyrTailDescender.r RightSB 0 RightSB
+			__ : begin [glyph-proc]
+
+	define [StigmaShape tail] : glyph-proc
+		define fine : AdviceStroke 3
+		local box : new Box XH 0 SB RightSB
+		local Arc : Flat box (sw -- Stroke)
+		include : dispiro
+			widths.lhs fine
+			straight.down.start (RightSB - [HSwToV fine]) (XH + 0.25 * Hook) [heading Downward]
+			g2 [mix [Arch.adjust-x.top Middle] (RightSB - [HSwToV fine]) 0.5] (XH - O - Hook * [StrokeWidthBlend 0.05 0.025]) [widths.lhs.heading Stroke Leftward]
+			g4 [Arch.adjust-x.top Middle] (XH - O)
+			archv 16
+			flatside.ld SB 0 XH SmallArchDepthA SmallArchDepthB
+			match tail
+				[Just TAIL-CURLY] : CurlyTailKnots
+				[Just TAIL-STRAIGHT] : StraightTailKnots Stroke RightSB [widths.rhs.heading Stroke Rightward]
+				[Just TAIL-DIAGONAL] : DiagonalTailKnots Stroke RightSB [widths.rhs.heading Stroke Rightward]
+				__ : Arc.hookEndR
+		include : match tail
+			([Just TAIL-STRAIGHT] || [Just TAIL-DIAGONAL]) : ExtendBelowBaseAnchors TailBot
+			[Just TAIL-STRAIGHT-SHARP-CORNER] : CyrDescender.r     RightSB 0 RightSB
+			[Just TAIL-DIAGONAL-SHARP-CORNER] : CyrTailDescender.r RightSB 0 RightSB
+			__ : begin [glyph-proc]
+
+	define FinalSigmaConfig : object
+		curlyTail               { TAIL-CURLY                 'p' }
+		straightTail            { TAIL-STRAIGHT              'e' }
+		diagonalTail            { TAIL-DIAGONAL              'e' }
+		straightTailSharpCorner { TAIL-STRAIGHT-SHARP-CORNER 'e' }
+		diagonalTailSharpCorner { TAIL-DIAGONAL-SHARP-CORNER 'e' }
+
+	foreach { suffix { tail mk } } [Object.entries FinalSigmaConfig] : do
+		create-glyph "grek/sigmaFinal.\(suffix)" : glyph-proc
+			include : MarkSet.(mk)
+			include : FinalSigmaShape tail
+		create-glyph "grek/stigma.\(suffix)" : glyph-proc
+			include : MarkSet.(mk)
+			include : StigmaShape tail
+
+	select-variant 'grek/sigmaFinal' 0x3C2
+	select-variant 'grek/stigma'     0x3DB (follow -- 'grek/sigmaFinal')
+
+	create-glyph 'grek/Stigma' 0x3DA : glyph-proc
+		include : MarkSet.capital
+		define yAttach : [if SLAB Stroke 0] + XH * 0.2
+		include : difference
+			dispiro
+				widths.lhs
+				g4 RightSB (CAP - Hook)
+				HookStart CAP
+				flatside.ld SB yAttach CAP ArchDepthA ArchDepthB
+				arcvh
+				g4 [Arch.adjust-x.bot Middle] (yAttach + O)
+				archv
+				g4 [mix Middle RightSB 2] (yAttach + Hook * 1.5) [heading Upward]
+			Rect (yAttach + Hook * 1.5 - O) Descender (Middle + [HSwToV HalfStroke]) VERY-FAR
+		include : VBar.m Middle 0 (yAttach + HalfStroke)
+		if SLAB : include : HSerif.mb Middle 0 MidJutCenter

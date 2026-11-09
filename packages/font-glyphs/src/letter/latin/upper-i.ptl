@@ -1,0 +1,109 @@
+$$include '../../meta/macros.ptl'
+
+import [mix linreg clamp fallback] from "@iosevka/util"
+import [MathSansSerif] from "@iosevka/glyph/relation"
+
+glyph-module
+
+glyph-block Letter-Latin-Upper-I : begin
+	glyph-block-import CommonShapes
+	glyph-block-import Common-Derivatives
+	glyph-block-import Letter-Shared : SetGrekUpperTonos CreateAccentedComposition
+	glyph-block-import Letter-Shared-Metrics : EFVJutLength EFMidBarPosY
+	glyph-block-import Mark-Adjustment : ExtendAboveBaseAnchors
+
+	define [IShape df top] : glyph-proc
+		include : VBar.m df.middle 0 top
+
+	define ISerifs : namespace
+		export : define [Impl df top jut] : glyph-proc
+			include : tagged 'serifMB' : HSerif.mb df.middle 0   jut
+			include : tagged 'serifMT' : HSerif.mt df.middle top jut
+			set-base-anchor 'trailing' (df.middle + jut) 0
+
+		export : define [None df top] : glyph-proc
+			local jut : HSwToV HalfStroke
+			set-base-anchor 'trailing' (df.middle + jut) 0
+			return : object jut
+		export : define [Long df top] : glyph-proc
+			local jut : Math.max MidJutCenter : mix [HSwToV HalfStroke] LongJut df.adws
+			include : Impl df top jut
+			return : object jut
+		export : define [Short df top] : glyph-proc
+			local jut : Math.max Jut : mix [HSwToV HalfStroke] MidJutCenter df.adws
+			include : Impl df top jut
+			return : object jut
+
+	define UpperIConfig : object
+		'straight'     { para.advanceScaleI  ISerifs.None  }
+		'serifless'    { para.advanceScaleII ISerifs.None  }
+		'serifed'      { para.advanceScaleI  ISerifs.Long  }
+		'shortSerifed' { para.advanceScaleII ISerifs.Short }
+
+	foreach { suffix { adws Serifs } } [Object.entries UpperIConfig] : do
+		create-glyph "I.\(suffix)" : glyph-proc
+			local df : include : DivFrame adws
+			include : df.markSet.capital
+			include : IShape df CAP
+			local serifs : include : Serifs df CAP
+			create-forked-glyph "grek/Iota.\(suffix)" : SetGrekUpperTonos [Math.min 0 : df.middle - serifs.jut - SB]
+
+		create-glyph "ISideways.\(suffix)" : glyph-proc
+			local df : DivFrame (XH / Width) 2 ((XH * 0.1) / SB)
+			include : PointingTo Width XH Width 0 : function [] : glyph-proc
+				include : IShape df RightSB
+				include : Serifs df RightSB
+				include : ApparentTranslate 0 (0.5 * SB)
+
+		create-glyph "ILonga.\(suffix)" : glyph-proc
+			local df : include : DivFrame adws
+			include : df.markSet.capital
+			local top : CAP + (Ascender - XH)
+			include : ExtendAboveBaseAnchors top
+			include : IShape df top
+			include : Serifs df top
+
+		create-glyph "AiDiphthong.\(suffix)" : glyph-proc
+			local df : include : DivFrame 1
+			include : df.markSet.capital
+			local subDf : DivFrame adws
+			include : with-transform [Translate (df.middle - subDf.middle) 0] [refer-glyph "I.\(suffix)"]
+			local xMidLeft  : [mix df.leftSB  df.rightSB 0.125] - [HSwToV HalfStroke]
+			local xMidRight : [mix df.rightSB df.leftSB  0.125] + [HSwToV HalfStroke]
+			local yBar : EFMidBarPosY CAP 0
+			include : HBar.m xMidLeft xMidRight yBar
+			if (Serifs !== ISerifs.None) : begin
+				local { jutTop jutBot jutMid } : EFVJutLength CAP 0
+				local swVJut : Math.min VJutStroke : VSwToH : 0.625 * ((df.middle - [HSwToV HalfStroke]) - xMidLeft)
+				include : VSerif.ml xMidLeft  yBar jutMid swVJut
+				include : VSerif.mr xMidRight yBar jutMid swVJut
+
+	select-variant 'I' 'I'
+	link-reduced-variant 'I/sansSerif' 'I' MathSansSerif
+	select-variant 'grek/Iota' 0x399 (follow -- 'I')
+	link-reduced-variant 'grek/Iota/sansSerif' 'grek/Iota' MathSansSerif (follow -- 'I/sansSerif')
+	alias 'cyrl/IUkrainian' 0x406 'I'
+	CreateAccentedComposition 'cyrl/Yi' 0x407 'I' 'dieresisAbove'
+	alias 'cyrl/Palochka' 0x4C0 'I'
+
+	select-variant 'ISideways' 0xA7F7 (follow -- 'I')
+	select-variant 'ILonga' 0xA7FE (follow -- 'I')
+
+	select-variant 'AiDiphthong' 0x1DF6E (follow -- 'I')
+
+	CreateAccentedComposition 'IAcute' 0xCD 'I' 'acuteAbove'
+
+	create-glyph 'smcpI' 0x26A : glyph-proc
+		local df : include : DivFrame para.advanceScaleI
+		include : df.markSet.e
+		include : IShape df XH
+		include : ISerifs.Impl df XH MidJutCenter
+
+	CreateAccentedComposition 'smcpIBar' 0x1D7B 'smcpI' 'barOver'
+
+	glyph-block-import Letter-Blackboard : BBS BBD BBBarCenter
+	create-glyph 'mathbb/I' 0x1D540 : glyph-proc
+		include : MarkSet.capital
+		include : BBBarCenter Middle 0 CAP
+		include : HBar.t (Middle - BBD / 2 - Jut) (Middle + BBD / 2 + Jut) CAP BBS
+		include : HBar.b (Middle - BBD / 2 - Jut) (Middle + BBD / 2 + Jut) 0   BBS

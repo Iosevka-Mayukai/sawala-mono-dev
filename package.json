@@ -1,0 +1,31 @@
+{
+  "name": "@iosevka/monorepo",
+  "version": "34.9.1",
+  "workspaces": [
+    "packages/*",
+    "tools/*"
+  ],
+  "scripts": {
+    "build": "verda -f verdafile.mjs",
+    "bump-ver": "node tools/misc/src/update-package-json-version.mjs && npm install && verda -f verdafile.mjs regenerate-code",
+    "clean": "verda -f verdafile.mjs clean",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --write",
+    "copy-char-name-to-markdown": "node tools/misc/src/copy-char-name-to-markdown.mjs"
+  },
+  "dependencies": {
+    "@iarna/toml": "^2.2.5",
+    "deep-equal": "^2.2.3",
+    "otb-ttc-bundle": "^1.8.1",
+    "semver": "^7.8.5",
+    "verda": "^1.14.0",
+    "which": "^7.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.2",
+    "patel": "^0.41.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

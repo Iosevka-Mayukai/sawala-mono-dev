@@ -1,0 +1,34 @@
+# Dependency
+node_modules
+
+# Settings
+.settings
+.vscode
+
+# Build artifacts
+.build
+dist
+release-archives
+
+# Test artifacts
+.test
+.coverage
+
+# Generated files
+packages/*/lib
+packages/font-glyphs/src/**/*.mjs
+packages/font-otl/src/**/*.mjs
+
+# Private config files
+private.toml
+# private-build-plans.toml is tracked for Sawala Mono custom build
+!private-build-plans.toml
+params/private-parameters.toml
+
+# pages-source ignores
+.next
+out
+shared/fonts/imports/*/TTF/*
+
+# Platform specified files
+.DS_store

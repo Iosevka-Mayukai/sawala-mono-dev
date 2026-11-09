@@ -1,0 +1,133 @@
+name: Build Sawala Mono Font
+
+on:
+  workflow_dispatch:
+    inputs:
+      variant:
+        description: 'Variant to build (e.g. SawalaMono, or "all" to build all plans in private-build-plans.toml)'
+        required: true
+        default: 'SawalaMono'
+        type: string
+      format:
+        description: 'Format output'
+        required: true
+        default: 'ttf'
+        type: choice
+        options:
+          - ttf
+          - woff2
+          - contents
+      create_release:
+        description: 'Publish as a GitHub Release?'
+        required: false
+        default: false
+        type: boolean
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    paths:
+      - 'private-build-plans.toml'
+      - '.github/workflows/build.yml'
+      - 'docker/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Font with Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Iosevka Builder Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: docker
+          load: true
+          tags: iosevka-builder:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Cache Node Modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Resolve Build Targets & Run Build
+        run: |
+          FORMAT="${{ github.event.inputs.format || 'ttf' }}"
+          VARIANT="${{ github.event.inputs.variant || 'SawalaMono' }}"
+
+          BUILD_ARGS=""
+          if [ "$VARIANT" = "all" ]; then
+            PLANS=$(grep -Po '^\[buildPlans\.\K[a-zA-Z0-9_-]+(?=\])' private-build-plans.toml | sort -u)
+            for p in $PLANS; do
+              BUILD_ARGS="${BUILD_ARGS} ${FORMAT}::${p}"
+            done
+          else
+            BUILD_ARGS="${FORMAT}::${VARIANT}"
+          fi
+
+          echo "Selected Format: $FORMAT"
+          echo "Selected Variant: $VARIANT"
+          echo "Final Build Arguments: $BUILD_ARGS"
+
+          docker run --rm \
+            -v ${{ github.workspace }}:/work \
+            --entrypoint bash \
+            iosevka-builder:latest \
+            -c "npm ci && npm run build -- $BUILD_ARGS"
+
+      - name: Fix Workspace Permissions
+        if: always()
+        run: |
+          sudo chown -R $USER:$USER ${{ github.workspace }}
+
+      - name: Package Archives (ZIP)
+        run: |
+          mkdir -p archives
+          cd dist
+          for font_dir in */; do
+            font_name="${font_dir%/}"
+            if [ -d "$font_name" ]; then
+              echo "Packaging $font_name into ZIP..."
+              zip -r "../archives/${font_name}.zip" "$font_name"
+            fi
+          done
+          cd ..
+          ls -lh archives/
+
+      - name: Upload Font Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sawala-Mono-Packages
+          path: archives/*.zip
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        if: ${{ github.event.inputs.create_release == 'true' || startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          RELEASE_TAG="${GITHUB_REF_NAME}"
+          if [ "${RELEASE_TAG}" = "main" ] || [ -z "${RELEASE_TAG}" ]; then
+            RELEASE_TAG="v$(date +'%Y.%m.%d-%H%M%S')"
+          fi
+
+          echo "Publishing release with tag: $RELEASE_TAG"
+          gh release create "$RELEASE_TAG" archives/*.zip \
+            --title "Iosevka Sawala Mono $RELEASE_TAG" \
+            --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
