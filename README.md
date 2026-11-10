@@ -231,13 +231,14 @@ To patch an existing release with programming and developer glyphs (Powerline, F
    - In the left sidebar, select **Patch Nerd Font**.
    - Click the **Run workflow** dropdown and configure the parameters:
      - **GitHub Release Tag to patch (`release_tag`)**: Enter the target release tag (e.g., `v1.0.0` or `latest` from your repository releases).
+     - **Variant to patch (`variant`)**: Choose `all`, `SawalaMono` (with ligatures), or `SawalaMonoNL` (no ligatures), matching `build.yml`.
      - **Nerd Font patch preset (`patch_mode`)**: Choose `complete` (~10,000+ developer and powerline glyphs) or `default` (Powerline core only).
-     - **Font scope to patch (`font_scope`)**: Choose `core` (8 Normal coding weights in ~6-8 mins), `extended-core` (8 SemiExtended coding weights in ~6-8 mins), or `all` (all 36 weights).
+     - **Font scope to patch (`font_scope`)**: Choose `core` (8 Normal coding weights in ~6-8 mins per variant), `extended-core` (8 SemiExtended coding weights in ~6-8 mins per variant), or `all` (all 36 weights per variant).
      - **Custom font family name override (`custom_name`)**: Optional custom family name override (e.g. `Sawala Mono NF` or `Sawala Mono NL NF`, or leave empty for auto-naming).
    - Click **Run workflow** to initiate the containerized patching pipeline.
 
 3. **Download Patched Fonts:**
-   - Once the patching pipeline finishes, the workflow automatically attaches `SawalaMono-NF-<tag>.zip` directly to the specified GitHub Release and uploads it to the workflow **Artifacts** (`Sawala-Mono-NF-Packages`).
+   - Once the patching pipeline finishes, the workflow automatically attaches the per-variant archives (`SawalaMono-NF-<tag>.zip`, `SawalaMonoNL-NF-<tag>.zip`, or `*-Extended-NF-<tag>.zip`) directly to the specified GitHub Release and uploads them to the workflow **Artifacts** (`Sawala-Mono-NF-Packages`).
 
 ### Method C: Containerized Docker Build (Recommended)
 
