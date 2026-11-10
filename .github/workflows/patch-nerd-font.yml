@@ -23,7 +23,13 @@ on:
         type: choice
         options:
           - core
+          - extended-core
           - all
+      custom_name:
+        description: 'Optional custom font family name override (e.g. "Sawala Mono NF", or leave empty for auto)'
+        required: false
+        default: ''
+        type: string
 
 permissions:
   contents: write
@@ -72,9 +78,12 @@ jobs:
           echo "Downloading base font archives for release: $TARGET_TAG"
           gh release download "$TARGET_TAG" --pattern "*SawalaMono*.zip" --dir raw_archives
 
+          # Exclude any previously uploaded Nerd Font patched archives
+          rm -f raw_archives/*NF*.zip raw_archives/*-NF-*.zip
+
           ZIP_COUNT=$(find raw_archives -name "*.zip" | wc -l)
           if [ "$ZIP_COUNT" -eq 0 ]; then
-            echo "::error::No SawalaMono zip archive found in release $TARGET_TAG."
+            echo "::error::No base SawalaMono zip archive found in release $TARGET_TAG."
             exit 1
           fi
 
@@ -83,9 +92,6 @@ jobs:
             echo "Unzipping $z..."
             unzip -q -o "$z" -d in_raw/
           done
-
-          # Consolidate all extracted TTFs
-          find in_raw -type f -name "*.ttf" -exec cp {} in_raw/ \;
 
       - name: Filter Font Scope
         env:
@@ -97,25 +103,35 @@ jobs:
           mkdir -p in
           if [ "$SCOPE" = "core" ]; then
             echo "Filtering core developer coding weights (Normal width: Regular, Italic, Medium, MediumItalic, SemiBold, SemiBoldItalic, Bold, BoldItalic)..."
-            CORE_PATTERNS=(
-              "SawalaMono-Regular.ttf"
-              "SawalaMono-Italic.ttf"
-              "SawalaMono-Medium.ttf"
-              "SawalaMono-MediumItalic.ttf"
-              "SawalaMono-SemiBold.ttf"
-              "SawalaMono-SemiBoldItalic.ttf"
-              "SawalaMono-Bold.ttf"
-              "SawalaMono-BoldItalic.ttf"
+            CORE_SUFFIXES=(
+              "-Regular.ttf"
+              "-Italic.ttf"
+              "-Medium.ttf"
+              "-MediumItalic.ttf"
+              "-SemiBold.ttf"
+              "-SemiBoldItalic.ttf"
+              "-Bold.ttf"
+              "-BoldItalic.ttf"
             )
 
-            for font_file in "${CORE_PATTERNS[@]}"; do
-              MATCH=$(find in_raw -name "$font_file" | head -n 1)
-              if [ -n "$MATCH" ] && [ -f "$MATCH" ]; then
-                echo "Found core font: $MATCH"
-                cp "$MATCH" in/
-              else
-                echo "Warning: Core font $font_file not found in extracted archive."
-              fi
+            for sfx in "${CORE_SUFFIXES[@]}"; do
+              find in_raw -type f -name "*$sfx" ! -name "*SemiExtended*" -exec cp {} in/ \;
+            done
+          elif [ "$SCOPE" = "extended-core" ]; then
+            echo "Filtering extended coding weights (SemiExtended width: Regular, Italic, Medium, MediumItalic, SemiBold, SemiBoldItalic, Bold, BoldItalic)..."
+            EXTENDED_SUFFIXES=(
+              "-SemiExtended.ttf"
+              "-SemiExtendedItalic.ttf"
+              "-SemiExtendedMedium.ttf"
+              "-SemiExtendedMediumItalic.ttf"
+              "-SemiExtendedSemiBold.ttf"
+              "-SemiExtendedSemiBoldItalic.ttf"
+              "-SemiExtendedBold.ttf"
+              "-SemiExtendedBoldItalic.ttf"
+            )
+
+            for sfx in "${EXTENDED_SUFFIXES[@]}"; do
+              find in_raw -type f -name "*$sfx" -exec cp {} in/ \;
             done
           else
             echo "Selecting all extracted TrueType font files..."
@@ -135,17 +151,24 @@ jobs:
       - name: Run Containerized Nerd Font Patcher
         env:
           PATCH_MODE_RAW: ${{ github.event.inputs.patch_mode }}
+          CUSTOM_NAME_RAW: ${{ github.event.inputs.custom_name }}
           WORKSPACE_PATH: ${{ github.workspace }}
         run: |
           PATCH_MODE="${PATCH_MODE_RAW:-complete}"
+          CUSTOM_NAME="${CUSTOM_NAME_RAW:-}"
           echo "Selected Patch Mode: $PATCH_MODE"
 
-          EXTRA_FLAGS=""
+          PATCH_ARGS=("--mono")
           if [ "$PATCH_MODE" = "complete" ]; then
-            EXTRA_FLAGS="--complete"
+            PATCH_ARGS+=("--complete")
           fi
 
-          echo "Running nerdfonts/patcher Docker container with PN=2, --mono, and $EXTRA_FLAGS..."
+          if [ -n "$CUSTOM_NAME" ]; then
+            echo "Custom Font Name Override: $CUSTOM_NAME"
+            PATCH_ARGS+=("--name" "$CUSTOM_NAME")
+          fi
+
+          echo "Running nerdfonts/patcher Docker container with PN=2 and arguments: ${PATCH_ARGS[*]}..."
           mkdir -p out
 
           docker run --rm \
@@ -153,7 +176,7 @@ jobs:
             -v "$WORKSPACE_PATH/out:/out" \
             -e "PN=2" \
             nerdfonts/patcher:latest \
-            $EXTRA_FLAGS --mono
+            "${PATCH_ARGS[@]}"
 
       - name: Fix Workspace Permissions
         if: always()
@@ -165,6 +188,7 @@ jobs:
       - name: Verify Patched Output & Package Archive
         env:
           TARGET_TAG: ${{ steps.resolve-tag.outputs.target_tag }}
+          SCOPE_RAW: ${{ github.event.inputs.font_scope }}
         run: |
           PATCHED_COUNT=$(find out -type f -name "*.ttf" | wc -l)
           echo "Total patched fonts generated: $PATCHED_COUNT"
@@ -177,11 +201,16 @@ jobs:
           echo "Patched font inventory:"
           ls -lh out/
 
-          ARCHIVE_NAME="SawalaMono-NF-${TARGET_TAG}.zip"
+          SCOPE="${SCOPE_RAW:-core}"
+          if [ "$SCOPE" = "extended-core" ]; then
+            ARCHIVE_NAME="SawalaMono-Extended-NF-${TARGET_TAG}.zip"
+          else
+            ARCHIVE_NAME="SawalaMono-NF-${TARGET_TAG}.zip"
+          fi
           echo "Packaging patched fonts into archives/${ARCHIVE_NAME}..."
           mkdir -p archives
           cd out
-          zip -r "../archives/${ARCHIVE_NAME}" ./*.ttf
+          zip -r "../archives/${ARCHIVE_NAME}" *.ttf
           cd ..
 
           ls -lh archives/

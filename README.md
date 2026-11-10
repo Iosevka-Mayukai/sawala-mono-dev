@@ -232,7 +232,8 @@ To patch an existing release with programming and developer glyphs (Powerline, F
    - Click the **Run workflow** dropdown and configure the parameters:
      - **GitHub Release Tag to patch (`release_tag`)**: Enter the target release tag (e.g., `v1.0.0` or `latest` from your repository releases).
      - **Nerd Font patch preset (`patch_mode`)**: Choose `complete` (~10,000+ developer and powerline glyphs) or `default` (Powerline core only).
-     - **Font scope to patch (`font_scope`)**: Choose `core` (8 essential coding weights in ~6-8 mins) or `all` (all 36 weights).
+     - **Font scope to patch (`font_scope`)**: Choose `core` (8 Normal coding weights in ~6-8 mins), `extended-core` (8 SemiExtended coding weights in ~6-8 mins), or `all` (all 36 weights).
+     - **Custom font family name override (`custom_name`)**: Optional custom family name override (e.g. `Sawala Mono NF` or `Sawala Mono NL NF`, or leave empty for auto-naming).
    - Click **Run workflow** to initiate the containerized patching pipeline.
 
 3. **Download Patched Fonts:**
