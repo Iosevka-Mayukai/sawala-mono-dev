@@ -132,7 +132,7 @@ jobs:
 
           echo "Publishing release with tag: $RELEASE_TAG"
           gh release create "$RELEASE_TAG" archives/*.zip \
-            --title "Iosevka Sawala Mono $RELEASE_TAG" \
+            --title "Sawala Mono $RELEASE_TAG" \
             --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
