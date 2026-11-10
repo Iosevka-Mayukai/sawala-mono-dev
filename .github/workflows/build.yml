@@ -4,10 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       variant:
-        description: 'Variant to build (e.g. SawalaMono, or "all" to build all plans in private-build-plans.toml)'
+        description: 'Variant to build'
         required: true
-        default: 'SawalaMono'
-        type: string
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - SawalaMono
+          - SawalaMonoNL
       format:
         description: 'Format output'
         required: true

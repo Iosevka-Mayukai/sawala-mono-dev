@@ -1,12 +1,18 @@
 # Configuration for Iosevka Sawala Mono
 # Reference: https://github.com/be5invis/Iosevka/blob/master/doc/custom-build.md
 
+###################################################################################################
+# 1. Sawala Mono (Standard Variant with Rich Programming Ligatures: =>, !==, ->, ::, etc.)
+###################################################################################################
 [buildPlans.SawalaMono]
 exportGlyphNames = false
 family = "Sawala Mono"
 noCvSs = true
 serifs = "sans"
 spacing = "normal"
+
+[buildPlans.SawalaMono.ligations]
+inherits = "default-calt"
 
 [buildPlans.SawalaMono.variants.design]
 a = "double-storey-toothless-corner"
@@ -41,7 +47,7 @@ p = "earless-corner-serifless"
 paren = "flat-arc"
 percent = "rings-continuous-slash"
 q = "earless-corner-straight-serifless"
-r = "serifed"
+r = "serifless"
 seven = "bend-serifless"
 t = "flat-hook"
 three = "flat-top-serifless"
@@ -97,6 +103,111 @@ menu = "upright"
 shape = "upright"
 
 [buildPlans.SawalaMono.slopes.Italic]
+angle = 9.4
+css = "italic"
+menu = "italic"
+shape = "italic"
+
+###################################################################################################
+# 2. Sawala Mono NL (No Ligatures Variant for Strict Symbolic Separation)
+###################################################################################################
+[buildPlans.SawalaMonoNL]
+exportGlyphNames = false
+family = "Sawala Mono NL"
+noCvSs = true
+noLigation = true
+serifs = "sans"
+spacing = "normal"
+
+[buildPlans.SawalaMonoNL.variants.design]
+a = "double-storey-toothless-corner"
+ampersand = "upper-open"
+ascii-single-quote = "straight"
+at = "threefold-tall"
+b = "toothless-corner-serifless"
+brace = "curly-flat-boundary"
+capital-a = "straight-serifless"
+capital-b = "more-asymmetric-serifless"
+capital-g = "flat-bottom-serifless-hooked"
+capital-m = "hanging-serifless"
+capital-r = "straight-serifless"
+capital-u = "toothless-rounded-serifless"
+capital-w = "straight-serifless"
+d = "toothless-corner-serifless"
+dollar = "through"
+eight = "two-circles"
+f = "flat-hook-serifless"
+five = "upright-arched-serifless"
+four = "semi-open-serifless"
+g = "double-storey"
+i = "serifed"
+j = "serifed"
+k = "straight-serifless"
+l = "serifed"
+m = "earless-corner-double-arch-serifless"
+n = "earless-rounded-straight-serifless"
+nine = "straight-bar"
+one = "base-long-top-serif"
+p = "earless-corner-serifless"
+paren = "flat-arc"
+percent = "rings-continuous-slash"
+q = "earless-corner-straight-serifless"
+r = "serifless"
+seven = "bend-serifless"
+t = "flat-hook"
+three = "flat-top-serifless"
+two = "curly-neck-serifless"
+u = "toothless-rounded-serifless"
+v = "straight-serifless"
+w = "straight-serifless"
+x = "straight-serifless"
+y = "straight-turn-serifless"
+zero = "tall-reverse-slashed"
+
+[buildPlans.SawalaMonoNL.variants.italic]
+a = "single-storey-earless-corner-tailed"
+b = "flat-bottom-serifless"
+c = "serifless"
+capital-b = "standard-serifless"
+capital-g = "flat-bottom-serifless-hooked"
+capital-u = "toothless-rounded-serifless"
+d = "flat-bottom-serifless"
+f = "flat-hook-tailed"
+g = "single-storey-flat-top-serifless"
+h = "straight-serifless"
+i = "serifed-flat-tailed"
+j = "flat-hook-serifed"
+k = "cursive-serifless"
+l = "serifed-semi-tailed"
+m = "earless-corner-double-arch-serifless"
+n = "flat-top-straight-serifless"
+nine = "open-contour"
+one = "no-base"
+p = "flat-top-serifless"
+q = "flat-top-straight-serifless"
+r = "flat-top-serifless"
+t = "flat-hook"
+u = "toothless-rounded-serifless"
+y = "cursive-serifless"
+zero = "reverse-slashed"
+
+[buildPlans.SawalaMonoNL.widths.Normal]
+css = "normal"
+menu = 5
+shape = 500
+
+[buildPlans.SawalaMonoNL.widths.SemiExtended]
+css = "semi-expanded"
+menu = 6
+shape = 548
+
+[buildPlans.SawalaMonoNL.slopes.Upright]
+angle = 0
+css = "normal"
+menu = "upright"
+shape = "upright"
+
+[buildPlans.SawalaMonoNL.slopes.Italic]
 angle = 9.4
 css = "italic"
 menu = "italic"
