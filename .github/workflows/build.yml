@@ -39,6 +39,7 @@ jobs:
   build:
     name: Build Font with Docker
     runs-on: ubuntu-latest
+    timeout-minutes: 90
 
     steps:
       - name: Checkout Repository
@@ -67,9 +68,13 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Resolve Build Targets & Run Build
+        env:
+          FORMAT_RAW: ${{ github.event.inputs.format }}
+          VARIANT_RAW: ${{ github.event.inputs.variant }}
+          WORKSPACE_PATH: ${{ github.workspace }}
         run: |
-          FORMAT="${{ github.event.inputs.format || 'ttf' }}"
-          VARIANT="${{ github.event.inputs.variant || 'SawalaMono' }}"
+          FORMAT="${FORMAT_RAW:-ttf}"
+          VARIANT="${VARIANT_RAW:-all}"
 
           BUILD_ARGS=""
           if [ "$VARIANT" = "all" ]; then
@@ -86,22 +91,29 @@ jobs:
           echo "Final Build Arguments: $BUILD_ARGS"
 
           docker run --rm \
-            -v ${{ github.workspace }}:/work \
+            -v "$WORKSPACE_PATH:/work" \
             --entrypoint bash \
             iosevka-builder:latest \
             -c "npm ci && npm run build -- $BUILD_ARGS"
 
       - name: Fix Workspace Permissions
         if: always()
+        env:
+          WORKSPACE_PATH: ${{ github.workspace }}
         run: |
-          sudo chown -R $USER:$USER ${{ github.workspace }}
+          sudo chown -R $USER:$USER "$WORKSPACE_PATH"
 
       - name: Package Archives (ZIP)
+        env:
+          CUSTOM_VER_RAW: ${{ github.event.inputs.version }}
         run: |
           mkdir -p archives
           DATE_TAG=$(date +'%Y%m%d')
-          CUSTOM_VER="${{ github.event.inputs.version }}"
+          CUSTOM_VER="${CUSTOM_VER_RAW:-}"
           SUFFIX="${CUSTOM_VER:-$DATE_TAG}"
+
+          # Remove intermediate unhinted build directories when hinted directories exist
+          find dist -type d \( -name "TTF-Unhinted" -o -name "WOFF2-Unhinted" \) -exec rm -rf {} +
 
           cd dist
           for font_dir in */; do
@@ -124,8 +136,11 @@ jobs:
 
       - name: Create GitHub Release
         if: ${{ github.event.inputs.create_release == 'true' || startsWith(github.ref, 'refs/tags/v') }}
+        env:
+          CUSTOM_VER_RAW: ${{ github.event.inputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          CUSTOM_VER="${{ github.event.inputs.version }}"
+          CUSTOM_VER="${CUSTOM_VER_RAW:-}"
           if [ -n "$CUSTOM_VER" ]; then
             RELEASE_TAG="$CUSTOM_VER"
           elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
@@ -134,9 +149,12 @@ jobs:
             RELEASE_TAG="v$(date +'%Y.%m.%d-%H%M%S')"
           fi
 
-          echo "Publishing release with tag: $RELEASE_TAG"
-          gh release create "$RELEASE_TAG" archives/*.zip \
-            --title "Sawala Mono $RELEASE_TAG" \
-            --generate-notes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          if gh release view "$RELEASE_TAG" --json tagName >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG already exists. Uploading archives with --clobber..."
+            gh release upload "$RELEASE_TAG" archives/*.zip --clobber
+          else
+            echo "Publishing new release with tag: $RELEASE_TAG"
+            gh release create "$RELEASE_TAG" archives/*.zip \
+              --title "Sawala Mono $RELEASE_TAG" \
+              --generate-notes
+          fi
