@@ -793,11 +793,11 @@ Infrastructure Assets (Inert Web Storage)
 - **AC-011 (Distribution Cards Display):**  
   *Given* the Distributions section,  
   *When* rendered on desktop ($\ge 1024\text{px}$),  
-  *Then* a 4-card grid displays `Sawala Mono`, `Sawala Mono NL`, `Sawala Mono NF`, and `Sawala Mono NL NF`, each listing recommended environments and target archive filenames (`SawalaMono-v1.0.0.zip`, `SawalaMonoNL-v1.0.0.zip`, `SawalaMono-NF-v1.0.0.zip`, `SawalaMonoNL-NF-v1.0.0.zip`).
-- **AC-012 (Direct Download Linking):**  
+  *Then* a 4-card grid displays `Sawala Mono`, `Sawala Mono NL`, `Sawala Mono NF`, and `Sawala Mono NL NF`, each listing recommended environments and clean Download ZIP actions without version-hardcoded archive captions below the button (so release version tags on GitHub Releases remain decoupled from static web copy).
+- **AC-012 (GitHub Releases Page Navigation):**  
   *Given* the user clicks "Download ZIP" on any distribution card,  
   *When* the link is activated,  
-  *Then* the browser initiates download directly targeting the repository's GitHub Releases asset endpoint (`https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/...`).
+  *Then* the browser navigates cleanly to the repository's GitHub Releases page (`https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases`).
 
 ### REQ-007: Quick Setup & Config Generator
 - **AC-013 (Editor Tab Switch & Copy-to-Clipboard):**  

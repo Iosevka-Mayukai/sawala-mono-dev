@@ -1380,15 +1380,6 @@
 	justify-content: center;
 }
 
-.distribution-card__archive {
-	font-family: var(--font-mono);
-	font-size: 12px;
-	line-height: 1.4;
-	color: var(--ink-subtle);
-	text-align: center;
-	word-break: break-all;
-}
-
 .distributions-subpage-bar {
 	display: flex;
 	flex-wrap: wrap;
