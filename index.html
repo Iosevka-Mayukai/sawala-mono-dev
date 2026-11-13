@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#010102">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; font-src 'self'; script-src 'self'; img-src 'self' data: https://img.shields.io; connect-src 'self' https://api.github.com;">
+	<title>Sawala Mono — Ergonomic Coding Typeface for Human Deliberation</title>
+	<meta name="description" content="Derived from the Sundanese word sawala (discussion, deliberation, intellectual exchange). An ergonomic, high-legibility coding monospace typeface built on Iosevka.">
+	<link rel="canonical" href="https://iosevka-mayukai.github.io/sawala-mono-dev/">
+
+	<!-- Open Graph & Social Metadata (REQ-011, AC-018) -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://iosevka-mayukai.github.io/sawala-mono-dev/">
+	<meta property="og:title" content="Sawala Mono — Code is written for human deliberation">
+	<meta property="og:description" content="Ergonomic coding monospace typeface built on Iosevka with tailored programming ligatures, unambiguous glyphs, and 4 compiled distributions.">
+	<meta property="og:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
+	<meta property="og:image:alt" content="Sawala Mono ergonomic coding monospace typeface showcase specimen">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Sawala Mono — Ergonomic Coding Typeface">
+	<meta name="twitter:description" content="Derived from Sundanese sawala. High-legibility monospace built for code reading, pull request review, and terminal workflows.">
+	<meta name="twitter:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
+
+	<!-- Preload Core Tier A Webfonts for <1.5s LCP & 0.00 CLS (CON-004) -->
+	<link rel="preload" href="web-docs/fonts/sawala-mono/SawalaMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="web-docs/fonts/sawala-mono/SawalaMono-Italic.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="web-docs/fonts/sawala-mono/SawalaMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="web-docs/fonts/sawala-mono/SawalaMono-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
+	<!-- Design System Stylesheets (CON-002) -->
+	<link rel="stylesheet" href="web-docs/css/tokens.css">
+	<link rel="stylesheet" href="web-docs/css/reset.css">
+	<link rel="stylesheet" href="web-docs/css/typography.css">
+	<link rel="stylesheet" href="web-docs/css/showcase.css">
+	<link rel="stylesheet" href="web-docs/vendor/prism/prism-sawala-dark.css">
+</head>
+<body>
+	<a class="skip-link" href="#main-content">Skip to main content</a>
+
+	<!-- Sticky Top Navigation Bar (DESIGN.md: top-nav, REQ-001, AC-001, AC-002) -->
+	<header class="top-nav" id="top-nav" data-scrolled="false">
+		<div class="top-nav__inner">
+			<div class="top-nav__brand">
+				<a href="#overview" class="top-nav__brand" aria-label="Sawala Mono Home">
+					<span class="top-nav__brand-mark" aria-hidden="true">=&gt;</span>
+					<span>Sawala Mono</span>
+				</a>
+				<span class="status-badge" title="Latest compiled release version">
+					<span class="status-badge__dot" aria-hidden="true"></span>
+					<span>v1.0.0</span>
+				</span>
+			</div>
+
+			<nav id="top-nav-menu" class="top-nav__links" aria-label="Primary Navigation" data-open="false">
+				<a href="#overview" class="top-nav__link is-active" aria-current="location" data-nav-link="overview">Overview</a>
+				<a href="#anatomy" class="top-nav__link" data-nav-link="anatomy">Anatomy</a>
+				<a href="#ligatures" class="top-nav__link" data-nav-link="ligatures">Ligatures</a>
+				<a href="#specimen" class="top-nav__link" data-nav-link="specimen">Specimen</a>
+				<a href="#glyphs" class="top-nav__link" data-nav-link="glyphs">Glyphs</a>
+				<a href="#distributions" class="top-nav__link" data-nav-link="distributions">Distributions</a>
+				<a href="#setup" class="top-nav__link" data-nav-link="setup">Setup</a>
+			</nav>
+
+			<div class="top-nav__actions">
+				<a
+					href="https://github.com/Iosevka-Mayukai/sawala-mono-dev"
+					class="button-secondary"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+						<path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+					</svg>
+					<span>GitHub</span>
+				</a>
+				<a
+					href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases"
+					class="button-primary"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<span>Download ZIP</span>
+				</a>
+				<button
+					type="button"
+					class="top-nav__toggle"
+					id="mobile-nav-toggle"
+					aria-expanded="false"
+					aria-controls="top-nav-menu"
+					aria-label="Toggle navigation menu"
+				>
+					<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+						<path d="M2.25 4.5H15.75M2.25 9H15.75M2.25 13.5H15.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<main id="main-content">
+		<!-- Section 1: Hero & Polyglot Code Specimen Runner (REQ-001, REQ-002, AC-001..004) -->
+		<section class="hero-section" id="overview" aria-labelledby="hero-title">
+			<div class="container">
+				<div class="hero-header">
+					<div class="hero-meta-row">
+						<span class="type-eyebrow">INTELLECTUAL EXCHANGE IN CODE</span>
+						<div class="hero-metrics-list" aria-label="Parametric font metrics">
+							<span class="hero-metric-pill tabular-nums"><strong>x-Height</strong> 520</span>
+							<span class="hero-metric-pill tabular-nums"><strong>Cap</strong> 735</span>
+							<span class="hero-metric-pill tabular-nums"><strong>Width</strong> 500</span>
+							<span class="hero-metric-pill tabular-nums"><strong>Italic</strong> 9.4°</span>
+						</div>
+					</div>
+
+					<h1 id="hero-title" class="type-display-xl hero-title">
+						Code is written for human deliberation.
+					</h1>
+
+					<p class="type-body-lg hero-subhead">
+						Derived from the Sundanese word <em>sawala</em> — meaning discussion, deliberation, or intellectual exchange.
+						An ergonomic, high-legibility coding monospace built on Iosevka, tuned for pull request reviews,
+						architectural reasoning, and focused terminal workflows across four distinct distributions.
+					</p>
+
+					<div class="hero-actions">
+						<a
+							href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases"
+							class="button-primary"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+								<path d="M8 1.5V10.5M8 10.5L4.5 7M8 10.5L11.5 7M2.5 13.5H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							<span>Download v1.0.0</span>
+						</a>
+						<a
+							href="https://github.com/Iosevka-Mayukai/sawala-mono-dev"
+							class="button-secondary"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<span>View on GitHub</span>
+						</a>
+						<button
+							type="button"
+							class="button-secondary hero-quick-copy"
+							id="hero-quick-copy"
+							data-copy-value="&quot;editor.fontFamily&quot;: &quot;'Sawala Mono', monospace&quot;"
+							aria-label="Copy VS Code font family configuration"
+						>
+							<span class="hero-quick-copy__code">"editor.fontFamily": "'Sawala Mono'"</span>
+							<span class="status-badge" id="hero-quick-copy-status" aria-live="polite">Copy</span>
+						</button>
+					</div>
+				</div>
+
+				<!-- Polyglot Code Specimen Runner (`specimen-playground-panel`, DESIGN.md:196) -->
+				<div class="specimen-playground-panel polyglot-runner" id="polyglot-runner" role="region" aria-label="Interactive Polyglot Code Specimen Runner">
+					<div class="polyglot-runner__toolbar">
+						<div
+							class="polyglot-runner__tabs"
+							id="polyglot-tablist"
+							role="tablist"
+							aria-label="Programming language specimens"
+						>
+							<button
+								type="button"
+								role="tab"
+								id="tab-typescript"
+								class="variant-switcher-tab is-selected"
+								aria-selected="true"
+								aria-controls="polyglot-code-panel"
+								data-polyglot-tab="typescript"
+								tabindex="0"
+							>
+								TypeScript
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="tab-rust"
+								class="variant-switcher-tab"
+								aria-selected="false"
+								aria-controls="polyglot-code-panel"
+								data-polyglot-tab="rust"
+								tabindex="-1"
+							>
+								Rust
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="tab-go"
+								class="variant-switcher-tab"
+								aria-selected="false"
+								aria-controls="polyglot-code-panel"
+								data-polyglot-tab="go"
+								tabindex="-1"
+							>
+								Go
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="tab-python"
+								class="variant-switcher-tab"
+								aria-selected="false"
+								aria-controls="polyglot-code-panel"
+								data-polyglot-tab="python"
+								tabindex="-1"
+							>
+								Python
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="tab-lua"
+								class="variant-switcher-tab"
+								aria-selected="false"
+								aria-controls="polyglot-code-panel"
+								data-polyglot-tab="lua"
+								tabindex="-1"
+							>
+								Lua
+							</button>
+						</div>
+
+						<div class="polyglot-runner__meta">
+							<span class="polyglot-runner__filename" id="polyglot-filename">deliberation.ts</span>
+							<button
+								type="button"
+								class="polyglot-runner__calt-toggle"
+								id="polyglot-calt-toggle"
+								aria-pressed="true"
+								title="Toggle OpenType contextual alternates (calt) in this specimen"
+							>
+								<span class="calt-indicator" aria-hidden="true">●</span>
+								<span data-calt-text>Sawala Mono · calt: 1</span>
+							</button>
+							<button
+								type="button"
+								class="polyglot-runner__copy-btn"
+								id="polyglot-copy-btn"
+								aria-live="polite"
+							>
+								<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+									<rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+									<path d="M3 11H2.5C1.94772 11 1.5 10.5523 1.5 10V2.5C1.5 1.94772 1.94772 1.5 2.5 1.5H10C10.5523 1.5 11 1.94772 11 2.5V3" stroke="currentColor" stroke-width="1.4"/>
+								</svg>
+								<span id="polyglot-copy-label">Copy Snippet</span>
+							</button>
+						</div>
+					</div>
+
+					<div
+						class="polyglot-runner__viewport"
+						id="polyglot-viewport"
+						role="tabpanel"
+						aria-labelledby="tab-typescript"
+						data-ligatures="standard"
+					>
+						<div class="polyglot-runner__gutter" id="polyglot-line-numbers" aria-hidden="true">
+							<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span>
+						</div>
+						<pre class="polyglot-runner__pre" id="polyglot-code-panel"><code id="polyglot-code" class="language-typescript">interface DeliberationSession&lt;T&gt; {
+  readonly participants: ReadonlyArray&lt;Developer&gt;;
+  evaluate: (pr: PullRequest) =&gt; Promise&lt;Result&lt;T, ReviewError&gt;&gt;;
+}
+
+const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
+  const quorumMask = 0x0F_10 !== 0x00 &amp;&amp; pr.id !== null;
+  const isApproved = pr.approvals.length &gt;= 2 &amp;&amp; pr.blockingDiscussions === 0;
+  pr.reviewerNotes ??= "Verified clarity across 1lI and 0O glyphs -&gt; LGTM";
+  return isApproved &amp;&amp; quorumMask ? pr.merge() : pr.requestRevision();
+};</code></pre>
+					</div>
+
+					<div class="polyglot-runner__footer">
+						<div class="polyglot-runner__highlights" aria-label="Featured operators and glyphs in snippet">
+							<span>Featured in snippet:</span>
+							<div class="polyglot-runner__highlights" id="polyglot-highlights">
+								<span class="polyglot-runner__token-chip">=&gt;</span>
+								<span class="polyglot-runner__token-chip">!==</span>
+								<span class="polyglot-runner__token-chip">===</span>
+								<span class="polyglot-runner__token-chip">&gt;=</span>
+								<span class="polyglot-runner__token-chip">??=</span>
+								<span class="polyglot-runner__token-chip">0 vs O</span>
+								<span class="polyglot-runner__token-chip">1 vs l vs I</span>
+							</div>
+						</div>
+						<span class="status-badge" id="webfont-status-badge" data-font-state="loading">
+							<span class="status-badge__dot" aria-hidden="true"></span>
+							<span id="webfont-status-text">Sawala Mono WOFF2 Ready</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 2: Ergonomic Anatomical Breakdown & Proportional x-Height Comparison Slider (REQ-003, REQ-012, AC-005, AC-019) -->
+		<section class="section-block" id="anatomy" aria-labelledby="anatomy-title">
+			<div class="container">
+				<div class="section-header">
+					<span class="type-eyebrow">ERGONOMIC TYPOGRAPHY</span>
+					<h2 id="anatomy-title" class="type-display-md">Engineered for Effortless Code Reading</h2>
+					<p class="type-subhead">
+						Every glyph in Sawala Mono is selected to eliminate visual ambiguity during high-density
+						pull request reviews, hexadecimal inspection, and nested expression scanning.
+					</p>
+				</div>
+
+				<!-- 4-Up Anatomical Cards (`feature-card`, DESIGN.md:190, AC-005) -->
+				<div class="anatomy-grid">
+					<!-- Card 1: Slashed Zero vs Capital O -->
+					<article class="feature-card">
+						<div class="anatomy-card__header">
+							<span class="anatomy-card__tag">zero = "reverse-slashed"</span>
+							<span class="type-caption tabular-nums">U+0030 · U+004F</span>
+						</div>
+						<div class="anatomy-card__stage" aria-label="Comparison between numeral zero and capital letter O">
+							<div class="anatomy-glyph-pair">
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char anatomy-glyph-char--accent">0</span>
+									<span class="anatomy-glyph-caption">DIGIT 0</span>
+								</div>
+								<span class="anatomy-glyph-vs">vs</span>
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char">O</span>
+									<span class="anatomy-glyph-caption">LATIN O</span>
+								</div>
+							</div>
+						</div>
+						<div class="anatomy-card__body">
+							<h3 class="anatomy-card__title">Slashed Zero vs Capital O</h3>
+							<p class="anatomy-card__desc">
+								Crisp reverse-slashed interior stroke separates numeric zero from uppercase O in memory addresses and hex literals even at 12px.
+							</p>
+							<div class="anatomy-card__meta">0x0F_10 !== O0_FF · tall-reverse-slashed (italic)</div>
+						</div>
+					</article>
+
+					<!-- Card 2: Distinct 1 / l / I -->
+					<article class="feature-card">
+						<div class="anatomy-card__header">
+							<span class="anatomy-card__tag">one = "base-long-top-serif"</span>
+							<span class="type-caption tabular-nums">1 · l · I</span>
+						</div>
+						<div class="anatomy-card__stage" aria-label="Comparison between digit one, lowercase L, and uppercase I">
+							<div class="anatomy-glyph-pair">
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char anatomy-glyph-char--accent">1</span>
+									<span class="anatomy-glyph-caption">U+0031</span>
+								</div>
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char">l</span>
+									<span class="anatomy-glyph-caption">U+006C</span>
+								</div>
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char">I</span>
+									<span class="anatomy-glyph-caption">U+0049</span>
+								</div>
+							</div>
+						</div>
+						<div class="anatomy-card__body">
+							<h3 class="anatomy-card__title">Distinct 1 / l / I Homoglyphs</h3>
+							<p class="anatomy-card__desc">
+								Generous top-serif and flat base on numeral 1 paired with asymmetric terminals on lowercase l and slab-serifed I remove lexical collisions.
+							</p>
+							<div class="anatomy-card__meta">const Il1 = [1, l, I] · inherits = "ss03"</div>
+						</div>
+					</article>
+
+					<!-- Card 3: High-Contrast Delimiters -->
+					<article class="feature-card">
+						<div class="anatomy-card__header">
+							<span class="anatomy-card__tag">brace = "curly-flat-boundary"</span>
+							<span class="type-caption tabular-nums">{ [ ( ) ] }</span>
+						</div>
+						<div class="anatomy-card__stage" aria-label="High contrast curly braces, brackets, and parentheses">
+							<div class="anatomy-glyph-pair">
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char anatomy-glyph-char--accent">{ }</span>
+									<span class="anatomy-glyph-caption">FLAT CURLY</span>
+								</div>
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char">( )</span>
+									<span class="anatomy-glyph-caption">CONTOUR</span>
+								</div>
+							</div>
+						</div>
+						<div class="anatomy-card__body">
+							<h3 class="anatomy-card__title">High-Contrast Delimiters</h3>
+							<p class="anatomy-card__desc">
+								Flat-boundary curly braces and large-contour parentheses create unmistakable visual anchors across deeply nested blocks and closures.
+							</p>
+							<div class="anatomy-card__meta">paren = "large-contour" · Clear nesting hierarchy</div>
+						</div>
+					</article>
+
+					<!-- Card 4: Dual Slope & Cursive Italic -->
+					<article class="feature-card">
+						<div class="anatomy-card__header">
+							<span class="anatomy-card__tag">slope = 0° vs 9.4°</span>
+							<span class="type-caption tabular-nums">Upright · Italic</span>
+						</div>
+						<div class="anatomy-card__stage" aria-label="Comparison between upright double-storey a and cursive italic single-storey a">
+							<div class="anatomy-glyph-pair">
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char">a f</span>
+									<span class="anatomy-glyph-caption">0° UPRIGHT</span>
+								</div>
+								<span class="anatomy-glyph-vs">→</span>
+								<div class="anatomy-glyph-item">
+									<span class="anatomy-glyph-char anatomy-glyph-char--italic">a f</span>
+									<span class="anatomy-glyph-caption">9.4° ITALIC</span>
+								</div>
+							</div>
+						</div>
+						<div class="anatomy-card__body">
+							<h3 class="anatomy-card__title">Dual-Persona Italic Cadence</h3>
+							<p class="anatomy-card__desc">
+								Upright double-storey tailed a transitions to a true single-storey cursive italic at a calibrated 9.4° angle for comments and keywords.
+							</p>
+							<div class="anatomy-card__meta">a = "single-storey-earless-corner-tailed"</div>
+						</div>
+					</article>
+				</div>
+
+				<!-- Interactive Proportional x-Height Comparison Slider (REQ-012, AC-019, Wireframe §1.4.4) -->
+				<div class="specimen-playground-panel comparison-block" id="comparison-slider-panel" role="region" aria-labelledby="comparison-title">
+					<div class="comparison-block__header">
+						<div>
+							<span class="type-eyebrow">ERGONOMIC X-HEIGHT COMPARISON</span>
+							<h3 id="comparison-title" class="type-headline">Generous x-Height Engineered for Reduced Eye Strain</h3>
+						</div>
+						<div class="comparison-legend">
+							<span class="comparison-legend__item">
+								<span class="comparison-legend__dot" aria-hidden="true"></span>
+								<span>Left: Generic Monospace</span>
+							</span>
+							<span class="comparison-legend__item">
+								<span class="comparison-legend__dot comparison-legend__dot--sawala" aria-hidden="true"></span>
+								<span>Right: Sawala Mono (x-Height 520 · Cap 735)</span>
+							</span>
+						</div>
+					</div>
+
+					<div class="comparison-stage" id="comparison-stage">
+						<!-- Base Layer: Generic Monospace Font -->
+						<div class="comparison-pane comparison-pane--generic">
+							<div class="comparison-pane__badge-row">
+								<span class="comparison-pane__label">Generic System Monospace (Standard x-Height · calt off)</span>
+								<span class="comparison-metrics-note">Tighter counters &amp; discrete operators</span>
+							</div>
+							<div class="comparison-specimen-lines">
+								<div class="comparison-code-line comparison-code-line--guided">const a = 10; // 0O vs 1lI check</div>
+								<div class="comparison-code-line comparison-code-line--guided">function readCode(x) =&gt; {</div>
+								<div class="comparison-code-line comparison-code-line--guided">  return x !== null ? x : 0;</div>
+								<div class="comparison-code-line comparison-code-line--guided">}</div>
+								<div class="comparison-guides" aria-hidden="true">
+									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--cap"></span>Cap Line</span>
+									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--xheight"></span>x-Height Guide</span>
+									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--baseline"></span>Baseline</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Overlay Layer: Sawala Mono -->
+						<div class="comparison-pane comparison-pane--sawala">
+							<div class="comparison-pane__badge-row">
+								<span class="comparison-pane__label">Sawala Mono (x-height: 520 · cap-height: 735 · width: 500)</span>
+								<span class="comparison-metrics-note">Open apertures &amp; active OpenType calt</span>
+							</div>
+							<div class="comparison-specimen-lines">
+								<div class="comparison-code-line comparison-code-line--guided">const a = 10; // 0O vs 1lI check</div>
+								<div class="comparison-code-line comparison-code-line--guided">function readCode(x) =&gt; {</div>
+								<div class="comparison-code-line comparison-code-line--guided">  return x !== null ? x : 0;</div>
+								<div class="comparison-code-line comparison-code-line--guided">}</div>
+								<div class="comparison-guides" aria-hidden="true">
+									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--cap"></span>Cap 735</span>
+									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--xheight"></span>x-Height 520 (70.7%)</span>
+									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--baseline"></span>Baseline 0</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Split Handle Divider -->
+						<div class="comparison-divider" aria-hidden="true">
+							<span class="comparison-divider__handle">⇄</span>
+						</div>
+					</div>
+
+					<div class="comparison-controls">
+						<div class="comparison-slider-wrap">
+							<label for="xheight-comparison-slider" class="comparison-slider-label">
+								Split Position: <strong id="comparison-split-value" class="tabular-nums">50%</strong>
+							</label>
+							<input
+								type="range"
+								role="slider"
+								id="xheight-comparison-slider"
+								class="control-slider"
+								min="0"
+								max="100"
+								step="1"
+								value="50"
+								aria-label="Compare Generic Monospace and Sawala Mono proportions"
+								aria-valuemin="0"
+								aria-valuemax="100"
+								aria-valuenow="50"
+							>
+						</div>
+
+						<div class="comparison-presets" role="group" aria-label="Comparison split presets">
+							<button type="button" class="variant-switcher-tab" data-comparison-preset="0" aria-pressed="false">
+								100% Sawala Mono
+							</button>
+							<button type="button" class="variant-switcher-tab is-selected" data-comparison-preset="50" aria-pressed="true">
+								50 / 50 Split
+							</button>
+							<button type="button" class="variant-switcher-tab" data-comparison-preset="100" aria-pressed="false">
+								100% Generic
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 3: Interactive Ligature Playground (REQ-004, AC-006, AC-007, AC-015, Wireframe §1.4.1) -->
+		<section class="section-block" id="ligatures" aria-labelledby="ligatures-title">
+			<div class="container">
+				<div class="ligature-header-bar">
+					<div>
+						<span class="type-eyebrow">CONTEXTUAL ALTERNATES</span>
+						<h2 id="ligatures-title" class="type-display-md">Tailored Programming Ligatures</h2>
+						<p class="type-subhead">
+							Multi-character operators fuse into single semantic glyphs via OpenType <code>calt</code>,
+							reducing visual noise while preserving exact monospace cell widths.
+						</p>
+					</div>
+
+					<div class="ligature-switcher" role="tablist" aria-label="Font ligation variant switcher">
+						<button
+							type="button"
+							role="tab"
+							id="ligature-tab-standard"
+							class="variant-switcher-tab is-selected"
+							data-ligature-tab="standard"
+							aria-selected="true"
+							aria-controls="ligature-matrix"
+							tabindex="0"
+						>
+							Sawala Mono (Ligatures Active)
+						</button>
+						<button
+							type="button"
+							role="tab"
+							id="ligature-tab-nl"
+							class="variant-switcher-tab"
+							data-ligature-tab="nl"
+							aria-selected="false"
+							aria-controls="ligature-matrix"
+							tabindex="-1"
+						>
+							Sawala Mono NL (Literal Symbols)
+						</button>
+					</div>
+				</div>
+
+				<!-- 16-Operator Transformation Grid (`glyph-grid-tile`, DESIGN.md:202, AC-006, AC-007) -->
+				<div
+					class="ligature-matrix"
+					id="ligature-matrix"
+					role="tabpanel"
+					aria-labelledby="ligature-tab-standard"
+					data-ligature-mode="standard"
+				>
+					<button type="button" class="glyph-grid-tile is-active" data-ligature-seq="=&gt;" aria-pressed="true">
+						<span class="ligature-tile__glyph">=&gt;</span>
+						<span class="ligature-tile__name">fat-arrow</span>
+						<span class="ligature-tile__seq">= + &gt;</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="!==" aria-pressed="false">
+						<span class="ligature-tile__glyph">!==</span>
+						<span class="ligature-tile__name">strict-ne</span>
+						<span class="ligature-tile__seq">! + = + =</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="===" aria-pressed="false">
+						<span class="ligature-tile__glyph">===</span>
+						<span class="ligature-tile__name">strict-eq</span>
+						<span class="ligature-tile__seq">= + = + =</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="!=" aria-pressed="false">
+						<span class="ligature-tile__glyph">!=</span>
+						<span class="ligature-tile__name">not-equal</span>
+						<span class="ligature-tile__seq">! + =</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="==" aria-pressed="false">
+						<span class="ligature-tile__glyph">==</span>
+						<span class="ligature-tile__name">equal</span>
+						<span class="ligature-tile__seq">= + =</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="-&gt;" aria-pressed="false">
+						<span class="ligature-tile__glyph">-&gt;</span>
+						<span class="ligature-tile__name">arrow</span>
+						<span class="ligature-tile__seq">- + &gt;</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="&lt;-" aria-pressed="false">
+						<span class="ligature-tile__glyph">&lt;-</span>
+						<span class="ligature-tile__name">left-arr</span>
+						<span class="ligature-tile__seq">&lt; + -</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="::" aria-pressed="false">
+						<span class="ligature-tile__glyph">::</span>
+						<span class="ligature-tile__name">scope-res</span>
+						<span class="ligature-tile__seq">: + :</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="&lt;=&gt;" aria-pressed="false">
+						<span class="ligature-tile__glyph">&lt;=&gt;</span>
+						<span class="ligature-tile__name">spaceship</span>
+						<span class="ligature-tile__seq">&lt; + = + &gt;</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="&lt;&lt;=" aria-pressed="false">
+						<span class="ligature-tile__glyph">&lt;&lt;=</span>
+						<span class="ligature-tile__name">shl-asgn</span>
+						<span class="ligature-tile__seq">&lt; + &lt; + =</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="&lt;=" aria-pressed="false">
+						<span class="ligature-tile__glyph">&lt;=</span>
+						<span class="ligature-tile__name">less-eq</span>
+						<span class="ligature-tile__seq">&lt; + =</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="&gt;=" aria-pressed="false">
+						<span class="ligature-tile__glyph">&gt;=</span>
+						<span class="ligature-tile__name">great-eq</span>
+						<span class="ligature-tile__seq">&gt; + =</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="&lt;!--" aria-pressed="false">
+						<span class="ligature-tile__glyph">&lt;!--</span>
+						<span class="ligature-tile__name">xml-cmnt</span>
+						<span class="ligature-tile__seq">&lt; + ! + - + -</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="+++" aria-pressed="false">
+						<span class="ligature-tile__glyph">+++</span>
+						<span class="ligature-tile__name">triple-plus</span>
+						<span class="ligature-tile__seq">+ + +</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="|&gt;" aria-pressed="false">
+						<span class="ligature-tile__glyph">|&gt;</span>
+						<span class="ligature-tile__name">pipeline</span>
+						<span class="ligature-tile__seq">| + &gt;</span>
+					</button>
+					<button type="button" class="glyph-grid-tile" data-ligature-seq="..." aria-pressed="false">
+						<span class="ligature-tile__glyph">...</span>
+						<span class="ligature-tile__name">vararg</span>
+						<span class="ligature-tile__seq">. + . + .</span>
+					</button>
+				</div>
+
+				<!-- Live Sequence Breakdown & Subpage Link (AC-007, AC-015) -->
+				<div class="ligature-inspector-bar" aria-live="polite">
+					<div class="ligature-inspector__details">
+						<div class="ligature-inspector__preview-box" id="ligature-inspector-preview" data-ligature-mode="standard">=&gt;</div>
+						<div class="ligature-inspector__meta">
+							<div class="ligature-inspector__title" id="ligature-inspector-title">Fat Right Arrow (Arrow / Function)</div>
+							<div class="ligature-inspector__breakdown" id="ligature-inspector-breakdown">ASCII Sequence: [ = ] + [ &gt; ]  →  Token: fat-arrow</div>
+							<div class="ligature-inspector__sample" id="ligature-inspector-sample">const approve = (pr) =&gt; pr.quorum &gt;= 2;</div>
+						</div>
+					</div>
+
+					<div class="specimen-pill-row">
+						<span class="status-badge" id="ligature-mode-badge">OpenType calt: 1 (Ligatures Active)</span>
+						<a href="web-docs/pages/ligatures.html" class="button-secondary">
+							<span>View Full Ligature Catalog (50+ Symbols)</span>
+							<span aria-hidden="true">→</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 4: Live Type Specimen & Playground (REQ-005, AC-008..010, Wireframe §1.4.1) -->
+		<section class="section-block" id="specimen" aria-labelledby="specimen-title">
+			<div class="container">
+				<div class="section-header">
+					<span class="type-eyebrow">INTERACTIVE SPECIMEN</span>
+					<h2 id="specimen-title" class="type-display-md">Test Your Own Code and Expressions</h2>
+					<p class="type-subhead">
+						Type or paste any code snippet below and adjust size, weight, line-height, and italic slope
+						in real time to evaluate how Sawala Mono performs in your daily workflow.
+					</p>
+				</div>
+
+				<div class="specimen-workbench">
+					<!-- Controls Toolbar (`surface-2`, DESIGN.md:541) -->
+					<div class="specimen-toolbar" role="toolbar" aria-label="Live specimen typography controls">
+						<!-- Font Size Control (12px–48px, AC-009) -->
+						<div class="specimen-control-group">
+							<div class="specimen-control-group__top">
+								<label for="specimen-size-slider" class="specimen-control-label">Font Size</label>
+								<span class="specimen-control-value" id="specimen-size-value">16px</span>
+							</div>
+							<input
+								type="range"
+								role="slider"
+								id="specimen-size-slider"
+								class="control-slider"
+								min="12"
+								max="48"
+								step="1"
+								value="16"
+								aria-label="Specimen font size in pixels"
+								aria-valuemin="12"
+								aria-valuemax="48"
+								aria-valuenow="16"
+							>
+						</div>
+
+						<!-- Font Weight Control (100–900) -->
+						<div class="specimen-control-group">
+							<div class="specimen-control-group__top">
+								<label for="specimen-weight-select" class="specimen-control-label">Font Weight</label>
+								<span class="specimen-control-value" id="specimen-weight-value">Regular (400)</span>
+							</div>
+							<select id="specimen-weight-select" class="control-select" aria-label="Specimen font weight">
+								<option value="100">Thin (100)</option>
+								<option value="200">ExtraLight (200)</option>
+								<option value="300">Light (300)</option>
+								<option value="400" selected>Regular (400)</option>
+								<option value="500">Medium (500)</option>
+								<option value="600">SemiBold (600)</option>
+								<option value="700">Bold (700)</option>
+								<option value="800">ExtraBold (800)</option>
+								<option value="900">Heavy (900)</option>
+							</select>
+						</div>
+
+						<!-- Line Height Control (1.2–2.0) -->
+						<div class="specimen-control-group">
+							<div class="specimen-control-group__top">
+								<label for="specimen-lineheight-slider" class="specimen-control-label">Line Height</label>
+								<span class="specimen-control-value" id="specimen-lineheight-value">1.50</span>
+							</div>
+							<input
+								type="range"
+								role="slider"
+								id="specimen-lineheight-slider"
+								class="control-slider"
+								min="1.2"
+								max="2.0"
+								step="0.05"
+								value="1.5"
+								aria-label="Specimen line height ratio"
+								aria-valuemin="1.2"
+								aria-valuemax="2.0"
+								aria-valuenow="1.5"
+							>
+						</div>
+
+						<!-- Slope Toggle (Upright 0° vs Italic 9.4°, AC-010) -->
+						<div class="specimen-control-group">
+							<div class="specimen-control-group__top">
+								<span class="specimen-control-label">Slope Angle</span>
+							</div>
+							<div class="specimen-pill-row" role="group" aria-label="Specimen slope toggle">
+								<button
+									type="button"
+									class="variant-switcher-tab is-selected"
+									data-specimen-slope="upright"
+									aria-pressed="true"
+								>
+									Upright (0°)
+								</button>
+								<button
+									type="button"
+									class="variant-switcher-tab"
+									data-specimen-slope="italic"
+									aria-pressed="false"
+								>
+									Italic (9.4°)
+								</button>
+							</div>
+						</div>
+
+						<!-- Variant Toggle (Standard calt vs NL) -->
+						<div class="specimen-control-group">
+							<div class="specimen-control-group__top">
+								<span class="specimen-control-label">Ligation Variant</span>
+							</div>
+							<div class="specimen-pill-row" role="group" aria-label="Specimen font variant toggle">
+								<button
+									type="button"
+									class="variant-switcher-tab is-selected"
+									data-specimen-variant="standard"
+									aria-pressed="true"
+								>
+									Sawala Mono (calt)
+								</button>
+								<button
+									type="button"
+									class="variant-switcher-tab"
+									data-specimen-variant="nl"
+									aria-pressed="false"
+								>
+									Sawala Mono NL
+								</button>
+								<button
+									type="button"
+									class="button-secondary"
+									id="specimen-reset-btn"
+									title="Restore default specimen parameters"
+								>
+									Reset
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Editable Specimen Textarea (`specimen-playground-panel`, AC-008) -->
+					<div class="specimen-editor-wrap" id="specimen-editor-wrap">
+						<label for="specimen-textarea" class="sr-only">Live editable code specimen</label>
+						<textarea
+							id="specimen-textarea"
+							class="specimen-textarea"
+							spellcheck="false"
+							autocapitalize="off"
+							autocomplete="off"
+							placeholder="The quick brown fox jumps over the lazy dog. 0123456789 =&gt; !== -&gt;"
+							data-ligature-mode="standard"
+						>// Type anything here to test rendering, ligatures, and weights:
+function calculateHammingDistance(a: string, b: string): number {
+  if (a.length !== b.length) throw new Error("Strings must be of equal length!");
+  let distance = 0;
+  for (let i = 0; i &lt; a.length; i++) {
+    if (a[i] !== b[i]) distance++; // =&gt; count differences across 0O and 1lI
+  }
+  return distance;
+}</textarea>
+					</div>
+
+					<div class="specimen-status-bar">
+						<div class="specimen-status-bar__group">
+							<span id="specimen-status-summary">Sawala Mono · 16px / 1.50 · Weight 400 · Upright 0°</span>
+						</div>
+						<div class="specimen-status-bar__group">
+							<span class="status-badge" id="specimen-tier-badge">Tier A Core WOFF2 (400)</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 5: Character Inspector & Glyph Browser (REQ-009, AC-016, Wireframe §1.4.1) -->
+		<section class="section-block" id="glyphs" aria-labelledby="glyphs-title">
+			<div class="container">
+				<div class="section-header">
+					<span class="type-eyebrow">ANATOMICAL GLYPH MATRIX</span>
+					<h2 id="glyphs-title" class="type-display-md">Inspect Individual Glyphs &amp; Unicode Codepoints</h2>
+					<p class="type-subhead">
+						Explore 86 curated characters across five functional categories and inspect the exact
+						parametric variant rules declared in <code>private-build-plans.toml</code>.
+					</p>
+				</div>
+
+				<div class="glyph-browser-toolbar">
+					<div class="glyph-category-tabs" role="tablist" aria-label="Glyph categories">
+						<button
+							type="button"
+							role="tab"
+							id="glyph-tab-all"
+							class="variant-switcher-tab is-selected"
+							data-glyph-category-tab="all"
+							aria-selected="true"
+							aria-controls="glyph-matrix-grid"
+							tabindex="0"
+						>
+							All Glyphs
+						</button>
+						<button
+							type="button"
+							role="tab"
+							id="glyph-tab-latin"
+							class="variant-switcher-tab"
+							data-glyph-category-tab="latin"
+							aria-selected="false"
+							aria-controls="glyph-matrix-grid"
+							tabindex="-1"
+						>
+							Basic Latin
+						</button>
+						<button
+							type="button"
+							role="tab"
+							id="glyph-tab-digits"
+							class="variant-switcher-tab"
+							data-glyph-category-tab="digits"
+							aria-selected="false"
+							aria-controls="glyph-matrix-grid"
+							tabindex="-1"
+						>
+							Digits &amp; Math
+						</button>
+						<button
+							type="button"
+							role="tab"
+							id="glyph-tab-punctuation"
+							class="variant-switcher-tab"
+							data-glyph-category-tab="punctuation"
+							aria-selected="false"
+							aria-controls="glyph-matrix-grid"
+							tabindex="-1"
+						>
+							Punctuation &amp; Delimiters
+						</button>
+						<button
+							type="button"
+							role="tab"
+							id="glyph-tab-operators"
+							class="variant-switcher-tab"
+							data-glyph-category-tab="operators"
+							aria-selected="false"
+							aria-controls="glyph-matrix-grid"
+							tabindex="-1"
+						>
+							Programming Symbols
+						</button>
+						<button
+							type="button"
+							role="tab"
+							id="glyph-tab-accented"
+							class="variant-switcher-tab"
+							data-glyph-category-tab="accented"
+							aria-selected="false"
+							aria-controls="glyph-matrix-grid"
+							tabindex="-1"
+						>
+							Accented Latin
+						</button>
+					</div>
+
+					<span class="status-badge tabular-nums" id="glyph-category-count">Showing 86 of 86 Glyphs</span>
+				</div>
+
+				<!-- Interactive Glyph Matrix Grid (`glyph-grid-tile`, DESIGN.md:202, AC-016) -->
+				<div
+					class="glyph-matrix-grid"
+					id="glyph-matrix-grid"
+					role="tabpanel"
+					aria-labelledby="glyph-tab-all"
+					data-active-category="all"
+				>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile is-active" data-glyph-char="0" data-glyph-hex="U+0030" data-glyph-category="digits" aria-pressed="true" aria-label="DIGIT ZERO (U+0030)">
+						<span class="glyph-matrix-tile__char">0</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+0030</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char="1" data-glyph-hex="U+0031" data-glyph-category="digits" aria-pressed="false" aria-label="DIGIT ONE (U+0031)">
+						<span class="glyph-matrix-tile__char">1</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+0031</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char="7" data-glyph-hex="U+0037" data-glyph-category="digits" aria-pressed="false" aria-label="DIGIT SEVEN (U+0037)">
+						<span class="glyph-matrix-tile__char">7</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+0037</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char="a" data-glyph-hex="U+0061" data-glyph-category="latin" aria-pressed="false" aria-label="LATIN SMALL LETTER A (U+0061)">
+						<span class="glyph-matrix-tile__char">a</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+0061</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char="g" data-glyph-hex="U+0067" data-glyph-category="latin" aria-pressed="false" aria-label="LATIN SMALL LETTER G (U+0067)">
+						<span class="glyph-matrix-tile__char">g</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+0067</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char="l" data-glyph-hex="U+006C" data-glyph-category="latin" aria-pressed="false" aria-label="LATIN SMALL LETTER L (U+006C)">
+						<span class="glyph-matrix-tile__char">l</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+006C</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char="{" data-glyph-hex="U+007B" data-glyph-category="punctuation" aria-pressed="false" aria-label="LEFT CURLY BRACKET (U+007B)">
+						<span class="glyph-matrix-tile__char">{</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+007B</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char="}" data-glyph-hex="U+007D" data-glyph-category="punctuation" aria-pressed="false" aria-label="RIGHT CURLY BRACKET (U+007D)">
+						<span class="glyph-matrix-tile__char">}</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+007D</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char="(" data-glyph-hex="U+0028" data-glyph-category="punctuation" aria-pressed="false" aria-label="LEFT PARENTHESIS (U+0028)">
+						<span class="glyph-matrix-tile__char">(</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+0028</span>
+					</button>
+					<button type="button" class="glyph-grid-tile glyph-matrix-tile" data-glyph-char=")" data-glyph-hex="U+0029" data-glyph-category="punctuation" aria-pressed="false" aria-label="RIGHT PARENTHESIS (U+0029)">
+						<span class="glyph-matrix-tile__char">)</span>
+						<span class="glyph-matrix-tile__code tabular-nums">U+0029</span>
+					</button>
+				</div>
+
+				<!-- Selected Glyph Inspection Card (AC-016, Wireframe §1.4.1) -->
+				<div class="glyph-inspector-card" id="glyph-inspector-card" aria-live="polite">
+					<div class="glyph-inspector-stage">
+						<span class="status-badge">96px Magnified Preview</span>
+						<div class="glyph-inspector-stage__pair">
+							<span class="glyph-inspector-char" id="glyph-inspector-preview">0</span>
+							<span class="glyph-inspector-char--italic" id="glyph-inspector-preview-italic" title="9.4° Italic Companion">0</span>
+						</div>
+						<div class="glyph-inspector-stage__labels">
+							<span>0° Upright</span>
+							<span>9.4° Italic</span>
+						</div>
+					</div>
+
+					<div class="glyph-inspector-body">
+						<div class="glyph-inspector-header">
+							<div class="glyph-inspector-title-group">
+								<span class="glyph-inspector-codepoint tabular-nums" id="glyph-inspector-codepoint">U+0030</span>
+								<h3 class="glyph-inspector-name" id="glyph-inspector-name">DIGIT ZERO</h3>
+							</div>
+							<span class="status-badge" id="glyph-inspector-category">Digits &amp; Math</span>
+						</div>
+
+						<div class="glyph-inspector-meta-grid">
+							<div class="glyph-inspector-field">
+								<span class="glyph-inspector-field__label">Active Design Variant</span>
+								<span class="glyph-inspector-field__value" id="glyph-inspector-variant">reverse-slashed (upright) · tall-reverse-slashed (italic)</span>
+							</div>
+							<div class="glyph-inspector-field">
+								<span class="glyph-inspector-field__label">Source Declaration</span>
+								<span class="glyph-inspector-field__value" id="glyph-inspector-toml">private-build-plans.toml:37,54</span>
+							</div>
+							<div class="glyph-inspector-field">
+								<span class="glyph-inspector-field__label">Parametric Cell Metrics</span>
+								<span class="glyph-inspector-field__value tabular-nums" id="glyph-inspector-metrics">Advance Width 500 | Cap 735 | x-Height 520</span>
+							</div>
+						</div>
+
+						<p class="glyph-inspector-rationale" id="glyph-inspector-rationale">
+							Crisp reverse-slashed interior stroke eliminates ambiguity with capital Latin O at 12px.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 6: Nerd Font Terminal Environment Mockup (REQ-010, AC-017, Wireframe §1.4.1) -->
+		<section class="section-block" id="terminal" aria-labelledby="terminal-title">
+			<div class="container">
+				<div class="section-header">
+					<span class="type-eyebrow">TERMINAL NATIVE</span>
+					<h2 id="terminal-title" class="type-display-md">Engineered for Modern Shells, Neovim &amp; Multiplexers</h2>
+					<p class="type-subhead">
+						<code>Sawala Mono NF</code> and <code>Sawala Mono NL NF</code> bundle 10,000+ developer icons and
+						Powerline glyphs via Nerd Fonts v3.3.0 while maintaining exact 500-unit cell alignment.
+					</p>
+				</div>
+
+				<div class="product-screenshot-card" role="region" aria-label="Interactive Nerd Font Terminal Environment Mockup">
+					<div class="terminal-toolbar">
+						<div class="terminal-preset-tabs" role="tablist" aria-label="Terminal workflow presets">
+							<button
+								type="button"
+								role="tab"
+								id="terminal-tab-neovim"
+								class="variant-switcher-tab is-selected"
+								data-terminal-preset="neovim"
+								aria-selected="true"
+								aria-controls="terminal-mockup-viewport"
+								tabindex="0"
+							>
+								Neovim + Lualine
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="terminal-tab-git"
+								class="variant-switcher-tab"
+								data-terminal-preset="git-review"
+								aria-selected="false"
+								aria-controls="terminal-mockup-viewport"
+								tabindex="-1"
+							>
+								Starship + PR Review
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="terminal-tab-tmux"
+								class="variant-switcher-tab"
+								data-terminal-preset="tmux-build"
+								aria-selected="false"
+								aria-controls="terminal-mockup-viewport"
+								tabindex="-1"
+							>
+								Tmux + Nerd Font Patcher
+							</button>
+						</div>
+
+						<div class="specimen-pill-row" role="group" aria-label="Terminal Nerd Font variant switcher">
+							<button
+								type="button"
+								class="variant-switcher-tab is-selected"
+								data-terminal-variant="standard"
+								aria-pressed="true"
+							>
+								Sawala Mono NF (calt: 1)
+							</button>
+							<button
+								type="button"
+								class="variant-switcher-tab"
+								data-terminal-variant="nl"
+								aria-pressed="false"
+							>
+								Sawala Mono NL NF (calt: 0)
+							</button>
+						</div>
+					</div>
+
+					<div class="terminal-window">
+						<div class="terminal-titlebar">
+							<div class="terminal-window-dots" aria-hidden="true">
+								<span class="terminal-window-dot terminal-window-dot--active"></span>
+								<span class="terminal-window-dot"></span>
+								<span class="terminal-window-dot"></span>
+							</div>
+							<span class="terminal-window-title" id="terminal-window-title">~/work/sawala-mono (main) — nvim src/session.ts</span>
+							<span class="status-badge" id="terminal-font-badge">Sawala Mono NF · Powerline + calt: 1</span>
+						</div>
+
+						<!-- Top Starship / Buffer Powerline Bar (U+E0B0 , U+E0B1 , U+E0B2 , U+E0A0 ) -->
+						<div class="terminal-powerline-bar" aria-label="Simulated Starship and Powerline prompt bar">
+							<div class="terminal-powerline-group">
+								<span class="powerline-seg powerline-seg--primary">
+									<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+										<path d="M1.5 3.5C1.5 2.67157 2.17157 2 3 2H6.29289C6.69072 2 7.07225 2.15804 7.35355 2.43934L8.56066 3.64645C8.84196 3.92775 9.22349 4.08579 9.62132 4.08579H13C13.8284 4.08579 14.5 4.75736 14.5 5.58579V12.5C14.5 13.3284 13.8284 14 13 14H3C2.17157 14 1.5 13.3284 1.5 12.5V3.5Z" stroke="currentColor" stroke-width="1.4"/>
+									</svg>
+									<span id="terminal-seg-dir">src/session.ts</span>
+								</span>
+								<span class="powerline-sep" aria-hidden="true"> </span>
+								<span class="powerline-seg powerline-seg--branch">
+									<svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+										<circle cx="4" cy="3.5" r="1.75" stroke="currentColor" stroke-width="1.4"/>
+										<circle cx="4" cy="12.5" r="1.75" stroke="currentColor" stroke-width="1.4"/>
+										<circle cx="12" cy="5.5" r="1.75" stroke="currentColor" stroke-width="1.4"/>
+										<path d="M4 5.25V10.75M12 7.25C12 9.5 8 8.5 4 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+									</svg>
+									<span aria-hidden="true"></span>
+									<span id="terminal-seg-branch">main*</span>
+								</span>
+								<span class="powerline-sep" aria-hidden="true"></span>
+								<span class="powerline-seg">
+									<span id="terminal-seg-runtime">v1.0.0 · TS 5.6</span>
+								</span>
+							</div>
+
+							<div class="terminal-powerline-group">
+								<span class="powerline-sep" aria-hidden="true"></span>
+								<span class="powerline-seg tabular-nums">
+									<svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+										<circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/>
+										<path d="M8 4.5V8L10.5 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+									</svg>
+									<span id="terminal-seg-duration">18ms</span>
+								</span>
+							</div>
+						</div>
+
+						<!-- Terminal Code Viewport -->
+						<div
+							class="terminal-viewport"
+							id="terminal-mockup-viewport"
+							role="tabpanel"
+							aria-labelledby="terminal-tab-neovim"
+							data-ligature-mode="standard"
+						>
+							<div class="terminal-code-lines" id="terminal-code-lines">
+								<div class="terminal-line"><span class="terminal-line__no tabular-nums" aria-hidden="true">1</span><span class="terminal-line__code"><span class="term-kw">import</span> { <span class="term-type">SawalaSession</span>, <span class="term-type">GlyphMetrics</span> } <span class="term-kw">from</span> <span class="term-str">"@sawala/core"</span>;</span></div>
+								<div class="terminal-line"><span class="terminal-line__no tabular-nums" aria-hidden="true">2</span><span class="terminal-line__code">&nbsp;</span></div>
+								<div class="terminal-line"><span class="terminal-line__no tabular-nums" aria-hidden="true">3</span><span class="terminal-line__code"><span class="term-cm">// Powerline glyphs (   ) align seamlessly with 500-unit cell grids</span></span></div>
+								<div class="terminal-line"><span class="terminal-line__no tabular-nums" aria-hidden="true">4</span><span class="terminal-line__code"><span class="term-kw">export const</span> <span class="term-fn">verifyTerminalGrid</span> = (<span class="term-var">m</span>: <span class="term-type">GlyphMetrics</span>): <span class="term-type">boolean</span> <span class="term-op">=&gt;</span> {</span></div>
+								<div class="terminal-line"><span class="terminal-line__no tabular-nums" aria-hidden="true">5</span><span class="terminal-line__code">  <span class="term-kw">const</span> <span class="term-var">isAligned</span> = <span class="term-var">m</span>.width <span class="term-op">===</span> <span class="term-num">500</span> <span class="term-op">&amp;&amp;</span> <span class="term-var">m</span>.xHeight <span class="term-op">!==</span> <span class="term-num">0</span>;</span></div>
+								<div class="terminal-line"><span class="terminal-line__no tabular-nums" aria-hidden="true">6</span><span class="terminal-line__code">  <span class="term-kw">return</span> <span class="term-var">isAligned</span> ? <span class="term-str">"Sawala Mono NF -&gt; Ready"</span>.<span class="term-fn">length</span> <span class="term-op">&gt;=</span> <span class="term-num">1</span> : <span class="term-num">false</span>;</span></div>
+								<div class="terminal-line"><span class="terminal-line__no tabular-nums" aria-hidden="true">7</span><span class="terminal-line__code">};</span></div>
+							</div>
+						</div>
+
+						<!-- Bottom Statusline (Lualine / Tmux) -->
+						<div class="terminal-statusline">
+							<div class="terminal-powerline-group">
+								<span class="powerline-seg powerline-seg--primary" id="terminal-status-mode">NORMAL</span>
+								<span class="powerline-sep" aria-hidden="true"></span>
+								<span class="powerline-seg">
+									<span aria-hidden="true"></span>
+									<span id="terminal-status-branch">main*</span>
+								</span>
+								<span class="powerline-sep" aria-hidden="true"></span>
+								<span class="powerline-seg tabular-nums" id="terminal-status-diff">+14 ~2 -0</span>
+							</div>
+							<div class="terminal-powerline-group">
+								<span class="powerline-sep" aria-hidden="true"></span>
+								<span class="powerline-seg">UTF-8 · LF · typescript</span>
+								<span class="powerline-sep" aria-hidden="true"></span>
+								<span class="powerline-seg tabular-nums" id="terminal-status-pos">7:24</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="terminal-footer-notes">
+						<span class="type-caption">
+							Inline vector &amp; UTF-8 Powerline preview (<code>U+E0B0</code>  · <code>U+E0B1</code>  · <code>U+E0A0</code> ) — zero multi-MB webfont overhead on initial load.
+						</span>
+						<span class="status-badge">Nerd Fonts v3.3.0 Complete Patch Ready</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 7: 4-Tier Distribution Matrix (REQ-006, AC-011, AC-012, Wireframe §1.4.1) -->
+		<section class="section-block" id="distributions" aria-labelledby="distributions-title">
+			<div class="container">
+				<div class="distributions-toolbar">
+					<div>
+						<span class="type-eyebrow">PACKAGING &amp; RELEASES</span>
+						<h2 id="distributions-title" class="type-display-md">Choose Your Optimal Distribution</h2>
+						<p class="type-subhead">
+							Four purpose-built packages compiled from the same parametric core so you can pair
+							ligature-enabled IDEs with icon-rich terminal emulators without metric mismatch.
+						</p>
+					</div>
+
+					<div class="distributions-width-switcher" role="group" aria-label="Font width scope selector">
+						<button
+							type="button"
+							class="variant-switcher-tab is-selected"
+							data-distribution-width="normal"
+							aria-pressed="true"
+						>
+							Normal Width (500)
+						</button>
+						<button
+							type="button"
+							class="variant-switcher-tab"
+							data-distribution-width="semi-extended"
+							aria-pressed="false"
+						>
+							SemiExtended Width (548)
+						</button>
+					</div>
+				</div>
+
+				<!-- 4-Card Distribution Grid (`distribution-card` & `distribution-card-featured`, DESIGN.md:166, AC-011, AC-012) -->
+				<div class="distributions-grid">
+					<!-- Card 1: Sawala Mono (Featured Flagship) -->
+					<article class="distribution-card distribution-card-featured" data-distribution-card="sawala-mono">
+						<div class="distribution-card__top">
+							<div class="distribution-card__badge-row">
+								<span class="distribution-card__badge">FEATURED · FLAGSHIP</span>
+								<span class="type-caption tabular-nums">calt: 1</span>
+							</div>
+							<h3 class="distribution-card__title">Sawala Mono</h3>
+							<div class="distribution-card__subtitle">Standard Coding Ligatures</div>
+							<p class="distribution-card__desc">
+								Flagship coding distribution featuring rich OpenType contextual alternates (<code>=&gt;</code>, <code>!==</code>, <code>-&gt;</code>, <code>::</code>, <code>&lt;=&gt;</code>) tuned for modern IDEs and pull request reviews.
+							</p>
+							<div class="distribution-card__specimen">fn(x) =&gt; x !== 0 &amp;&amp; x &gt;= 1</div>
+							<div class="distribution-card__specs">
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Ligatures</span>
+									<span class="distribution-card__spec-val">Active (~50+ calt)</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Nerd Font Icons</span>
+									<span class="distribution-card__spec-val">Clean Unicode</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Best For</span>
+									<span class="distribution-card__spec-val">VS Code, JetBrains, Zed</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Width Scope</span>
+									<span class="distribution-card__spec-val" data-distribution-width-note>Normal Width (500) · Core</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="distribution-card__footer">
+							<a
+								href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-v1.0.0.zip"
+								class="button-primary distribution-card__cta"
+								data-distribution-download
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<span>Download ZIP</span>
+							</a>
+							<div class="distribution-card__archive" data-distribution-archive>SawalaMono-v1.0.0.zip</div>
+						</div>
+					</article>
+
+					<!-- Card 2: Sawala Mono NL -->
+					<article class="distribution-card" data-distribution-card="sawala-mono-nl">
+						<div class="distribution-card__top">
+							<div class="distribution-card__badge-row">
+								<span class="distribution-card__badge">NO LIGATURES</span>
+								<span class="type-caption tabular-nums">noLigation = true</span>
+							</div>
+							<h3 class="distribution-card__title">Sawala Mono NL</h3>
+							<div class="distribution-card__subtitle">Strict Symbolic Separation</div>
+							<p class="distribution-card__desc">
+								Compiled without OpenType ligation tables for developers who require every multi-character operator to remain discrete, literal ASCII glyphs.
+							</p>
+							<div class="distribution-card__specimen distribution-card__specimen--nl">fn(x) =&gt; x !== 0 &amp;&amp; x &gt;= 1</div>
+							<div class="distribution-card__specs">
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Ligatures</span>
+									<span class="distribution-card__spec-val">Disabled (Discrete)</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Nerd Font Icons</span>
+									<span class="distribution-card__spec-val">Clean Unicode</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Best For</span>
+									<span class="distribution-card__spec-val">Pure Literals, Systems C</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Width Scope</span>
+									<span class="distribution-card__spec-val" data-distribution-width-note>Normal Width (500) · Core</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="distribution-card__footer">
+							<a
+								href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMonoNL-v1.0.0.zip"
+								class="button-secondary distribution-card__cta"
+								data-distribution-download
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<span>Download ZIP</span>
+							</a>
+							<div class="distribution-card__archive" data-distribution-archive>SawalaMonoNL-v1.0.0.zip</div>
+						</div>
+					</article>
+
+					<!-- Card 3: Sawala Mono NF -->
+					<article class="distribution-card" data-distribution-card="sawala-mono-nf">
+						<div class="distribution-card__top">
+							<div class="distribution-card__badge-row">
+								<span class="distribution-card__badge">NERD FONT PATCHED</span>
+								<span class="type-caption tabular-nums">NF v3.3.0</span>
+							</div>
+							<h3 class="distribution-card__title">Sawala Mono NF</h3>
+							<div class="distribution-card__subtitle">Ligatures + 10,000+ Icons</div>
+							<p class="distribution-card__desc">
+								Patched with Powerline, Devicons, Octicons, Font Awesome, and Material Design icons alongside full programming ligatures.
+							</p>
+							<div class="distribution-card__specimen"> main  =&gt; !== -&gt; ::</div>
+							<div class="distribution-card__specs">
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Ligatures</span>
+									<span class="distribution-card__spec-val">Active (~50+ calt)</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Nerd Font Icons</span>
+									<span class="distribution-card__spec-val">10,000+ Glyphs</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Best For</span>
+									<span class="distribution-card__spec-val">Neovim, Tmux, Kitty, WezTerm</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Width Scope</span>
+									<span class="distribution-card__spec-val" data-distribution-width-note>Normal Width (500) · Core</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="distribution-card__footer">
+							<a
+								href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-NF-v1.0.0.zip"
+								class="button-secondary distribution-card__cta"
+								data-distribution-download
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<span>Download ZIP</span>
+							</a>
+							<div class="distribution-card__archive" data-distribution-archive>SawalaMono-NF-v1.0.0.zip</div>
+						</div>
+					</article>
+
+					<!-- Card 4: Sawala Mono NL NF -->
+					<article class="distribution-card" data-distribution-card="sawala-mono-nl-nf">
+						<div class="distribution-card__top">
+							<div class="distribution-card__badge-row">
+								<span class="distribution-card__badge">NERD FONT + NO LIG</span>
+								<span class="type-caption tabular-nums">NF + NL</span>
+							</div>
+							<h3 class="distribution-card__title">Sawala Mono NL NF</h3>
+							<div class="distribution-card__subtitle">Terminal Icons + Literal Symbols</div>
+							<p class="distribution-card__desc">
+								Combines full Nerd Font v3.3.0 Powerline and developer icon coverage with strict discrete operator rendering (<code>noLigation = true</code>).
+							</p>
+							<div class="distribution-card__specimen distribution-card__specimen--nl"> main  = &gt; ! = = - &gt;</div>
+							<div class="distribution-card__specs">
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Ligatures</span>
+									<span class="distribution-card__spec-val">Disabled (Discrete)</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Nerd Font Icons</span>
+									<span class="distribution-card__spec-val">10,000+ Glyphs</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Best For</span>
+									<span class="distribution-card__spec-val">Terminals, Pure TUI Shells</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Width Scope</span>
+									<span class="distribution-card__spec-val" data-distribution-width-note>Normal Width (500) · Core</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="distribution-card__footer">
+							<a
+								href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMonoNL-NF-v1.0.0.zip"
+								class="button-secondary distribution-card__cta"
+								data-distribution-download
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<span>Download ZIP</span>
+							</a>
+							<div class="distribution-card__archive" data-distribution-archive>SawalaMonoNL-NF-v1.0.0.zip</div>
+						</div>
+					</article>
+				</div>
+
+				<div class="distributions-subpage-bar">
+					<span class="type-body-sm">
+						Need detailed weight tables (Thin 100 to Heavy 900), Normal vs SemiExtended metrics, or CI artifact details?
+					</span>
+					<a href="web-docs/pages/distributions.html" class="button-secondary">
+						<span>Explore Distributions Technical Matrix</span>
+						<span aria-hidden="true">→</span>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 8: Quick Setup & IDE Config Generator (REQ-007, AC-013, AC-014, Wireframe §1.4.1) -->
+		<section class="section-block" id="setup" aria-labelledby="setup-title">
+			<div class="container">
+				<div class="section-header">
+					<span class="type-eyebrow">INSTANT SETUP</span>
+					<h2 id="setup-title" class="type-display-md">Configure Your Favorite Environment in Seconds</h2>
+					<p class="type-subhead">
+						Select your editor or terminal emulator below, choose your installed Sawala Mono distribution,
+						and copy the ready-to-use configuration snippet with one click.
+					</p>
+				</div>
+
+				<div class="config-workbench" role="region" aria-label="Quick Setup IDE Configuration Generator">
+					<div class="config-toolbar">
+						<div class="config-tabs" role="tablist" aria-label="Editor and terminal environments">
+							<button
+								type="button"
+								role="tab"
+								id="config-tab-vscode"
+								class="variant-switcher-tab is-selected"
+								data-config-tab="vscode"
+								aria-selected="true"
+								aria-controls="config-tabpanel"
+								tabindex="0"
+							>
+								VS Code
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="config-tab-jetbrains"
+								class="variant-switcher-tab"
+								data-config-tab="jetbrains"
+								aria-selected="false"
+								aria-controls="config-tabpanel"
+								tabindex="-1"
+							>
+								JetBrains IDEs
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="config-tab-neovim"
+								class="variant-switcher-tab"
+								data-config-tab="neovim"
+								aria-selected="false"
+								aria-controls="config-tabpanel"
+								tabindex="-1"
+							>
+								Neovim
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="config-tab-alacritty"
+								class="variant-switcher-tab"
+								data-config-tab="alacritty"
+								aria-selected="false"
+								aria-controls="config-tabpanel"
+								tabindex="-1"
+							>
+								Alacritty
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="config-tab-kitty"
+								class="variant-switcher-tab"
+								data-config-tab="kitty"
+								aria-selected="false"
+								aria-controls="config-tabpanel"
+								tabindex="-1"
+							>
+								Kitty
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="config-tab-wezterm"
+								class="variant-switcher-tab"
+								data-config-tab="wezterm"
+								aria-selected="false"
+								aria-controls="config-tabpanel"
+								tabindex="-1"
+							>
+								WezTerm
+							</button>
+							<button
+								type="button"
+								role="tab"
+								id="config-tab-windows-terminal"
+								class="variant-switcher-tab"
+								data-config-tab="windows-terminal"
+								aria-selected="false"
+								aria-controls="config-tabpanel"
+								tabindex="-1"
+							>
+								Windows Terminal
+							</button>
+						</div>
+
+						<div class="config-family-picker">
+							<label for="config-family-select" class="config-family-picker__label">Target Family:</label>
+							<select id="config-family-select" class="control-select" aria-label="Target Sawala Mono font family">
+								<option value="sawala-mono" selected>Sawala Mono (Standard)</option>
+								<option value="sawala-mono-nl">Sawala Mono NL (No Ligatures)</option>
+								<option value="sawala-mono-nf">Sawala Mono NF (Nerd Font)</option>
+								<option value="sawala-mono-nl-nf">Sawala Mono NL NF (NF + No Lig)</option>
+							</select>
+						</div>
+					</div>
+
+					<div id="config-tabpanel" role="tabpanel" aria-labelledby="config-tab-vscode">
+						<div class="config-header-row">
+							<span class="config-filename" id="config-filename">// VS Code — settings.json</span>
+							<button
+								type="button"
+								class="config-copy-btn"
+								id="config-copy-btn"
+								aria-live="polite"
+							>
+								<svg class="config-copy-btn__icon-copy" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+									<rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+									<path d="M3 11H2.5C1.94772 11 1.5 10.5523 1.5 10V2.5C1.5 1.94772 1.94772 1.5 2.5 1.5H10C10.5523 1.5 11 1.94772 11 2.5V3" stroke="currentColor" stroke-width="1.4"/>
+								</svg>
+								<svg class="config-copy-btn__icon-check" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+									<path d="M3 8.5L6.5 12L13 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+								<span id="config-copy-label">Copy Configuration</span>
+							</button>
+						</div>
+
+						<div class="config-code-wrap">
+							<pre class="config-pre"><code id="config-code" class="language-json">{
+  "editor.fontFamily": "'Sawala Mono', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.5
+}</code></pre>
+							<label for="config-fallback-textarea" class="sr-only">Configuration fallback copy box</label>
+							<textarea
+								id="config-fallback-textarea"
+								class="config-fallback-textarea"
+								readonly
+								aria-label="Selected configuration text for manual Ctrl+C copy"
+							>{
+  "editor.fontFamily": "'Sawala Mono', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.5
+}</textarea>
+						</div>
+					</div>
+
+					<div class="config-footer-bar">
+						<span id="config-tip-text">Tip: Set "editor.fontLigatures": false when using Sawala Mono NL.</span>
+						<a href="web-docs/pages/installation.html" class="button-secondary">
+							<span>Step-by-Step OS Installation Guide</span>
+							<span aria-hidden="true">→</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Section 9: Call-To-Action Release Banner (`cta-banner`, DESIGN.md:256, 527, Wireframe §1.4.1) -->
+		<section class="section-block" id="cta-release" aria-labelledby="cta-release-title">
+			<div class="container">
+				<div class="cta-banner">
+					<div class="cta-banner__content">
+						<span class="type-eyebrow">OPEN SOURCE · SIL OFL 1.1</span>
+						<h2 id="cta-release-title" class="cta-banner__title">
+							Ready for human deliberation in your editor?
+						</h2>
+						<p class="cta-banner__desc">
+							Download Sawala Mono v1.0.0 today and elevate your daily code reviews, architectural reasoning, and terminal workflows.
+						</p>
+					</div>
+
+					<div class="cta-banner__actions">
+						<a
+							href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases"
+							class="button-primary"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<span>Download All Distributions (ZIP)</span>
+						</a>
+						<a
+							href="https://github.com/Iosevka-Mayukai/sawala-mono-dev"
+							class="button-secondary"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<span>Star on GitHub</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- Footer & Open Source Credits (`footer`, DESIGN.md:280 & 565) -->
+	<footer class="site-footer" id="footer">
+		<div class="site-footer__inner">
+			<div class="site-footer__brand">
+				<div class="site-footer__title">Sawala Mono · Ergonomic Coding Typeface</div>
+				<p class="site-footer__desc">
+					Built for human deliberation, code review clarity, and terminal precision.
+					Distributed under the SIL Open Font License 1.1 (OFL). Heartfelt thanks to
+					Belleve Invis (Iosevka creator) and Ryan L. McIntyre (Nerd Fonts).
+				</p>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Showcase</div>
+				<ul class="site-footer__list">
+					<li><a href="#overview" class="site-footer__link">Overview &amp; Runner</a></li>
+					<li><a href="#anatomy" class="site-footer__link">Ergonomic Anatomy</a></li>
+					<li><a href="#ligatures" class="site-footer__link">Ligature Matrix</a></li>
+					<li><a href="#specimen" class="site-footer__link">Live Specimen Tester</a></li>
+					<li><a href="#glyphs" class="site-footer__link">Character Inspector</a></li>
+					<li><a href="#terminal" class="site-footer__link">Terminal Mockup</a></li>
+					<li><a href="#distributions" class="site-footer__link">4-Tier Distributions</a></li>
+					<li><a href="#setup" class="site-footer__link">IDE Config Generator</a></li>
+				</ul>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Documentation</div>
+				<ul class="site-footer__list">
+					<li><a href="web-docs/pages/ligatures.html" class="site-footer__link">Full Ligatures Catalog</a></li>
+					<li><a href="web-docs/pages/distributions.html" class="site-footer__link">Distributions Matrix</a></li>
+					<li><a href="web-docs/pages/installation.html" class="site-footer__link">Installation Guide</a></li>
+				</ul>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Project &amp; Releases</div>
+				<ul class="site-footer__list">
+					<li>
+						<a
+							href="https://github.com/Iosevka-Mayukai/sawala-mono-dev"
+							class="site-footer__link"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							GitHub Repository
+						</a>
+					</li>
+					<li>
+						<a
+							href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases"
+							class="site-footer__link"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							GitHub Releases (ZIP)
+						</a>
+					</li>
+					<li>
+						<a
+							href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/issues"
+							class="site-footer__link"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Issue Tracker
+						</a>
+					</li>
+					<li>
+						<a
+							href="https://scripts.sil.org/OFL"
+							class="site-footer__link"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							SIL Open Font License 1.1
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="site-footer__bottom">
+			<span>© 2026 Iosevka Sawala Mono Project · SIL Open Font License 1.1</span>
+			<span class="type-mono">Sawala Mono v1.0.0 · Normal (500) &amp; SemiExtended (548)</span>
+		</div>
+	</footer>
+
+	<!-- Zero-Build Client Scripts (CON-001, CON-005, CON-006) -->
+	<script src="web-docs/vendor/prism/prism.min.js" defer></script>
+	<script type="module" src="web-docs/js/polyglot-runner.js"></script>
+	<script type="module" src="web-docs/js/ligature-playground.js"></script>
+	<script type="module" src="web-docs/js/specimen-tester.js"></script>
+	<script type="module" src="web-docs/js/glyph-matrix.js"></script>
+	<script type="module" src="web-docs/js/terminal-preview.js"></script>
+	<script type="module" src="web-docs/js/distribution-cards.js"></script>
+	<script type="module" src="web-docs/js/config-generator.js"></script>
+	<script type="module" src="web-docs/js/main.js"></script>
+</body>
+</html>

@@ -27,6 +27,14 @@ colors:
   brand-secure: "#7a7fad"
   semantic-success: "#27a644"
   semantic-overlay: "#000000"
+  syntax-keyword: "#bb9af7"
+  syntax-function: "#7aa2f7"
+  syntax-string: "#9ece6a"
+  syntax-number: "#ff9e64"
+  syntax-comment: "#565f89"
+  syntax-operator: "#89ddff"
+  syntax-variable: "#c0caf5"
+  syntax-type: "#2ac3de"
 
 typography:
   display-xl:
@@ -102,7 +110,7 @@ typography:
     lineHeight: 1.30
     letterSpacing: 0.4px
   mono:
-    fontFamily: "Sawala Mono, Iosevka Sawala Mono, ui-monospace, SF Mono, Menlo, monospace"
+    fontFamily: "Sawala Mono, Sawala Mono NL, Iosevka Sawala Mono, ui-monospace, SF Mono, Menlo, monospace"
     fontSize: 14px
     fontWeight: 400
     lineHeight: 1.65

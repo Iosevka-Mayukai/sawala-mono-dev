@@ -1,0 +1,86 @@
+/**
+ * Iosevka Sawala Mono — Syntax Highlighting Theme (Tokyo Night / Catppuccin Mocha Dark)
+ * Strictly bound to --syntax-* tokens in web-docs/css/tokens.css (DESIGN.md:645, CON-002).
+ * Preserves OpenType contextual alternates (calt) across all token spans.
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: var(--ink);
+	font-family: var(--font-mono);
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.65;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	tab-size: 2;
+	hyphens: none;
+	font-variant-ligatures: inherit;
+	font-feature-settings: inherit;
+}
+
+.token {
+	font-variant-ligatures: inherit;
+	font-feature-settings: inherit;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: var(--syntax-comment);
+	font-style: italic;
+}
+
+.token.keyword,
+.token.tag,
+.token.important,
+.token.atrule {
+	color: var(--syntax-keyword);
+}
+
+.token.function,
+.token.method {
+	color: var(--syntax-function);
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.regex {
+	color: var(--syntax-string);
+}
+
+.token.number,
+.token.boolean,
+.token.constant,
+.token.symbol {
+	color: var(--syntax-number);
+}
+
+.token.operator,
+.token.entity,
+.token.url {
+	color: var(--syntax-operator);
+}
+
+.token.type,
+.token.class-name,
+.token.builtin,
+.token.namespace {
+	color: var(--syntax-type);
+}
+
+.token.variable,
+.token.parameter,
+.token.property,
+.token.attr-name {
+	color: var(--syntax-variable);
+}
+
+.token.punctuation {
+	color: var(--ink-subtle);
+}

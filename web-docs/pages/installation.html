@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#010102">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; font-src 'self'; script-src 'self'; img-src 'self' data: https://img.shields.io; connect-src 'self' https://api.github.com;">
+	<meta name="referrer" content="strict-origin-when-cross-origin">
+	<title>Installing Sawala Mono on Your System — Sawala Mono</title>
+	<meta name="description" content="Step-by-step Sawala Mono installation instructions for Windows, macOS, Linux (fc-cache), and scripted Homebrew / Arch setups, plus editor configuration pointers.">
+	<link rel="canonical" href="https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/installation.html">
+
+	<!-- Open Graph & Social Metadata (REQ-011, AC-018) -->
+	<meta property="og:type" content="article">
+	<meta property="og:site_name" content="Sawala Mono">
+	<meta property="og:url" content="https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/installation.html">
+	<meta property="og:title" content="Installing Sawala Mono on Your System — Sawala Mono">
+	<meta property="og:description" content="Step-by-step Sawala Mono installation instructions for Windows, macOS, Linux (fc-cache), and scripted Homebrew / Arch setups, plus editor configuration pointers.">
+	<meta property="og:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
+	<meta property="og:image:alt" content="Sawala Mono coding typeface specimen on a near-black canvas">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Installing Sawala Mono on Your System — Sawala Mono">
+	<meta name="twitter:description" content="Step-by-step Sawala Mono installation instructions for Windows, macOS, Linux (fc-cache), and scripted Homebrew / Arch setups, plus editor configuration pointers.">
+	<meta name="twitter:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
+
+	<!-- Tier A Webfont Preload (CON-004) -->
+	<link rel="preload" href="../fonts/sawala-mono/SawalaMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="../fonts/sawala-mono/SawalaMonoNL-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+	<link rel="stylesheet" href="../css/tokens.css">
+	<link rel="stylesheet" href="../css/reset.css">
+	<link rel="stylesheet" href="../css/typography.css">
+	<link rel="stylesheet" href="../css/showcase.css">
+</head>
+<body>
+	<a class="skip-link" href="#main-content">Skip to main content</a>
+
+	<header class="top-nav" id="top-nav" data-scrolled="false">
+		<div class="top-nav__inner">
+			<div class="top-nav__brand">
+				<a href="../../index.html" class="top-nav__brand" aria-label="Sawala Mono Home">
+					<span class="top-nav__brand-mark" aria-hidden="true">=&gt;</span>
+					<span>Sawala Mono</span>
+				</a>
+				<span class="status-badge" title="Latest compiled release version">
+					<span class="status-badge__dot" aria-hidden="true"></span>
+					<span>v1.0.0</span>
+				</span>
+			</div>
+
+			<nav id="top-nav-menu" class="top-nav__links" aria-label="Primary Navigation" data-open="false">
+				<a href="../../index.html#overview" class="top-nav__link">Overview</a>
+				<a href="../../index.html#anatomy" class="top-nav__link">Anatomy</a>
+				<a href="../../index.html#ligatures" class="top-nav__link">Ligatures</a>
+				<a href="../../index.html#specimen" class="top-nav__link">Specimen</a>
+				<a href="../../index.html#glyphs" class="top-nav__link">Glyphs</a>
+				<a href="../../index.html#distributions" class="top-nav__link">Distributions</a>
+				<a href="../../index.html#setup" class="top-nav__link">Setup</a>
+			</nav>
+
+			<div class="top-nav__actions">
+				<a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="button-primary" target="_blank" rel="noopener noreferrer"><span>Download ZIP</span></a>
+				<button
+					type="button"
+					class="top-nav__toggle"
+					id="mobile-nav-toggle"
+					aria-expanded="false"
+					aria-controls="top-nav-menu"
+					aria-label="Toggle navigation menu"
+				>
+					<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+						<path d="M2.25 4.5H15.75M2.25 9H15.75M2.25 13.5H15.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<main id="main-content">
+		<section class="doc-hero" aria-labelledby="doc-title">
+			<div class="container">
+				<nav class="doc-breadcrumb" aria-label="Breadcrumb">
+					<ol class="doc-breadcrumb__list">
+						<li class="doc-breadcrumb__item"><a href="../../index.html" class="doc-breadcrumb__link">Home</a></li>
+						<li class="doc-breadcrumb__item">Documentation</li>
+						<li class="doc-breadcrumb__item" aria-current="page">Installation Guide</li>
+					</ol>
+				</nav>
+				<span class="type-eyebrow">INSTALLATION GUIDE</span>
+				<h1 id="doc-title" class="type-display-lg doc-hero__title">Installing Sawala Mono on Your System</h1>
+				<p class="type-body-lg doc-hero__lead">Step-by-step instructions for Windows, macOS, Linux, and terminal-first environments. Pick your operating system below, then copy a ready-made editor configuration from the main showcase.</p>
+				<div class="doc-hero__meta">
+					<span class="status-badge">Windows · macOS · Linux</span>
+					<span class="status-badge">TTF desktop binaries</span>
+					<span class="status-badge">No admin rights needed on Linux</span>
+				</div>
+			</div>
+		</section>
+
+		<section class="doc-section" aria-labelledby="os-title">
+			<div class="container">
+				<div class="doc-section__header">
+					<h2 id="os-title" class="type-headline doc-section__title">Choose Your Operating System</h2>
+					<p class="type-body doc-section__desc">The same steps apply to every distribution; only the archive name and the family name you configure change.</p>
+				</div>
+
+				<div class="doc-toolbar">
+					<div class="doc-tabs" role="tablist" aria-label="Operating system" data-doc-tabs>
+						<button type="button" role="tab" id="os-tab-windows" class="variant-switcher-tab is-selected" aria-selected="true" aria-controls="os-panel-windows" tabindex="0">Windows 10/11</button>
+						<button type="button" role="tab" id="os-tab-macos" class="variant-switcher-tab" aria-selected="false" aria-controls="os-panel-macos" tabindex="-1">macOS (Font Book)</button>
+						<button type="button" role="tab" id="os-tab-linux" class="variant-switcher-tab" aria-selected="false" aria-controls="os-panel-linux" tabindex="-1">Linux (fc-cache)</button>
+						<button type="button" role="tab" id="os-tab-cli" class="variant-switcher-tab" aria-selected="false" aria-controls="os-panel-cli" tabindex="-1">Homebrew / Arch (Manual CLI)</button>
+					</div>
+				</div>
+
+				<div class="doc-panel" id="os-panel-windows" role="tabpanel" aria-labelledby="os-tab-windows">
+					<ol class="doc-steps">
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Download the archive</h3>
+								<p class="doc-step__text">Get <code>SawalaMono-v1.0.0.zip</code> (or the NL / NF variant) from <a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-breadcrumb__link" target="_blank" rel="noopener noreferrer">GitHub Releases</a>.</p>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Extract the archive</h3>
+								<p class="doc-step__text">Right-click the ZIP and choose <strong>Extract All…</strong> into any folder.</p>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Install for all users</h3>
+								<p class="doc-step__text">Select every <code>.ttf</code> file, right-click, and choose <strong>Install for all users</strong>. This avoids per-user font permission issues in Java runtimes (JetBrains IDEs) and some terminal emulators.</p>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Configure your editor</h3>
+								<p class="doc-step__text">Set the font family to <code>'Sawala Mono', monospace</code> in VS Code, Windows Terminal, or your IDE, then restart the application.</p>
+							</div>
+						</li>
+					</ol>
+					<div class="doc-callout" role="note"><span aria-hidden="true">i</span><span><strong>Tip:</strong> If JetBrains IDEs do not list the font, confirm it was installed for all users and restart the IDE completely.</span></div>
+				</div>
+				<div class="doc-panel" id="os-panel-macos" role="tabpanel" aria-labelledby="os-tab-macos" hidden>
+					<ol class="doc-steps">
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Download the archive</h3>
+								<p class="doc-step__text">Get the ZIP for your preferred variant from <a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-breadcrumb__link" target="_blank" rel="noopener noreferrer">GitHub Releases</a>; Safari extracts it automatically.</p>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Open Font Book</h3>
+								<p class="doc-step__text">Press <code>Cmd + Space</code>, type <strong>Font Book</strong>, and press Return.</p>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Add the fonts</h3>
+								<p class="doc-step__text">Drag the extracted <code>TTF/*.ttf</code> files into the Font Book window, or copy them from the terminal:</p>
+								<pre class="doc-code"><code>cp ~/Downloads/SawalaMono-v1.0.0/SawalaMono/TTF/*.ttf ~/Library/Fonts/</code></pre>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Restart your editor</h3>
+								<p class="doc-step__text">Quit and reopen your editor or terminal so it picks up the new font family.</p>
+							</div>
+						</li>
+					</ol>
+					<div class="doc-callout" role="note"><span aria-hidden="true">i</span><span><strong>Tip:</strong> Font Book flags duplicate families. Remove older Sawala Mono builds before installing a new release.</span></div>
+				</div>
+				<div class="doc-panel" id="os-panel-linux" role="tabpanel" aria-labelledby="os-tab-linux" hidden>
+					<ol class="doc-steps">
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Download and extract</h3>
+								<p class="doc-step__text">Fetch the release archive and unzip it:</p>
+								<pre class="doc-code"><code>curl -LO https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-v1.0.0.zip
+unzip SawalaMono-v1.0.0.zip -d SawalaMono-v1.0.0</code></pre>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Copy to your user fonts directory</h3>
+								<p class="doc-step__text">Standard builds nest font binaries inside <code>SawalaMono/TTF/</code> (no root access required):</p>
+								<pre class="doc-code"><code>mkdir -p ~/.local/share/fonts/SawalaMono
+cp SawalaMono-v1.0.0/SawalaMono/TTF/*.ttf ~/.local/share/fonts/SawalaMono/</code></pre>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Refresh the font cache</h3>
+								<p class="doc-step__text">Rebuild fontconfig's cache so applications can see the family:</p>
+								<pre class="doc-code"><code>fc-cache -f -v</code></pre>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Verify the installation</h3>
+								<p class="doc-step__text">The family should appear in the fontconfig listing:</p>
+								<pre class="doc-code"><code>fc-list | grep &quot;Sawala Mono&quot;</code></pre>
+							</div>
+						</li>
+					</ol>
+					<div class="doc-callout" role="note"><span aria-hidden="true">i</span><span><strong>Tip:</strong> For a system-wide install, copy the files to <code>/usr/local/share/fonts/</code> with <code>sudo</code> instead.</span></div>
+				</div>
+				<div class="doc-panel" id="os-panel-cli" role="tabpanel" aria-labelledby="os-tab-cli" hidden>
+					<ol class="doc-steps">
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">No package manager formula yet</h3>
+								<p class="doc-step__text">Sawala Mono is not yet published as a Homebrew cask or AUR package. Until it is, use this reproducible scripted install on macOS (with Homebrew tools) or Arch Linux.</p>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Download the release</h3>
+								<p class="doc-step__text">Pick the variant you need (standard, NL, NF, or NL NF):</p>
+								<pre class="doc-code"><code>curl -LO https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-NF-v1.0.0.zip
+unzip SawalaMono-NF-v1.0.0.zip -d SawalaMonoNF</code></pre>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Install into the user font directory</h3>
+								<p class="doc-step__text">macOS uses <code>~/Library/Fonts</code>; Arch uses <code>~/.local/share/fonts</code>:</p>
+								<pre class="doc-code"><code># macOS
+cp SawalaMonoNF/*.ttf ~/Library/Fonts/
+
+# Arch Linux
+mkdir -p ~/.local/share/fonts/SawalaMonoNF
+cp SawalaMonoNF/*.ttf ~/.local/share/fonts/SawalaMonoNF/ &amp;&amp; fc-cache -f</code></pre>
+							</div>
+						</li>
+						<li class="doc-step">
+							<div class="doc-step__body">
+								<h3 class="doc-step__title">Point your terminal at the NF family</h3>
+								<p class="doc-step__text">Use <code>Sawala Mono NF</code> (or <code>Sawala Mono NL NF</code>) in Kitty, WezTerm, Alacritty, or Starship-based prompts.</p>
+							</div>
+						</li>
+					</ol>
+					<div class="doc-callout" role="note"><span aria-hidden="true">i</span><span><strong>Tip:</strong> Watch the repository releases to be notified when an official cask or AUR package becomes available.</span></div>
+				</div>
+			</div>
+		</section>
+
+		<section class="doc-section" aria-labelledby="next-title">
+			<div class="container">
+				<div class="doc-section__header">
+					<h2 id="next-title" class="type-headline doc-section__title">After Installing</h2>
+					<p class="type-body doc-section__desc">Configure the family name in your editor or terminal emulator.</p>
+				</div>
+				<div class="doc-grid-2">
+					<article class="feature-card">
+						<span class="anatomy-card__tag">IDEs &amp; Editors</span>
+						<h3 class="anatomy-card__title">Sawala Mono / Sawala Mono NL</h3>
+						<p class="anatomy-card__desc">Use the standard build with <code>"editor.fontLigatures": true</code>, or the NL build with ligatures disabled.</p>
+						<a href="../../index.html#setup" class="button-secondary"><span>Open IDE Config Generator</span><span aria-hidden="true">→</span></a>
+					</article>
+					<article class="feature-card">
+						<span class="anatomy-card__tag">Terminals &amp; TUI</span>
+						<h3 class="anatomy-card__title">Sawala Mono NF / NL NF</h3>
+						<p class="anatomy-card__desc">Set the terminal family to <code>Sawala Mono NF</code> so Powerline segments and devicons render in Neovim, Tmux, and Starship.</p>
+						<a href="distributions.html" class="button-secondary"><span>Compare Distributions</span><span aria-hidden="true">→</span></a>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<div class="container doc-footer-nav">
+			<a href="../../index.html" class="button-secondary"><span aria-hidden="true">←</span><span>Return to Main Showcase</span></a>
+			<div class="specimen-pill-row">
+				<a href="distributions.html" class="button-tertiary"><span>Distributions Matrix</span></a>
+				<a href="ligatures.html" class="button-secondary"><span>Ligatures Catalog</span><span aria-hidden="true">→</span></a>
+			</div>
+		</div>
+	</main>
+
+	<footer class="site-footer" id="footer">
+		<div class="site-footer__inner">
+			<div class="site-footer__brand">
+				<div class="site-footer__title">Sawala Mono · Ergonomic Coding Typeface</div>
+				<p class="site-footer__desc">
+					Built for human deliberation, code review clarity, and terminal precision.
+					Distributed under the SIL Open Font License 1.1 (OFL). Heartfelt thanks to
+					Belleve Invis (Iosevka creator) and Ryan L. McIntyre (Nerd Fonts).
+				</p>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Showcase</div>
+				<ul class="site-footer__list">
+					<li><a href="../../index.html#overview" class="site-footer__link">Overview &amp; Runner</a></li>
+					<li><a href="../../index.html#ligatures" class="site-footer__link">Ligature Matrix</a></li>
+					<li><a href="../../index.html#glyphs" class="site-footer__link">Character Inspector</a></li>
+					<li><a href="../../index.html#setup" class="site-footer__link">IDE Config Generator</a></li>
+				</ul>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Documentation</div>
+				<ul class="site-footer__list">
+					<li><a href="ligatures.html" class="site-footer__link">Full Ligatures Catalog</a></li>
+					<li><a href="distributions.html" class="site-footer__link">Distributions Matrix</a></li>
+					<li><a href="installation.html" class="site-footer__link" aria-current="page">Installation Guide</a></li>
+				</ul>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Project &amp; Releases</div>
+				<ul class="site-footer__list">
+					<li><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev" class="site-footer__link" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+					<li><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="site-footer__link" target="_blank" rel="noopener noreferrer">GitHub Releases (ZIP)</a></li>
+					<li><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/issues" class="site-footer__link" target="_blank" rel="noopener noreferrer">Issue Tracker</a></li>
+					<li><a href="https://scripts.sil.org/OFL" class="site-footer__link" target="_blank" rel="noopener noreferrer">SIL Open Font License 1.1</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="site-footer__bottom">
+			<span>© 2026 Iosevka Sawala Mono Project · SIL Open Font License 1.1</span>
+			<span class="type-mono">Sawala Mono v1.0.0 · Normal (500) &amp; SemiExtended (548)</span>
+		</div>
+	</footer>
+
+	<!-- Zero-Build Client Script (CON-001, CON-006) -->
+	<script type="module" src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+/**
+ * Iosevka Sawala Mono — Design System Tokens
+ * Canonical Source: DESIGN.md (Linear Design System)
+ * Spec Reference: docs/spec/sawala-mono-showcase-web-spec.md §4.3
+ */
+
+:root {
+	/* Surface Ladder (DESIGN.md:15-19) */
+	--canvas: #010102;
+	--surface-1: #0f1011;
+	--surface-2: #141516;
+	--surface-3: #18191a;
+	--surface-4: #191a1b;
+
+	/* Inverse Surfaces (DESIGN.md:23-26) */
+	--inverse-canvas: #ffffff;
+	--inverse-surface-1: #f5f6f6;
+	--inverse-surface-2: #f6f7f7;
+	--inverse-ink: #000000;
+
+	/* Hairlines & Borders (DESIGN.md:20-22) */
+	--hairline: #23252a;
+	--hairline-strong: #34343a;
+	--hairline-tertiary: #3e3e44;
+
+	/* Brand Accents (DESIGN.md:7-10, 27) */
+	--primary: #5e6ad2;
+	--primary-hover: #828fff;
+	--button-primary-hover: #4c58c6;
+	--primary-focus: #5e69d1;
+	--on-primary: #ffffff;
+	--brand-secure: #7a7fad;
+
+	/* Text & Inks (DESIGN.md:11-14) */
+	--ink: #f7f8f8;
+	--ink-muted: #d0d6e0;
+	--ink-subtle: #8a8f98;
+	--ink-tertiary: #62666d;
+
+	/* Semantics (DESIGN.md:28-29) */
+	--semantic-success: #27a644;
+	--semantic-overlay: rgba(0, 0, 0, 0.7);
+
+	/* Focus & Subtle Surface Highlights (DESIGN.md:427, 435) */
+	--focus-ring-color: rgba(94, 105, 209, 0.5);
+	--edge-highlight-top: rgba(247, 248, 248, 0.04);
+	--nav-backdrop: rgba(1, 1, 2, 0.86);
+
+	/* Typography Font Stacks (DESIGN.md:31-110) */
+	--font-display:
+		"Linear Display", "SF Pro Display", -apple-system, system-ui, "Inter", "Geist Sans",
+		"Segoe UI", Roboto, sans-serif;
+	--font-body:
+		"Linear Text", "Inter", -apple-system, system-ui, "Geist Sans", "Segoe UI", Roboto,
+		sans-serif;
+	--font-mono:
+		"Sawala Mono", "Iosevka Sawala Mono", ui-monospace, "SF Mono", Menlo, Consolas,
+		monospace;
+	--font-mono-nl:
+		"Sawala Mono NL", "Iosevka Sawala Mono NL", ui-monospace, "SF Mono", Menlo, Consolas,
+		monospace;
+
+	/* Radii Scale (DESIGN.md:111-120) */
+	--radius-xs: 4px;
+	--radius-sm: 6px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--radius-xl: 16px;
+	--radius-xxl: 24px;
+	--radius-pill: 9999px;
+	--radius-full: 9999px;
+
+	/* Spacing Scale (DESIGN.md:121-130) */
+	--space-xxs: 4px;
+	--space-xs: 8px;
+	--space-sm: 12px;
+	--space-md: 16px;
+	--space-lg: 24px;
+	--space-xl: 32px;
+	--space-xxl: 48px;
+	--space-section: 96px;
+
+	/* Layout Dimensions (DESIGN.md:279, 404) */
+	--nav-height: 56px;
+	--container-max: 1280px;
+
+	/* Syntax Highlighting Tokens (Tokyo Night / Catppuccin Mocha Dark Spec, DESIGN.md:645) */
+	--syntax-keyword: #bb9af7;
+	--syntax-function: #7aa2f7;
+	--syntax-string: #9ece6a;
+	--syntax-number: #ff9e64;
+	--syntax-comment: #848eb8;
+	--syntax-operator: #89ddff;
+	--syntax-variable: #c0caf5;
+	--syntax-type: #2ac3de;
+
+	/* Responsive Breakpoints (DESIGN.md:598-606) */
+	--bp-desktop-xl: 1440px;
+	--bp-desktop: 1280px;
+	--bp-tablet: 1024px;
+	--bp-mobile-lg: 768px;
+	--bp-mobile: 480px;
+}

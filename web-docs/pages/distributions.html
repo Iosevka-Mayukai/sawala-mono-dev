@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#010102">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; font-src 'self'; script-src 'self'; img-src 'self' data: https://img.shields.io; connect-src 'self' https://api.github.com;">
+	<meta name="referrer" content="strict-origin-when-cross-origin">
+	<title>Choosing the Right Sawala Mono Variant — Sawala Mono</title>
+	<meta name="description" content="Technical comparison of the four Sawala Mono distributions (Standard, NL, NF, NL NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
+	<link rel="canonical" href="https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/distributions.html">
+
+	<!-- Open Graph & Social Metadata (REQ-011, AC-018) -->
+	<meta property="og:type" content="article">
+	<meta property="og:site_name" content="Sawala Mono">
+	<meta property="og:url" content="https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/distributions.html">
+	<meta property="og:title" content="Choosing the Right Sawala Mono Variant — Sawala Mono">
+	<meta property="og:description" content="Technical comparison of the four Sawala Mono distributions (Standard, NL, NF, NL NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
+	<meta property="og:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
+	<meta property="og:image:alt" content="Sawala Mono coding typeface specimen on a near-black canvas">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Choosing the Right Sawala Mono Variant — Sawala Mono">
+	<meta name="twitter:description" content="Technical comparison of the four Sawala Mono distributions (Standard, NL, NF, NL NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
+	<meta name="twitter:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
+
+	<!-- Tier A Webfont Preload (CON-004) -->
+	<link rel="preload" href="../fonts/sawala-mono/SawalaMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="../fonts/sawala-mono/SawalaMonoNL-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+	<link rel="stylesheet" href="../css/tokens.css">
+	<link rel="stylesheet" href="../css/reset.css">
+	<link rel="stylesheet" href="../css/typography.css">
+	<link rel="stylesheet" href="../css/showcase.css">
+</head>
+<body>
+	<a class="skip-link" href="#main-content">Skip to main content</a>
+
+	<header class="top-nav" id="top-nav" data-scrolled="false">
+		<div class="top-nav__inner">
+			<div class="top-nav__brand">
+				<a href="../../index.html" class="top-nav__brand" aria-label="Sawala Mono Home">
+					<span class="top-nav__brand-mark" aria-hidden="true">=&gt;</span>
+					<span>Sawala Mono</span>
+				</a>
+				<span class="status-badge" title="Latest compiled release version">
+					<span class="status-badge__dot" aria-hidden="true"></span>
+					<span>v1.0.0</span>
+				</span>
+			</div>
+
+			<nav id="top-nav-menu" class="top-nav__links" aria-label="Primary Navigation" data-open="false">
+				<a href="../../index.html#overview" class="top-nav__link">Overview</a>
+				<a href="../../index.html#anatomy" class="top-nav__link">Anatomy</a>
+				<a href="../../index.html#ligatures" class="top-nav__link">Ligatures</a>
+				<a href="../../index.html#specimen" class="top-nav__link">Specimen</a>
+				<a href="../../index.html#glyphs" class="top-nav__link">Glyphs</a>
+				<a href="../../index.html#distributions" class="top-nav__link">Distributions</a>
+				<a href="../../index.html#setup" class="top-nav__link">Setup</a>
+			</nav>
+
+			<div class="top-nav__actions">
+				<a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="button-primary" target="_blank" rel="noopener noreferrer"><span>Download ZIP</span></a>
+				<button
+					type="button"
+					class="top-nav__toggle"
+					id="mobile-nav-toggle"
+					aria-expanded="false"
+					aria-controls="top-nav-menu"
+					aria-label="Toggle navigation menu"
+				>
+					<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+						<path d="M2.25 4.5H15.75M2.25 9H15.75M2.25 13.5H15.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<main id="main-content">
+		<section class="doc-hero" aria-labelledby="doc-title">
+			<div class="container">
+				<nav class="doc-breadcrumb" aria-label="Breadcrumb">
+					<ol class="doc-breadcrumb__list">
+						<li class="doc-breadcrumb__item"><a href="../../index.html" class="doc-breadcrumb__link">Home</a></li>
+						<li class="doc-breadcrumb__item">Documentation</li>
+						<li class="doc-breadcrumb__item" aria-current="page">Font Distributions Matrix</li>
+					</ol>
+				</nav>
+				<span class="type-eyebrow">PACKAGING &amp; RELEASES</span>
+				<h1 id="doc-title" class="type-display-lg doc-hero__title">Choosing the Right Sawala Mono Variant</h1>
+				<p class="type-body-lg doc-hero__lead">Detailed technical breakdown of ligation tables, icon coverage, weights, widths, and release archives. All four distributions share one parametric core, so you can mix a ligature IDE font with an icon-rich terminal font without any metric mismatch.</p>
+				<div class="doc-hero__meta">
+					<span class="status-badge">4 distributions</span>
+					<span class="status-badge">9 weights × 2 widths × 2 slopes</span>
+					<span class="status-badge">SIL OFL 1.1</span>
+				</div>
+			</div>
+		</section>
+
+		<section class="doc-section" aria-labelledby="matrix-title">
+			<div class="container">
+				<div class="doc-section__header">
+					<h2 id="matrix-title" class="type-headline doc-section__title">Feature &amp; Specification Matrix</h2>
+					<p class="type-body doc-section__desc">
+						The highlighted column is the flagship <strong>Sawala Mono</strong> build. Archive names mirror the CI/CD
+						ground truth in <code>.github/workflows/build.yml</code> and <code>patch-nerd-font.yml</code>.
+					</p>
+				</div>
+
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<caption>Sawala Mono distribution comparison (v1.0.0 standard &amp; Nerd Font patched builds)</caption>
+						<thead>
+							<tr>
+								<th scope="col">Feature / Spec</th>
+								<th scope="col">Sawala Mono</th>
+								<th scope="col">Sawala Mono NL</th>
+								<th scope="col">Sawala Mono NF</th>
+								<th scope="col">Sawala Mono NL NF</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">Primary Use Case</th>
+								<td class="doc-table__featured">Modern IDEs (VS Code, JetBrains)</td>
+								<td>Strict literal coding</td>
+								<td>Terminal, Neovim, Tmux</td>
+								<td>Terminals without ligatures</td>
+							</tr>
+							<tr>
+								<th scope="row">Programming Ligatures</th>
+								<td class="doc-table__featured"><span class="doc-tag doc-tag--yes">Yes · ~50+ calt</span></td>
+								<td><span class="doc-tag">No · noLigation</span></td>
+								<td><span class="doc-tag doc-tag--yes">Yes · ~50+ calt</span></td>
+								<td><span class="doc-tag">No · noLigation</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Nerd Font Icons</th>
+								<td class="doc-table__featured"><span class="doc-tag">No · clean Unicode</span></td>
+								<td><span class="doc-tag">No · clean Unicode</span></td>
+								<td><span class="doc-tag doc-tag--yes">Yes · 10,000+ glyphs</span></td>
+								<td><span class="doc-tag doc-tag--yes">Yes · 10,000+ glyphs</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Metrics</th>
+								<td class="doc-table__featured">Width 500 · x-H 520 · Cap 735</td>
+								<td>Width 500 · x-H 520 · Cap 735</td>
+								<td>Width 500 · x-H 520 · Cap 735</td>
+								<td>Width 500 · x-H 520 · Cap 735</td>
+							</tr>
+							<tr>
+								<th scope="row">Italic Slope</th>
+								<td class="doc-table__featured">9.4°</td>
+								<td>9.4°</td>
+								<td>9.4°</td>
+								<td>9.4°</td>
+							</tr>
+							<tr>
+								<th scope="row">Install Family Name</th>
+								<td class="doc-table__featured"><code>Sawala Mono</code></td>
+								<td><code>Sawala Mono NL</code></td>
+								<td><code>Sawala Mono NF</code></td>
+								<td><code>Sawala Mono NL NF</code></td>
+							</tr>
+							<tr>
+								<th scope="row">Recommended Apps</th>
+								<td class="doc-table__featured">VS Code, IntelliJ, WebStorm, Zed</td>
+								<td>Any editor or terminal</td>
+								<td>Kitty, WezTerm, Alacritty, Windows Terminal</td>
+								<td>Kitty, WezTerm, Alacritty, Windows Terminal</td>
+							</tr>
+							<tr>
+								<th scope="row">Normal Archive (500)</th>
+								<td class="doc-table__featured"><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-v1.0.0.zip" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMono-v1.0.0.zip</a></td>
+								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMonoNL-v1.0.0.zip" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMonoNL-v1.0.0.zip</a></td>
+								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-NF-v1.0.0.zip" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMono-NF-v1.0.0.zip</a></td>
+								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMonoNL-NF-v1.0.0.zip" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMonoNL-NF-v1.0.0.zip</a></td>
+							</tr>
+							<tr>
+								<th scope="row">SemiExtended Archive (548)</th>
+								<td class="doc-table__featured">Bundled in standard ZIP</td>
+								<td>Bundled in standard ZIP</td>
+								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-Extended-NF-v1.0.0.zip" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMono-Extended-NF-v1.0.0.zip</a></td>
+								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMonoNL-Extended-NF-v1.0.0.zip" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMonoNL-Extended-NF-v1.0.0.zip</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<section class="doc-section" aria-labelledby="weights-title">
+			<div class="container">
+				<div class="doc-section__header">
+					<h2 id="weights-title" class="type-headline doc-section__title">Weight Ladder</h2>
+					<p class="type-body doc-section__desc">
+						Every desktop archive ships nine weights in upright and 9.4° italic. This documentation site bundles five
+						full-repertoire Tier A webfonts (400, 400 italic, 600, 700, NL 400) for complete glyph and ligature fidelity;
+						additional weights below preview via browser synthesis.
+					</p>
+				</div>
+
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<caption>Weight names follow the Iosevka naming scheme used in the compiled TTF files</caption>
+						<thead>
+							<tr>
+								<th scope="col">Weight Name</th>
+								<th scope="col">CSS Value</th>
+								<th scope="col">Preview</th>
+								<th scope="col">Web Delivery</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">Thin</th>
+								<td class="doc-table__mono tabular-nums">100</td>
+								<td class="doc-table__mono font-w-100">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag">Desktop TTF only</span></td>
+							</tr>
+							<tr>
+								<th scope="row">ExtraLight</th>
+								<td class="doc-table__mono tabular-nums">200</td>
+								<td class="doc-table__mono font-w-200">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag">Desktop TTF only</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Light</th>
+								<td class="doc-table__mono tabular-nums">300</td>
+								<td class="doc-table__mono font-w-300">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag">Desktop TTF only</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Regular</th>
+								<td class="doc-table__mono tabular-nums">400</td>
+								<td class="doc-table__mono font-w-400">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag doc-tag--yes">Tier A · bundled WOFF2</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Medium</th>
+								<td class="doc-table__mono tabular-nums">500</td>
+								<td class="doc-table__mono font-w-500">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag">Desktop TTF only</span></td>
+							</tr>
+							<tr>
+								<th scope="row">SemiBold</th>
+								<td class="doc-table__mono tabular-nums">600</td>
+								<td class="doc-table__mono font-w-600">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag doc-tag--yes">Tier A · bundled WOFF2</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Bold</th>
+								<td class="doc-table__mono tabular-nums">700</td>
+								<td class="doc-table__mono font-w-700">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag doc-tag--yes">Tier A · bundled WOFF2</span></td>
+							</tr>
+							<tr>
+								<th scope="row">ExtraBold</th>
+								<td class="doc-table__mono tabular-nums">800</td>
+								<td class="doc-table__mono font-w-800">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag">Desktop TTF only</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Heavy</th>
+								<td class="doc-table__mono tabular-nums">900</td>
+								<td class="doc-table__mono font-w-900">fn(x) =&gt; x !== 0</td>
+								<td><span class="doc-tag">Desktop TTF only</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<section class="doc-section" aria-labelledby="widths-title">
+			<div class="container">
+				<div class="doc-section__header">
+					<h2 id="widths-title" class="type-headline doc-section__title">Normal vs SemiExtended Width</h2>
+					<p class="type-body doc-section__desc">Declared in <code>private-build-plans.toml</code> under <code>widths.Normal</code> and <code>widths.SemiExtended</code>.</p>
+				</div>
+				<div class="doc-grid-2">
+					<article class="feature-card">
+						<span class="anatomy-card__tag">shape = 500 · css = normal</span>
+						<h3 class="anatomy-card__title">Normal (500)</h3>
+						<p class="anatomy-card__desc">The default coding width. Dense enough for side-by-side diffs and split panes while keeping counters open at 12–14px.</p>
+						<div class="anatomy-card__meta">Core NF scope: 8 Normal coding weights</div>
+					</article>
+					<article class="feature-card">
+						<span class="anatomy-card__tag">shape = 548 · css = semi-expanded</span>
+						<h3 class="anatomy-card__title">SemiExtended (548)</h3>
+						<p class="anatomy-card__desc">About 10% wider cells for high-DPI displays, presentations, and readers who prefer more horizontal breathing room.</p>
+						<div class="anatomy-card__meta">Extended-Core NF scope: 8 SemiExtended coding weights</div>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<div class="container doc-footer-nav">
+			<a href="../../index.html" class="button-secondary"><span aria-hidden="true">←</span><span>Return to Main Showcase</span></a>
+			<div class="specimen-pill-row">
+				<a href="ligatures.html" class="button-tertiary"><span>Ligatures Catalog</span></a>
+				<a href="installation.html" class="button-secondary"><span>Installation Guide</span><span aria-hidden="true">→</span></a>
+			</div>
+		</div>
+	</main>
+
+	<footer class="site-footer" id="footer">
+		<div class="site-footer__inner">
+			<div class="site-footer__brand">
+				<div class="site-footer__title">Sawala Mono · Ergonomic Coding Typeface</div>
+				<p class="site-footer__desc">
+					Built for human deliberation, code review clarity, and terminal precision.
+					Distributed under the SIL Open Font License 1.1 (OFL). Heartfelt thanks to
+					Belleve Invis (Iosevka creator) and Ryan L. McIntyre (Nerd Fonts).
+				</p>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Showcase</div>
+				<ul class="site-footer__list">
+					<li><a href="../../index.html#overview" class="site-footer__link">Overview &amp; Runner</a></li>
+					<li><a href="../../index.html#ligatures" class="site-footer__link">Ligature Matrix</a></li>
+					<li><a href="../../index.html#glyphs" class="site-footer__link">Character Inspector</a></li>
+					<li><a href="../../index.html#setup" class="site-footer__link">IDE Config Generator</a></li>
+				</ul>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Documentation</div>
+				<ul class="site-footer__list">
+					<li><a href="ligatures.html" class="site-footer__link">Full Ligatures Catalog</a></li>
+					<li><a href="distributions.html" class="site-footer__link" aria-current="page">Distributions Matrix</a></li>
+					<li><a href="installation.html" class="site-footer__link">Installation Guide</a></li>
+				</ul>
+			</div>
+
+			<div>
+				<div class="site-footer__col-title">Project &amp; Releases</div>
+				<ul class="site-footer__list">
+					<li><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev" class="site-footer__link" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+					<li><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="site-footer__link" target="_blank" rel="noopener noreferrer">GitHub Releases (ZIP)</a></li>
+					<li><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/issues" class="site-footer__link" target="_blank" rel="noopener noreferrer">Issue Tracker</a></li>
+					<li><a href="https://scripts.sil.org/OFL" class="site-footer__link" target="_blank" rel="noopener noreferrer">SIL Open Font License 1.1</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="site-footer__bottom">
+			<span>© 2026 Iosevka Sawala Mono Project · SIL Open Font License 1.1</span>
+			<span class="type-mono">Sawala Mono v1.0.0 · Normal (500) &amp; SemiExtended (548)</span>
+		</div>
+	</footer>
+
+	<!-- Zero-Build Client Script (CON-001, CON-006) -->
+	<script type="module" src="../js/main.js"></script>
+</body>
+</html>
