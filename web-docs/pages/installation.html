@@ -42,10 +42,6 @@
 					<span class="top-nav__brand-mark" aria-hidden="true">=&gt;</span>
 					<span>Sawala Mono</span>
 				</a>
-				<span class="status-badge" title="Latest compiled release version">
-					<span class="status-badge__dot" aria-hidden="true"></span>
-					<span>v1.0.0</span>
-				</span>
 			</div>
 
 			<nav id="top-nav-menu" class="top-nav__links" aria-label="Primary Navigation" data-open="false">
@@ -118,7 +114,7 @@
 						<li class="doc-step">
 							<div class="doc-step__body">
 								<h3 class="doc-step__title">Download the archive</h3>
-								<p class="doc-step__text">Get <code>SawalaMono-v1.0.0.zip</code> (or the NL / NF variant) from <a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-breadcrumb__link" target="_blank" rel="noopener noreferrer">GitHub Releases</a>.</p>
+								<p class="doc-step__text">Get <code>SawalaMono-&lt;tag&gt;.zip</code> (or the NL / NF variant) from <a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-breadcrumb__link" target="_blank" rel="noopener noreferrer">GitHub Releases</a>.</p>
 							</div>
 						</li>
 						<li class="doc-step">
@@ -160,7 +156,7 @@
 							<div class="doc-step__body">
 								<h3 class="doc-step__title">Add the fonts</h3>
 								<p class="doc-step__text">Drag the extracted <code>TTF/*.ttf</code> files into the Font Book window, or copy them from the terminal:</p>
-								<pre class="doc-code"><code>cp ~/Downloads/SawalaMono-v1.0.0/SawalaMono/TTF/*.ttf ~/Library/Fonts/</code></pre>
+								<pre class="doc-code"><code>cp ~/Downloads/SawalaMono/SawalaMono/TTF/*.ttf ~/Library/Fonts/</code></pre>
 							</div>
 						</li>
 						<li class="doc-step">
@@ -178,8 +174,9 @@
 							<div class="doc-step__body">
 								<h3 class="doc-step__title">Download and extract</h3>
 								<p class="doc-step__text">Fetch the release archive and unzip it:</p>
-								<pre class="doc-code"><code>curl -LO https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-v1.0.0.zip
-unzip SawalaMono-v1.0.0.zip -d SawalaMono-v1.0.0</code></pre>
+								<pre class="doc-code"><code># Replace &lt;tag&gt; with the latest tag on GitHub Releases
+curl -LO https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/&lt;tag&gt;/SawalaMono-&lt;tag&gt;.zip
+unzip SawalaMono-*.zip -d SawalaMono</code></pre>
 							</div>
 						</li>
 						<li class="doc-step">
@@ -187,7 +184,7 @@ unzip SawalaMono-v1.0.0.zip -d SawalaMono-v1.0.0</code></pre>
 								<h3 class="doc-step__title">Copy to your user fonts directory</h3>
 								<p class="doc-step__text">Standard builds nest font binaries inside <code>SawalaMono/TTF/</code> (no root access required):</p>
 								<pre class="doc-code"><code>mkdir -p ~/.local/share/fonts/SawalaMono
-cp SawalaMono-v1.0.0/SawalaMono/TTF/*.ttf ~/.local/share/fonts/SawalaMono/</code></pre>
+cp SawalaMono/SawalaMono/TTF/*.ttf ~/.local/share/fonts/SawalaMono/</code></pre>
 							</div>
 						</li>
 						<li class="doc-step">
@@ -219,8 +216,9 @@ cp SawalaMono-v1.0.0/SawalaMono/TTF/*.ttf ~/.local/share/fonts/SawalaMono/</code
 							<div class="doc-step__body">
 								<h3 class="doc-step__title">Download the release</h3>
 								<p class="doc-step__text">Pick the variant you need (standard, NL, NF, or NL NF):</p>
-								<pre class="doc-code"><code>curl -LO https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/v1.0.0/SawalaMono-NF-v1.0.0.zip
-unzip SawalaMono-NF-v1.0.0.zip -d SawalaMonoNF</code></pre>
+								<pre class="doc-code"><code># Replace &lt;tag&gt; with the latest tag on GitHub Releases
+curl -LO https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download/&lt;tag&gt;/SawalaMono-NF-&lt;tag&gt;.zip
+unzip SawalaMono-NF-*.zip -d SawalaMonoNF</code></pre>
 							</div>
 						</li>
 						<li class="doc-step">
@@ -322,7 +320,7 @@ cp SawalaMonoNF/*.ttf ~/.local/share/fonts/SawalaMonoNF/ &amp;&amp; fc-cache -f<
 
 		<div class="site-footer__bottom">
 			<span>© 2026 Iosevka Sawala Mono Project · SIL Open Font License 1.1</span>
-			<span class="type-mono">Sawala Mono v1.0.0 · Normal (500) &amp; SemiExtended (548)</span>
+			<span class="type-mono">Sawala Mono · Normal (500) &amp; SemiExtended (548)</span>
 		</div>
 	</footer>
 

@@ -1,10 +1,10 @@
 /**
  * Iosevka Sawala Mono — 4-Tier Distribution Matrix Controller
- * Manages release metadata, Normal (500) vs SemiExtended (548) archive resolution,
- * and direct GitHub Releases download links (REQ-006, AC-011, AC-012).
+ * Manages release metadata, Normal (500) vs SemiExtended (548) width scopes,
+ * and GitHub Releases page links (REQ-006, AC-011, AC-012).
  */
 
-export const RELEASE_BASE_URL = "https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/download";
+export const RELEASES_PAGE_URL = "https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases";
 
 export const DISTRIBUTION_TIERS = Object.freeze([
 	{
@@ -17,11 +17,10 @@ export const DISTRIBUTION_TIERS = Object.freeze([
 		hasLigatures: true,
 		hasNerdFont: false,
 		recommendedFor: "VS Code, VSCodium, JetBrains IDEs (IntelliJ, WebStorm, PyCharm), Zed",
-		archiveFilename: "SawalaMono-v1.0.0.zip",
-		extendedArchiveFilename: "SawalaMono-v1.0.0.zip",
-		releaseTag: "v1.0.0",
-		downloadUrl: `${RELEASE_BASE_URL}/v1.0.0/SawalaMono-v1.0.0.zip`,
-		extendedDownloadUrl: `${RELEASE_BASE_URL}/v1.0.0/SawalaMono-v1.0.0.zip`,
+		archiveFilename: "SawalaMono-*.zip",
+		extendedArchiveFilename: "SawalaMono-*.zip",
+		downloadUrl: RELEASES_PAGE_URL,
+		extendedDownloadUrl: RELEASES_PAGE_URL,
 		isFeatured: true,
 		specimenPreview: "fn(x) => x !== 0 && x >= 1"
 	},
@@ -35,11 +34,10 @@ export const DISTRIBUTION_TIERS = Object.freeze([
 		hasLigatures: false,
 		hasNerdFont: false,
 		recommendedFor: "Literal operator workflows, kernel/systems C, strict security auditing",
-		archiveFilename: "SawalaMonoNL-v1.0.0.zip",
-		extendedArchiveFilename: "SawalaMonoNL-v1.0.0.zip",
-		releaseTag: "v1.0.0",
-		downloadUrl: `${RELEASE_BASE_URL}/v1.0.0/SawalaMonoNL-v1.0.0.zip`,
-		extendedDownloadUrl: `${RELEASE_BASE_URL}/v1.0.0/SawalaMonoNL-v1.0.0.zip`,
+		archiveFilename: "SawalaMonoNL-*.zip",
+		extendedArchiveFilename: "SawalaMonoNL-*.zip",
+		downloadUrl: RELEASES_PAGE_URL,
+		extendedDownloadUrl: RELEASES_PAGE_URL,
 		isFeatured: false,
 		specimenPreview: "fn(x) => x !== 0 && x >= 1"
 	},
@@ -53,11 +51,10 @@ export const DISTRIBUTION_TIERS = Object.freeze([
 		hasLigatures: true,
 		hasNerdFont: true,
 		recommendedFor: "Neovim, Tmux, Starship prompt, Kitty, WezTerm, Alacritty, Windows Terminal",
-		archiveFilename: "SawalaMono-NF-v1.0.0.zip",
-		extendedArchiveFilename: "SawalaMono-Extended-NF-v1.0.0.zip",
-		releaseTag: "v1.0.0",
-		downloadUrl: `${RELEASE_BASE_URL}/v1.0.0/SawalaMono-NF-v1.0.0.zip`,
-		extendedDownloadUrl: `${RELEASE_BASE_URL}/v1.0.0/SawalaMono-Extended-NF-v1.0.0.zip`,
+		archiveFilename: "SawalaMono-NF-*.zip",
+		extendedArchiveFilename: "SawalaMono-Extended-NF-*.zip",
+		downloadUrl: RELEASES_PAGE_URL,
+		extendedDownloadUrl: RELEASES_PAGE_URL,
 		isFeatured: false,
 		specimenPreview: "\uE0A0 main \uE0B1 => !== -> ::"
 	},
@@ -71,11 +68,10 @@ export const DISTRIBUTION_TIERS = Object.freeze([
 		hasLigatures: false,
 		hasNerdFont: true,
 		recommendedFor: "Terminal emulators, shells, and TUI environments without operator ligatures",
-		archiveFilename: "SawalaMonoNL-NF-v1.0.0.zip",
-		extendedArchiveFilename: "SawalaMonoNL-Extended-NF-v1.0.0.zip",
-		releaseTag: "v1.0.0",
-		downloadUrl: `${RELEASE_BASE_URL}/v1.0.0/SawalaMonoNL-NF-v1.0.0.zip`,
-		extendedDownloadUrl: `${RELEASE_BASE_URL}/v1.0.0/SawalaMonoNL-Extended-NF-v1.0.0.zip`,
+		archiveFilename: "SawalaMonoNL-NF-*.zip",
+		extendedArchiveFilename: "SawalaMonoNL-Extended-NF-*.zip",
+		downloadUrl: RELEASES_PAGE_URL,
+		extendedDownloadUrl: RELEASES_PAGE_URL,
 		isFeatured: false,
 		specimenPreview: "\uE0A0 main \uE0B1 = > ! = = - >"
 	}
@@ -128,17 +124,14 @@ export function setDistributionWidthMode(widthMode, root = document) {
 		if (!tierId) {
 			return;
 		}
+		const tier = DISTRIBUTION_TIERS.find(item => item.id === tierId) || DISTRIBUTION_TIERS[0];
 		const resolved = resolveDistributionArchive(tierId, resolvedMode);
-		const archiveEl = card.querySelector("[data-distribution-archive]");
 		const linkEl = card.querySelector("[data-distribution-download]");
 		const widthNoteEl = card.querySelector("[data-distribution-width-note]");
 
-		if (archiveEl) {
-			archiveEl.textContent = resolved.archiveFilename;
-		}
 		if (linkEl) {
 			linkEl.setAttribute("href", resolved.downloadUrl);
-			linkEl.setAttribute("aria-label", `Download ${resolved.archiveFilename} from GitHub Releases`);
+			linkEl.setAttribute("aria-label", `Download ${tier.name} (${resolved.widthLabel}) on GitHub Releases`);
 		}
 		if (widthNoteEl) {
 			widthNoteEl.textContent = resolved.widthLabel;

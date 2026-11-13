@@ -911,10 +911,6 @@
 }
 
 @media (max-width: 480px) {
-	.top-nav__brand .status-badge {
-		display: none;
-	}
-
 	.top-nav__actions .button-primary {
 		padding: 8px 12px;
 		font-size: 13px;
