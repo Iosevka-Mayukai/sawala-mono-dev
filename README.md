@@ -2,15 +2,16 @@
 <!-- markdownlint-disable  -->
 [![Build Font](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/build.yml/badge.svg)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/build.yml)
 [![Patch Nerd Font](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/patch-nerd-font.yml/badge.svg)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/patch-nerd-font.yml)
-[![License: SIL OFL 1.1](https://img.shields.io/badge/License-OFL%201.1-blue.svg)](https://scripts.sil.org/OFL)
-[![Status: In Development](https://img.shields.io/badge/Status-Private%20Development-orange.svg)](https://github.com/Iosevka-Mayukai/sawala-mono-dev)
-<!-- Live public release badge (enable once repository visibility is changed to public):
+[![Deploy Showcase to Pages](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/pages.yml/badge.svg)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/actions/workflows/pages.yml)
 [![GitHub release](https://img.shields.io/github/v/release/Iosevka-Mayukai/sawala-mono-dev?include_prereleases)](https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases)
--->
+[![Web Documentation](https://img.shields.io/badge/Docs-Live%20Showcase-5e6ad2)](https://iosevka-mayukai.github.io/sawala-mono-dev/)
+[![License: SIL OFL 1.1](https://img.shields.io/badge/License-OFL%201.1-blue.svg)](https://scripts.sil.org/OFL)
 
 ![Sawala Mono Banner](sawala-mono-hero-img.jpg)
 
 A clean, ergonomic monospace coding typeface built on top of [Iosevka](https://github.com/be5invis/Iosevka), customized for focused programming sessions, terminal workflows, and code reviews.
+
+> **Live Web Documentation & Interactive Showcase:** Explore side-by-side coding specimens, interactive ligature tests, glyph inspection, and IDE configs at **[iosevka-mayukai.github.io/sawala-mono-dev](https://iosevka-mayukai.github.io/sawala-mono-dev/)** ([Ligatures Catalog](https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/ligatures.html) · [Distributions Matrix](https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/distributions.html) · [Installation Guide](https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/installation.html)).
 
 ---
 
@@ -78,7 +79,7 @@ In modern software development, code is written for people first and compilers s
    - **Linux:** Copy the `.ttf` files to your user fonts directory and refresh the font cache:
      ```bash
      mkdir -p ~/.local/share/fonts/SawalaMono
-     cp *.ttf ~/.local/share/fonts/SawalaMono/
+     cp SawalaMono/TTF/*.ttf ~/.local/share/fonts/SawalaMono/   # or *.ttf for Nerd Font archives
      fc-cache -f -v
      ```
 
@@ -296,6 +297,7 @@ npm run build -- ttf::SawalaMono ttf::SawalaMonoNL
 ## Architecture & Customization
 
 - **Plan Configuration:** Typographical features, glyph variant selections, and weight/slope/width matrices are declaratively configured in [`private-build-plans.toml`](private-build-plans.toml).
+- **Web Documentation & Showcase:** Zero-build static documentation site (`index.html` and `web-docs/`), automatically staged and deployed via [`.github/workflows/pages.yml`](.github/workflows/pages.yml) to [iosevka-mayukai.github.io/sawala-mono-dev](https://iosevka-mayukai.github.io/sawala-mono-dev/).
 - **Architecture Documentation:** For an in-depth breakdown of the font compiler engine, Clean Architecture seams, and Verda task DAG, read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 - **Upstream References:** Explore character variant identifiers in [`doc/character-variants.md`](doc/character-variants.md) and custom build options in [`doc/custom-build.md`](doc/custom-build.md).
 
