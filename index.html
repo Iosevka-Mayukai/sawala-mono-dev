@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="theme-color" content="#010102">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; font-src 'self'; script-src 'self'; img-src 'self' data: https://img.shields.io; connect-src 'self' https://api.github.com;">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; img-src 'self' data: https://img.shields.io; connect-src 'self' https://api.github.com;">
 	<title>Sawala Mono — Ergonomic Coding Typeface for Human Deliberation</title>
 	<meta name="description" content="Derived from the Sundanese word sawala (discussion, deliberation, intellectual exchange). An ergonomic, high-legibility coding monospace typeface built on Iosevka.">
 	<link rel="canonical" href="https://iosevka-mayukai.github.io/sawala-mono-dev/">
@@ -30,6 +30,11 @@
 	<link rel="preload" href="web-docs/fonts/sawala-mono/SawalaMono-Italic.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="web-docs/fonts/sawala-mono/SawalaMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="web-docs/fonts/sawala-mono/SawalaMono-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
+	<!-- Comparison Baseline Webfonts (Google Fonts CDN, REQ-012) -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400&family=Inconsolata:wght@400&family=JetBrains+Mono:wght@400&family=Reddit+Mono:wght@400&family=Ubuntu+Mono:wght@400&family=Victor+Mono:wght@400&display=swap">
 
 	<!-- Design System Stylesheets (CON-002) -->
 	<link rel="stylesheet" href="web-docs/css/tokens.css">
@@ -437,7 +442,7 @@ const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
 						<div class="comparison-legend">
 							<span class="comparison-legend__item">
 								<span class="comparison-legend__dot" aria-hidden="true"></span>
-								<span>Left: Generic Monospace</span>
+								<span id="comparison-left-legend">Left: JetBrains Mono</span>
 							</span>
 							<span class="comparison-legend__item">
 								<span class="comparison-legend__dot comparison-legend__dot--sawala" aria-hidden="true"></span>
@@ -446,18 +451,31 @@ const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
 						</div>
 					</div>
 
-					<div class="comparison-stage" id="comparison-stage">
-						<!-- Base Layer: Generic Monospace Font -->
+					<div class="comparison-font-bar">
+						<span class="comparison-font-bar__label">Compare Against:</span>
+						<div class="comparison-font-options" role="group" aria-label="Select monospace baseline font for comparison">
+							<button type="button" class="variant-switcher-tab is-selected" data-comparison-font-option="jetbrains-mono" aria-pressed="true">JetBrains Mono</button>
+							<button type="button" class="variant-switcher-tab" data-comparison-font-option="inconsolata" aria-pressed="false">Inconsolata</button>
+							<button type="button" class="variant-switcher-tab" data-comparison-font-option="fira-mono" aria-pressed="false">Fira Mono</button>
+							<button type="button" class="variant-switcher-tab" data-comparison-font-option="reddit-mono" aria-pressed="false">Reddit Mono</button>
+							<button type="button" class="variant-switcher-tab" data-comparison-font-option="victor-mono" aria-pressed="false">Victor Mono</button>
+							<button type="button" class="variant-switcher-tab" data-comparison-font-option="ubuntu-mono" aria-pressed="false">Ubuntu Mono</button>
+						</div>
+					</div>
+
+					<div class="comparison-stage" id="comparison-stage" data-comparison-font="jetbrains-mono">
+						<!-- Base Layer: Selectable Comparison Baseline Font -->
 						<div class="comparison-pane comparison-pane--generic">
 							<div class="comparison-pane__badge-row">
-								<span class="comparison-pane__label">Generic System Monospace (Standard x-Height · calt off)</span>
-								<span class="comparison-metrics-note">Tighter counters &amp; discrete operators</span>
+								<span class="comparison-pane__label" id="comparison-left-badge">JetBrains Mono (OpenType calt)</span>
+								<span class="comparison-metrics-note" id="comparison-left-note">Increased x-height &amp; native ligatures</span>
 							</div>
 							<div class="comparison-specimen-lines">
-								<div class="comparison-code-line comparison-code-line--guided">const a = 10; // 0O vs 1lI check</div>
-								<div class="comparison-code-line comparison-code-line--guided">function readCode(x) =&gt; {</div>
-								<div class="comparison-code-line comparison-code-line--guided">  return x !== null ? x : 0;</div>
-								<div class="comparison-code-line comparison-code-line--guided">}</div>
+								<div class="comparison-code-line comparison-code-line--guided">const scan = (n = 0) =&gt; { // 0O 1lI !=</div>
+								<div class="comparison-code-line comparison-code-line--guided">  const AZ = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;;</div>
+								<div class="comparison-code-line comparison-code-line--guided">  const az = &quot;abcdefghijklmnopqrstuvwxyz&quot;;</div>
+								<div class="comparison-code-line comparison-code-line--guided">  const id = &quot;0123456789&quot;; // === &lt;= &gt;=</div>
+								<div class="comparison-code-line comparison-code-line--guided">  return n !== 0 ? AZ + az : id; };</div>
 								<div class="comparison-guides" aria-hidden="true">
 									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--cap"></span>Cap Line</span>
 									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--xheight"></span>x-Height Guide</span>
@@ -473,10 +491,11 @@ const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
 								<span class="comparison-metrics-note">Open apertures &amp; active OpenType calt</span>
 							</div>
 							<div class="comparison-specimen-lines">
-								<div class="comparison-code-line comparison-code-line--guided">const a = 10; // 0O vs 1lI check</div>
-								<div class="comparison-code-line comparison-code-line--guided">function readCode(x) =&gt; {</div>
-								<div class="comparison-code-line comparison-code-line--guided">  return x !== null ? x : 0;</div>
-								<div class="comparison-code-line comparison-code-line--guided">}</div>
+								<div class="comparison-code-line comparison-code-line--guided">const scan = (n = 0) =&gt; { // 0O 1lI !=</div>
+								<div class="comparison-code-line comparison-code-line--guided">  const AZ = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;;</div>
+								<div class="comparison-code-line comparison-code-line--guided">  const az = &quot;abcdefghijklmnopqrstuvwxyz&quot;;</div>
+								<div class="comparison-code-line comparison-code-line--guided">  const id = &quot;0123456789&quot;; // === &lt;= &gt;=</div>
+								<div class="comparison-code-line comparison-code-line--guided">  return n !== 0 ? AZ + az : id; };</div>
 								<div class="comparison-guides" aria-hidden="true">
 									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--cap"></span>Cap 735</span>
 									<span class="comparison-guide-pill"><span class="comparison-guide-line comparison-guide-line--xheight"></span>x-Height 520 (70.7%)</span>
@@ -505,7 +524,7 @@ const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
 								max="100"
 								step="1"
 								value="50"
-								aria-label="Compare Generic Monospace and Sawala Mono proportions"
+								aria-label="Compare JetBrains Mono and Sawala Mono proportions"
 								aria-valuemin="0"
 								aria-valuemax="100"
 								aria-valuenow="50"
@@ -519,8 +538,8 @@ const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
 							<button type="button" class="variant-switcher-tab is-selected" data-comparison-preset="50" aria-pressed="true">
 								50 / 50 Split
 							</button>
-							<button type="button" class="variant-switcher-tab" data-comparison-preset="100" aria-pressed="false">
-								100% Generic
+							<button type="button" class="variant-switcher-tab" id="comparison-baseline-preset" data-comparison-preset="100" aria-pressed="false">
+								100% JetBrains Mono
 							</button>
 						</div>
 					</div>

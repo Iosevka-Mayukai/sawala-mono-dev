@@ -198,16 +198,78 @@
 	background-color: var(--primary-hover);
 }
 
+.comparison-font-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-sm);
+	margin-bottom: var(--space-md);
+}
+
+.comparison-font-bar__label {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--ink-subtle);
+	white-space: nowrap;
+}
+
+.comparison-font-options {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-xs);
+}
+
 .comparison-stage {
 	--comparison-split: 50%;
+	--comparison-left-font: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+	--comparison-left-ligatures: normal;
+	--comparison-left-features: "calt" 1;
 	position: relative;
-	min-height: 250px;
+	min-height: 290px;
 	background-color: var(--canvas);
 	border: 1px solid var(--hairline);
 	border-radius: var(--radius-lg);
 	overflow: hidden;
 	user-select: none;
 	touch-action: pan-y;
+}
+
+.comparison-stage[data-comparison-font="jetbrains-mono"] {
+	--comparison-left-font: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+	--comparison-left-ligatures: normal;
+	--comparison-left-features: "calt" 1;
+}
+
+.comparison-stage[data-comparison-font="inconsolata"] {
+	--comparison-left-font: "Inconsolata", ui-monospace, "SF Mono", Menlo, monospace;
+	--comparison-left-ligatures: none;
+	--comparison-left-features: "calt" 0;
+}
+
+.comparison-stage[data-comparison-font="fira-mono"] {
+	--comparison-left-font: "Fira Mono", ui-monospace, "SF Mono", Menlo, monospace;
+	--comparison-left-ligatures: none;
+	--comparison-left-features: "calt" 0;
+}
+
+.comparison-stage[data-comparison-font="reddit-mono"] {
+	--comparison-left-font: "Reddit Mono", ui-monospace, "SF Mono", Menlo, monospace;
+	--comparison-left-ligatures: none;
+	--comparison-left-features: "calt" 0;
+}
+
+.comparison-stage[data-comparison-font="victor-mono"] {
+	--comparison-left-font: "Victor Mono", ui-monospace, "SF Mono", Menlo, monospace;
+	--comparison-left-ligatures: normal;
+	--comparison-left-features: "calt" 1;
+}
+
+.comparison-stage[data-comparison-font="ubuntu-mono"] {
+	--comparison-left-font: "Ubuntu Mono", ui-monospace, "SF Mono", Menlo, monospace;
+	--comparison-left-ligatures: none;
+	--comparison-left-features: "calt" 0;
 }
 
 .comparison-pane {
@@ -325,16 +387,17 @@
 }
 
 .comparison-code-line {
-	font-size: clamp(13px, 2.2vw, 22px);
+	font-size: clamp(11px, 1.8vw, 18px);
 	line-height: 1.4;
-	white-space: nowrap;
+	white-space: pre;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
 .comparison-pane--generic .comparison-code-line {
-	font-family: ui-monospace, "SF Mono", Menlo, monospace;
-	font-variant-ligatures: none;
+	font-family: var(--comparison-left-font);
+	font-variant-ligatures: var(--comparison-left-ligatures);
+	font-feature-settings: var(--comparison-left-features);
 	color: var(--ink-subtle);
 }
 
@@ -1652,9 +1715,10 @@
 	}
 
 	.comparison-code-line {
-		font-size: 13px;
+		font-size: clamp(10px, 2.75vw, 13px);
 	}
 
+	.comparison-font-options .variant-switcher-tab,
 	.comparison-preset-btn,
 	.glyph-category-tab,
 	.config-tab-btn,

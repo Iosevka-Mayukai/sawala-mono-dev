@@ -253,19 +253,119 @@ export function setComparisonSplit(percent, root = document) {
 	return clamped;
 }
 
+// shortcut: loads 6 Google Fonts regular weights from CDN on index.html only; migrate to self-hosted WOFF2 subsets if strict air-gapped offline rendering is required later
+export const COMPARISON_FONTS = Object.freeze({
+	"jetbrains-mono": {
+		id: "jetbrains-mono",
+		name: "JetBrains Mono",
+		badgeLabel: "JetBrains Mono (OpenType calt)",
+		metricsNote: "Increased x-height & native ligatures"
+	},
+	inconsolata: {
+		id: "inconsolata",
+		name: "Inconsolata",
+		badgeLabel: "Inconsolata (calt off)",
+		metricsNote: "Humanist condensed monospace proportions"
+	},
+	"fira-mono": {
+		id: "fira-mono",
+		name: "Fira Mono",
+		badgeLabel: "Fira Mono (Non-ligature)",
+		metricsNote: "Open apertures & discrete operators"
+	},
+	"reddit-mono": {
+		id: "reddit-mono",
+		name: "Reddit Mono",
+		badgeLabel: "Reddit Mono (calt off)",
+		metricsNote: "Neo-grotesque wide monospace stance"
+	},
+	"victor-mono": {
+		id: "victor-mono",
+		name: "Victor Mono",
+		badgeLabel: "Victor Mono (OpenType calt)",
+		metricsNote: "Slender crisp glyphs with ligatures"
+	},
+	"ubuntu-mono": {
+		id: "ubuntu-mono",
+		name: "Ubuntu Mono",
+		badgeLabel: "Ubuntu Mono (calt off)",
+		metricsNote: "Compact x-height & rounded terminals"
+	}
+});
+
+/**
+ * Selects the baseline comparison typeface rendered on the left pane (REQ-012, AC-019).
+ * @param {string} fontId
+ * @param {Document|HTMLElement} [root=document]
+ * @returns {string} Active font identifier
+ */
+export function setComparisonFont(fontId, root = document) {
+	const resolvedId = Object.prototype.hasOwnProperty.call(COMPARISON_FONTS, fontId)
+		? fontId
+		: "jetbrains-mono";
+	const fontMeta = COMPARISON_FONTS[resolvedId];
+	if (!root || typeof root.querySelector !== "function") {
+		return fontMeta.id;
+	}
+	const stageEl = root.querySelector("#comparison-stage");
+	const legendEl = root.querySelector("#comparison-left-legend");
+	const badgeEl = root.querySelector("#comparison-left-badge");
+	const noteEl = root.querySelector("#comparison-left-note");
+	const sliderEl = root.querySelector("#xheight-comparison-slider");
+	const baselinePresetBtn = root.querySelector("#comparison-baseline-preset");
+	const fontBtns = root.querySelectorAll("[data-comparison-font-option]");
+
+	if (stageEl) {
+		stageEl.setAttribute("data-comparison-font", fontMeta.id);
+	}
+	if (legendEl) {
+		legendEl.textContent = `Left: ${fontMeta.name}`;
+	}
+	if (badgeEl) {
+		badgeEl.textContent = fontMeta.badgeLabel;
+	}
+	if (noteEl) {
+		noteEl.textContent = fontMeta.metricsNote;
+	}
+	if (sliderEl) {
+		sliderEl.setAttribute("aria-label", `Compare ${fontMeta.name} and Sawala Mono proportions`);
+	}
+	if (baselinePresetBtn) {
+		baselinePresetBtn.textContent = `100% ${fontMeta.name}`;
+	}
+
+	fontBtns.forEach(btn => {
+		const isSelected = btn.getAttribute("data-comparison-font-option") === fontMeta.id;
+		btn.classList.toggle("is-selected", isSelected);
+		btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+	});
+
+	return fontMeta.id;
+}
+
 /**
  * Initializes the interactive Proportional x-Height Comparison Slider (REQ-012, AC-019).
- * Supports range input, pointer dragging on stage, and preset buttons.
+ * Supports baseline font switcher, range input, pointer dragging on stage, and preset buttons.
  * @param {Document|HTMLElement} [root=document]
  */
 export function initComparisonSlider(root = document) {
 	const stageEl = root.querySelector("#comparison-stage");
 	const sliderEl = root.querySelector("#xheight-comparison-slider");
 	const presetBtns = root.querySelectorAll("[data-comparison-preset]");
+	const fontBtns = root.querySelectorAll("[data-comparison-font-option]");
 
 	if (!stageEl && !sliderEl) {
 		return;
 	}
+
+	fontBtns.forEach(btn => {
+		btn.addEventListener("click", () => {
+			const nextFontId = btn.getAttribute("data-comparison-font-option");
+			if (nextFontId) {
+				setComparisonFont(nextFontId, root);
+			}
+		});
+	});
 
 	if (sliderEl) {
 		sliderEl.addEventListener("input", () => {
@@ -321,6 +421,7 @@ export function initComparisonSlider(root = document) {
 		stageEl.addEventListener("pointercancel", endDrag);
 	}
 
+	setComparisonFont(stageEl?.getAttribute("data-comparison-font") || "jetbrains-mono", root);
 	setComparisonSplit(50, root);
 }
 

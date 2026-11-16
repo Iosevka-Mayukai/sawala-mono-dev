@@ -1,7 +1,7 @@
 ---
 goal: Repository Architecture and Clean Architecture Seams Documentation
 date_created: 2026-11-09
-last_updated: 2026-11-13
+last_updated: 2026-11-16
 status: 'Active'
 tags: ["architecture", "clean-architecture", "polya-topography", "system-map", "iosevka-sawalamono"]
 ---
@@ -33,6 +33,7 @@ This document serves as the canonical architectural map of the repository. It ou
   - **Verda Task Graph:** Reactive, self-tracking dependency build engine (implemented in `verdafile.mjs`) orchestrating compilation rules across worker threads.
   - **Nerd Font Patching:** Decoupled containerized post-processing pipeline using FontForge to inject developer symbols into pre-compiled TrueType fonts.
 - **Target Environments:** Desktop developer operating systems (Windows, macOS, Linux terminals and IDEs), web typography (self-hosted WOFF2 webfonts), and static GitHub Pages documentation (`index.html`, `web-docs/`).
+- **Licensing & Distribution Boundary:** Licensed under the SIL Open Font License 1.1 (`LICENSE.md`), permitting free use, modification, and redistribution across all four font distributions.
 
 ---
 
@@ -42,7 +43,7 @@ This document serves as the canonical architectural map of the repository. It ou
 | :--- | :--- | :--- |
 | **Primary Language(s)** | JavaScript (ES Modules, Node.js `>=16.0.0`), Patel (`.ptl` Lisp-like DSL), TOML, Bash | `package.json`, `biome.json`, `private-build-plans.toml` |
 | **Core Frameworks & Build** | `verda` (v1.14.0 task runner), `patel` (v0.41.1 compiler) | `verdafile.mjs` |
-| **Font Assembly & Serialization** | `ot-builder` (v1.8.1), `otb-ttc-bundle` (v1.8.1), `harfbuzzjs` (v1.6.4), `ttfautohint` | `packages/font/package.json` |
+| **Font Assembly & Serialization** | `ot-builder` (v1.8.1), `otb-ttc-bundle` (v1.8.1), `harfbuzzjs` (v1.6.4), `@msgpack/msgpack` (v3.1.3), `ttfautohint` | `packages/font/package.json` |
 | **Nerd Font Patching Engine** | Docker (`nerdfonts/patcher:latest`, FontForge + Python 3 + icon glyph databases) | `.github/workflows/patch-nerd-font.yml` |
 | **Linter & Formatter** | Biome v2.6.2 (scoped to `packages/*/src/**/*.mjs`, `tools/*/src/**/*.mjs`, `verdafile.mjs`) | `biome.json` |
 | **Web Showcase Runtime** | Zero-build static HTML5, CSS Design Tokens, Vanilla ES Modules, vendored Prism.js | `index.html`, `web-docs/`, `.nojekyll` |
@@ -118,13 +119,14 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
   - **Contains:** Parametric character drawing scripts in Patel DSL (`letter/*.ptl`, `symbol/*.ptl`), OpenType feature compilers (`gsub-ligation.ptl`, `gsub-cv-ss.ptl`), parameter resolver (`variant.mjs`, `ligation.mjs`, `subset-filter.mjs`), high-level geometry kits (`boole-kit`, `spiro-kit`), math/interpolation helpers (`packages/util/`), and caching workers.
   - **Invariant:** Orchestrates typography rules and feature sets without direct coupling to disk I/O or binary packing.
 - **Interface Adapters (`packages/font/src/`, `tools/misc/`, `tools/data-export/`, `tools/amend-readme/`, `tools/generate-samples/`):**
-  - **Contains:** Translators converting high-level glyph definitions into OpenType Data (`otd-conv/`), naming metadata generator (`naming/`), unused glyph garbage collection (`cleanup/gc.mjs`), metric validation (`validate/metrics.mjs`), SVG/data exporters (`tools/data-export/`, `tools/generate-samples/`), and standalone conversion scripts (`ttf-to-woff2.mjs`, `make-webfont-css.mjs`).
+  - **Contains:** Font build worker entrypoint (`index.mjs`, `build-font/index.mjs`), OpenType Data translators (`otd-conv/`), naming metadata generator (`naming/`), unused glyph garbage collection (`cleanup/`), compatibility ligature builder (`hb-compat-ligature/`), post-processing (`post-processing/`), `ttfautohint` control generator (`ttfa-controls/`), metric validation (`validate/metrics.mjs`), gzipped MessagePack charmap/geometry cache I/O, SVG/data exporters (`tools/data-export/`, `tools/generate-samples/`), and standalone conversion scripts (`ttf-to-woff2.mjs`, `make-webfont-css.mjs`).
   - **Invariant:** Converts domain/application structures into formats consumable by external drivers (`ot-builder`, `ttfautohint`).
 - **Frameworks & Infrastructure (`verdafile.mjs`, `docker/`, `.github/workflows/`):**
   - **Contains:** Task dependency graph scheduler (`verda`), container build harness (`docker/Dockerfile`, `docker/build.sh`), CI compiler workflow (`build.yml`), standalone Nerd Font patcher workflow (`patch-nerd-font.yml`), and GitHub Pages deployment workflow (`pages.yml`).
   - **Invariant:** Entry point orchestrators that drive inner layers via command-line arguments, static staging, and configuration files.
 - **Presentation & Static Web Showcase (`DESIGN.md`, `index.html`, `.nojekyll`, `web-docs/`):**
   - **Contains:** Linear-inspired Near-Black design tokens (`DESIGN.md`, `web-docs/css/tokens.css`), landing showcase (`index.html`), 3 standalone technical guide pages (`web-docs/pages/{ligatures,distributions,installation}.html`), 8 modular Vanilla ES controllers (`web-docs/js/*.js`), preloaded Tier A WOFF2 webfonts (`web-docs/fonts/sawala-mono/`), vendored Prism.js syntax highlighter (`web-docs/vendor/prism/`), and brand icon assets (`web-docs/assets/`).
+  - **Internal Cascade & Script Topology:** Stylesheets load strictly in order (`tokens.css` ➔ `reset.css` ➔ `typography.css` ➔ `showcase.css` ➔ `vendor/prism/prism-sawala-dark.css` on landing). `index.html` initializes `prism.min.js` and all 8 ES modules (`main.js` imports `copyTextWithFallback` from `polyglot-runner.js` and drives shared nav/slider/scroll-spy logic), while subpages in `web-docs/pages/*.html` load only the 4 core stylesheets and `main.js`.
   - **Invariant:** Zero-build static runtime strictly decoupled from `packages/*` and `verdafile.mjs` (`CON-005`), enforcing strict Content Security Policy (`CON-006`) and WCAG 2.1 AA landmarks (`CON-007`).
 
 ---
@@ -145,12 +147,12 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
    └── Glyph contours are evaluated using `packages/geometry` and stored in `packages/glyph`.
 4. OpenType Layout Feature Assembly
    └── `packages/font-otl` compiles GSUB lookup tables (ligatures for SawalaMono; bypassed for SawalaMonoNL) and GPOS mark positioning.
-5. OpenType Data Conversion & Pruning
-   └── `packages/font/src/otd-conv` maps domain glyphs into OpenType Data (OTD) schema.
-   └── `packages/font/src/cleanup/gc.mjs` runs unreachable glyph elimination.
-6. Binary Assembly & Autohinting
-   └── `ot-builder` compiles OTD into TrueType binary (`.ttf`).
-   └── `ttfautohint` processes TrueType instructions for crisp rendering.
+5. OpenType Data Conversion, Pruning & Post-Processing (`packages/font/src/index.mjs`, `build-font/index.mjs`)
+   └── `cleanup/` eliminates unreachable glyphs; `otd-conv/` maps domain glyphs into OTD using `@iosevka/geometry-cache`.
+   └── `hb-compat-ligature/`, `post-processing/`, `ttfa-controls/`, and `validate/metrics.mjs` finalize tables, hinting controls, and monospace invariants.
+6. Binary Assembly, Cache Persistence & Autohinting
+   └── `font-io/` (`ot-builder`) compiles OTD into TrueType binary (`.ttf`) alongside gzipped `@msgpack/msgpack` charmap and geometry cache updates.
+   └── `ttfautohint` processes TrueType instructions using generated `ttfaControls` for crisp rendering.
 7. Base Output Delivery
    └── Compiled fonts are saved to `dist/SawalaMono/` and `dist/SawalaMonoNL/`, packaged into `.zip` archives, and published to GitHub Releases.
 ```
@@ -201,6 +203,8 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 [Project Root]
 ├── .agents/                 # AI agent configurations, skills, and SDLC standards
 ├── .github/
+│   ├── ISSUE_TEMPLATE/      # Issue templates (bug, feature, character/variant/ligation requests)
+│   ├── PULL_REQUEST_TEMPLATE/ # PR templates (character addition & variant checklists)
 │   └── workflows/
 │       ├── build.yml        # CI/CD compiler pipeline for Sawala Mono & Sawala Mono NL
 │       ├── pages.yml        # Automated GitHub Pages deployment for static web showcase (CON-008)
@@ -255,6 +259,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 ├── package.json             # Root npm monorepo manifest and script definitions
 ├── biome.json               # Biome linter & formatter configuration
 ├── DESIGN.md                # Linear-inspired product canvas tokens & specimen design system
+├── LICENSE.md               # SIL Open Font License 1.1 governing font distribution & modification
 ├── README.md                # Public repository documentation & build instructions
 └── verdafile.mjs            # Declarative reactive build graph definition
 ```
@@ -286,16 +291,18 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 ## 7. Key Configuration Files & Entry Points
 
 - **Build Engine Orchestrator:** `verdafile.mjs` — Bootstraps the `verda` reactive task graph, defines build targets (`ttf::*`, `woff2::*`), and manages parallel node worker jobs.
+- **Font Worker Entrypoint:** `packages/font/src/index.mjs` (delegating to `build-font/index.mjs`) — Per-variant font assembly pipeline invoked by `verdafile.mjs` to resolve parameters, load/save gzipped MessagePack geometry caches, and serialize `.ttf` binaries.
 - **Sawala Mono Dual Specifications:** `private-build-plans.toml` — Defines the active configurations for both `SawalaMono` and `SawalaMonoNL`, their variant mappings, width grades, and slope settings.
 - **Baseline Build Plan (ADR-0001):** `build-plans.toml` — Upstream build plan retained to satisfy `verdafile.mjs:157,159` parsing requirements.
 - **Root Monorepo Manifest:** `package.json` — Defines workspaces (`packages/*`, `tools/*`), dependencies (`verda`, `ot-builder`, `patel`), and lifecycle scripts (`npm run build`, `npm run lint`, `npm run clean`, `npm run bump-ver`).
 - **Linter & Formatter Config:** `biome.json` — Governs code formatting and linting rules across 97 scoped `.mjs` files (`packages/*/src/**/*.mjs`, `tools/*/src/**/*.mjs`, `verdafile.mjs`).
 - **Design System Tokens:** `DESIGN.md` & `web-docs/css/tokens.css` — Defines color ladder, typography scale, surface hierarchy, Tokyo Night syntax tokens, and specimen rendering tokens.
 - **Static Showcase Entry & Orchestrator:** `index.html`, `.nojekyll`, and `web-docs/js/main.js` — Serves the zero-build interactive landing page, loads Tier A WOFF2 webfonts, and initializes modular UI controllers and subpage helpers.
-- **Container Compiler Context:** `docker/Dockerfile` and `docker/build.sh` — Defines the portable Linux build environment with `ttfautohint`.
-- **CI/CD Compiler Workflow:** `.github/workflows/build.yml` — Orchestrates container builds and publishes base font release archives.
+- **Container Compiler Context:** `docker/Dockerfile` and `docker/build.sh` — Defines the portable Linux build environment with `ttfautohint`. By default, `ENTRYPOINT` runs `/build.sh` (which downloads upstream `be5invis/Iosevka` tarballs into `/iosevka` and overlays `private-build-plans.toml`); fork compilation in CI and local builds overrides `--entrypoint bash` to build `/work` directly.
+- **CI/CD Compiler Workflow:** `.github/workflows/build.yml` — Orchestrates container builds (`--entrypoint bash` on `/work`) and publishes base font release archives.
 - **Nerd Font Patch Pipeline:** `.github/workflows/patch-nerd-font.yml` — Decoupled containerized patcher pipeline using Docker (`nerdfonts/patcher:latest`) to generate and attach `Sawala Mono NF` assets.
 - **GitHub Pages Deploy Workflow:** `.github/workflows/pages.yml` — Stages `index.html`, `.nojekyll`, `sawala-mono-hero-img.jpg`, and `web-docs/` into `_site/` and deploys to GitHub Pages on pushes to `main`.
+- **Licensing Manifest:** `LICENSE.md` — SIL Open Font License 1.1 governing redistribution and modification rights.
 
 ---
 
@@ -316,11 +323,13 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 | Tier | Target Latency | When Executed | Exact CLI Command(s) |
 | :--- | :--- | :--- | :--- |
 | **`check:fast`** | `< 5s` | Every file edit (Micro level) | `node -e "require('@iarna/toml').parse(require('fs').readFileSync('private-build-plans.toml'))" && npx @biomejs/biome check .` |
+| **`check:fast` (Web)** | `< 5s` | Edits to `index.html` or `web-docs/` | `node -e "const fs=require('fs'),{execFileSync}=require('child_process');for(const f of fs.readdirSync('web-docs/js'))if(f.endsWith('.js'))execFileSync(process.execPath,['--check','web-docs/js/'+f])"` |
 | **`check:task`** | `< 90s` | End of each Vertical Tracer Bullet / Task | `npx @biomejs/biome check . && npm ls --workspaces` |
+| **`check:task` (Web)** | `< 30s` | Web Showcase / Design Token changes | `.agents/skills/impeccable/scripts/impeccable.cmd detect --json` |
 | **`check:full`** | `< 5m` | Macro Phase Checkpoint / `/to-review` / CI | `docker run --rm -v ${PWD}:/work --entrypoint bash iosevka-builder:latest -c "npm ci && npm run build -- ttf::SawalaMono ttf::SawalaMonoNL"` |
 
 > [!NOTE]
-> `biome.json` scopes `npx @biomejs/biome check .` exclusively to `packages/*/src/**/*.mjs`, `tools/*/src/**/*.mjs`, and `verdafile.mjs` (97 files). The `@iarna/toml` parse check in `check:fast` requires dependencies installed via `npm ci` (locally or inside the Docker builder). Static showcase assets (`index.html`, `web-docs/css/*.css`, `web-docs/js/*.js`) are outside Biome's include globs and are verified via browser/DOM assertions and CSP/design-token audits.
+> `biome.json` scopes `npx @biomejs/biome check .` exclusively to `packages/*/src/**/*.mjs`, `tools/*/src/**/*.mjs`, and `verdafile.mjs` (97 files). The `@iarna/toml` parse check in `check:fast` requires dependencies installed via `npm ci` (locally or inside the Docker builder). Static showcase assets (`index.html`, `web-docs/css/*.css`, `web-docs/js/*.js`) are outside Biome's include globs and are verified via `node --check`, `impeccable detect --json`, and browser/DOM assertions.
 
 ### 8.3 Non-Regressing Quality Ratchets (Measure & Hold)
 
@@ -351,6 +360,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 - **Technical Debt & Architectural Hotspots:**
   - **Monolithic Build Orchestrator:** `verdafile.mjs` spans 1,761 lines and encapsulates cross-cutting logic (environment detection, task compilation, webfont CSS generation, archive bundling). Edits must be approached surgically to avoid destabilizing the task graph.
   - **Coupling to Baseline `build-plans.toml`:** The build engine tightly couples plan resolution with `build-plans.toml`. As recorded in ADR-0001, deleting this file breaks the engine; any future decoupling will require patching `verdafile.mjs:155-170`.
+  - **Docker Entrypoint Dual Behavior (`docker/build.sh`):** Running `docker run iosevka-builder:latest` with the default entrypoint executes `/build.sh`, which pulls upstream `be5invis/Iosevka` tarballs instead of compiling local `packages/*` changes. Always pass `--entrypoint bash` (matching `build.yml` and `check:full`) when building the fork's working tree.
   - **Upstream Biome Configuration & Lint Drift:** `biome.json` uses the deprecated `linter.recommended` field (Biome v2.6.2 notice) and currently emits 3 errors and 5 warnings in untouched upstream files (`packages/util/src/index.mjs`, `packages/font-kits/src/letter-model.mjs`, `packages/font-kits/src/spiro-kit.mjs`). Additionally, `web-docs/js/*.js` is not yet covered by `biome.json` include globs.
 - **Recorded Architecture Decisions:**
   - [ADR-0001: Retention of `build-plans.toml` and `tools/` Workspaces](adr/0001-retain-build-plans-and-tools.md) — Documented decision to preserve essential workspace structures and the baseline TOML manifest while purging auxiliary bloat.
