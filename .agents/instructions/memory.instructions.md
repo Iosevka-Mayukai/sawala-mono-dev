@@ -205,3 +205,36 @@
 
 <!-- checkpoint-tail: Completed all 4 phases (TASK-001 through TASK-017) of the Iosevka Sawala Mono showcase and documentation web platform with 0 Impeccable findings and 0 Biome errors; ready for user sign-off (TASK-018) and /to-review. -->
 
+---
+
+## 📝 Session Checkpoint: 2026-11-13 (Architecture Topography Sync & Quality Ratchet Calibration)
+
+- **Active Memory Path:** `.agents/instructions/memory.instructions.md`
+- **Current SDLC Phase:** Cross-Cutting Utility: Architecture Topography Mapping (`/to-map`) Complete
+- **Active Artifacts:**
+  - `docs/ARCHITECTURE.md` — Status: ✅ Updated (`last_updated: 2026-11-13`, aligned across §§1–9 with current repo state)
+  - `private-build-plans.toml` — Status: ✅ Verified (current design/italic variant selections cross-checked)
+  - `biome.json` — Status: ✅ Audited (scope verified: 97 `.mjs` files across `packages/*/src`, `tools/*/src`, `verdafile.mjs`)
+- **Achieved Milestones:**
+  - Conducted full source-driven reality scan of the repository on branch `dev` (after commits through `7b45eba`) and identified drift in `docs/ARCHITECTURE.md` (`2026-11-11`).
+  - Surgically updated `docs/ARCHITECTURE.md` across §§1–9:
+    - Aligned §1 variant examples with `private-build-plans.toml` (`a = "double-storey-tailed"` / `"single-storey-earless-corner-tailed"`, `zero = "reverse-slashed"` / `"tall-reverse-slashed"`, `i`/`l = "serifed-semi-tailed"`, `ss03` baseline).
+    - Integrated the 3rd CI/CD & Presentation pipeline (`.github/workflows/pages.yml`, `index.html`, `.nojekyll`, `web-docs/`) into §2 Tech Stack, §3.1 C4 Topology, §4.1 Layer Breakdown, §5.1 Phase C, §5.2 `INV-008`, §7 Entry Points, and §9 Extension Seams.
+    - Updated §6.1–§6.2 topography with `docs/bug-reports/`, `docs/releases/`, `web-docs/assets/`, `web-docs/vendor/prism/`, `sawala-mono-hero-img.jpg`, `packages/geometry-cache/`, `packages/util/`, and `tools/`.
+    - Calibrated §8.2–§8.4 verification commands and Biome ratchet ceiling to match observed output (`npx @biomejs/biome check .` checked 97 `.mjs` files: 3 pre-existing upstream errors, 5 warnings in `packages/font-kits` & `packages/util`, 1 deprecation info on `biome.json`; recorded under `EX-002`, expiring `2027-02-11`; noted `npm ci` requirement for `@iarna/toml` local parse check since `node_modules` is absent locally).
+    - Verified `npm ls --workspaces --depth=0` exits with code `0`.
+- **Dead-Ends (Do NOT Repeat):**
+  - **Attempted:** Running `node -e "require('@iarna/toml')..."` directly in a fresh local workspace without `node_modules/`.
+  - **Reason:** Local `node_modules/` does not exist until `npm ci` runs (or inside `iosevka-builder:latest` Docker container); `npx @biomejs/biome check .` works standalone, while `@iarna/toml` requires `npm ci` first.
+  - **Note:** Documented in `docs/ARCHITECTURE.md` §8.2 note; also note Biome scope excludes `web-docs/js/*.js`.
+- **Updated Files:**
+  - `docs/ARCHITECTURE.md` — Surgically updated §§1–9 to reflect current 3-pipeline architecture, web showcase seam, directory tree, and calibrated Biome/verification ratchets
+  - `.agents/instructions/memory.instructions.md` — Appended session checkpoint for 2026-11-13
+- **Decisions Made:**
+  - Calibrated `docs/ARCHITECTURE.md` §8.3 Biome ratchet ceiling to `<= 3 errors / <= 5 warnings` with time-bounded exception `EX-002` (`2027-02-11`) rather than claiming `0 errors / 0 warnings` against untouched upstream Iosevka v34.9.1 `.mjs` files.
+  - Preserved `AGENTS.md` and `README.md` untouched since both already contain valid discovery links to `docs/ARCHITECTURE.md`.
+- **Next Action / Pending:**
+  - Working tree contains changes to `docs/ARCHITECTURE.md` and `.agents/instructions/memory.instructions.md` ready for user review and on-demand git commit.
+
+<!-- checkpoint-tail: Synced docs/ARCHITECTURE.md with current 3-pipeline architecture (font compiler, Nerd Font patcher, GitHub Pages showcase), updated private-build-plans.toml variant docs, and calibrated Biome quality ratchets (EX-002). -->
+
