@@ -51,6 +51,7 @@ n = "earless-corner-straight-serifless"
 paren = "large-contour"
 t = "flat-hook-short-neck"
 u = "toothless-rounded-serifless"
+y = "cursive-serifless"
 zero = "tall-reverse-slashed"
 
 [buildPlans.SawalaMono.widths.Normal]
@@ -123,6 +124,7 @@ n = "earless-corner-straight-serifless"
 paren = "large-contour"
 t = "flat-hook-short-neck"
 u = "toothless-rounded-serifless"
+y = "cursive-serifless"
 zero = "tall-reverse-slashed"
 
 [buildPlans.SawalaMonoNL.widths.Normal]
