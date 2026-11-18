@@ -238,3 +238,86 @@
 
 <!-- checkpoint-tail: Synced docs/ARCHITECTURE.md with current 3-pipeline architecture (font compiler, Nerd Font patcher, GitHub Pages showcase), updated private-build-plans.toml variant docs, and calibrated Biome quality ratchets (EX-002). -->
 
+---
+
+## 📝 Session Checkpoint: 2026-11-16 (Review Remediation, Releases Decoupling, Favicons, README & Comparison Font Switcher)
+
+- **Active Memory Path:** `.agents/instructions/memory.instructions.md`
+- **Current SDLC Phase:** Phase 5 Bug Remediation (`GO`) + Fast-Track Feature Polish (`/to-quick-fix`) Complete
+- **Active Artifacts:**
+  - `docs/reviews/sawala-mono-showcase-web-review.md` — Status: ✅ Approved (Iteration 3 `GO`: `0 [Important]`, `0 [Nit]`, `1 [Pre-existing]` upstream Biome)
+  - `docs/bug-reports/sawala-mono-showcase-web-bugfix.md` — Status: ✅ Resolved (`BUG-101`..`BUG-20X` verified)
+  - `docs/spec/sawala-mono-showcase-web-spec.md` — Status: ✅ Synced (`cap = 735`, `REQ-012`, `CON-004` Plan B waiver, `CON-006` scoped Google Fonts CSP on `index.html`, `AC-011`, `AC-012`, `AC-019`)
+  - `docs/plan/sawala-mono-showcase-web-plan.md` — Status: ✅ Synced (`735` metrics & truthful §9 monorepo verification log)
+  - `docs/plan/fast-track-mini-plan-2026-11-16.md` — Status: ✅ Completed (6 Google Fonts comparison baselines + full-alphabet JS function specimen)
+- **Achieved Milestones:**
+  - Closed all 6 `[Important]` and 3 `[Nit]` findings from Iteration 2 review across Spec, Plan, HTML, CSS, JS, Prism tokenizer, and `_site` staging in `.github/workflows/pages.yml` (`TOTAL: 24 | PASS: 24 | FAIL: 0` at review closure, with live desktop & mobile Chromium checks at `0` console/CSP/overflow errors).
+  - Decoupled hardcoded `v1.0.0` version/download links so distribution cards (`index.html`, `web-docs/js/distribution-cards.js`) and `web-docs/pages/distributions.html` route directly to `https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases`, removed `.distribution-card__archive` captions and navbar/hero/CTA/footer `v1.0.0` badges, and updated `web-docs/pages/installation.html` CLI commands to `<tag>` placeholders.
+  - Created 4 brand-mark favicons matching `.top-nav__brand-mark` (`#141516`, `#34343a`, `#828fff` `=>` arrow) in `web-docs/assets/` (`favicon.svg`, `favicon-32x32.png`, `favicon.ico`, `apple-touch-icon.png`) and linked them across all 4 HTML pages.
+  - Updated `README.md` with live showcase badge/links (`https://iosevka-mayukai.github.io/sawala-mono-dev/`), enabled the public GitHub Release badge, added Pages deploy badge, removed `Private Development` badge, and corrected Linux `.ttf` copy path (`SawalaMono/TTF/*.ttf`).
+  - Executed `fast-track-mini-plan-2026-11-16.md`: upgraded `#comparison-slider-panel` with a mirrored 5-line JavaScript function (`const scan = ...` showcasing `A–Z`, `a–z`, `0–9`, `0O`, `1lI`, `=>`, `!==`, `===`) and a 6-font Google Fonts CDN selector (`JetBrains Mono`, `Inconsolata`, `Fira Mono`, `Reddit Mono`, `Victor Mono`, `Ubuntu Mono`) verified at `TOTAL: 27 | PASS: 27 | FAIL: 0` (`repro-review-findings.mjs`), `node --check` exit `0`, compiler seam clean, and live Chromium (`0` console/CSP errors, all 6 `.woff2` fonts HTTP 200).
+- **Dead-Ends (Do NOT Repeat):**
+  - **Attempted:** Pushing old shallow-grafted local `main` (`60e51ec`, parent `cea353b` in `.git/shallow`) to `github/main`.
+  - **Reason:** Shallow repository missing object `2487637bb71f41b2a66134afd9faa6c316e5a438` caused `remote unpack failed: index-pack failed`, and old `main` lacked `dev` history (`d0d45ce..HEAD`).
+  - **Correct Solution:** Push standalone `dev` history via `git push github dev:refs/heads/main`, then sync local `main` with `git fetch github && git branch -f main github/main`.
+- **Updated Files:**
+  - `index.html` — Removed version badges/captions, pointed distributions to Releases page, wired favicons, scoped Google Fonts CSP (`fonts.googleapis.com` / `fonts.gstatic.com`), added 6-font comparison selector & full-alphabet JS specimen
+  - `web-docs/js/main.js` — Added `COMPARISON_FONTS` & `setComparisonFont` controller inside `initComparisonSlider`
+  - `web-docs/js/distribution-cards.js` — Switched `RELEASES_PAGE_URL` routing across both Normal and SemiExtended scopes
+  - `web-docs/css/showcase.css` — Removed `.distribution-card__archive`, added `.comparison-font-bar` & `[data-comparison-font]` font/ligature mapping with `white-space: pre` code lines
+  - `web-docs/css/typography.css` — Cleaned up unused `.top-nav__brand .status-badge` mobile rule
+  - `web-docs/assets/{favicon.svg,favicon-32x32.png,favicon.ico,apple-touch-icon.png}` — Created brand favicons
+  - `web-docs/pages/{distributions,installation,ligatures}.html` — Linked favicons, removed `v1.0.0` navbar/footer labels, updated release links/CLI `<tag>` placeholders
+  - `README.md` — Replaced `Private Development` badge with live Release + Pages + Web Docs links/badges and accurate Linux TTF path
+  - `docs/spec/sawala-mono-showcase-web-spec.md`, `docs/plan/sawala-mono-showcase-web-plan.md`, `docs/plan/fast-track-mini-plan-2026-11-16.md`, `docs/reviews/sawala-mono-showcase-web-review.md`, `docs/bug-reports/sawala-mono-showcase-web-bugfix.md` — Synced spec, plan, review (`GO`), bugfix (`Resolved`), and mini-plan (`Completed`)
+- **Decisions Made:**
+  - Loaded the 6 comparison baseline fonts (`JetBrains Mono`, `Inconsolata`, `Fira Mono`, `Reddit Mono`, `Victor Mono`, `Ubuntu Mono`) via Google Fonts CDN (`wght@400&display=swap`), scoping CSP `fonts.googleapis.com`/`fonts.gstatic.com` exclusively to `index.html` while keeping documentation subpages strictly `'self'`.
+  - Decoupled static showcase release CTAs to GitHub Releases landing page rather than hardcoding tag-specific `.zip` URLs on cards.
+- **Next Action / Pending:**
+  - Commit all uncommitted showcase, favicon, `README.md`, spec/plan, and memory updates on `dev` and push to `github dev` and `github dev:refs/heads/main` for GitHub Pages deployment.
+
+<!-- checkpoint-tail: Completed Iteration 2 remediation (GO), Releases CTA decoupling, version badge removal, brand favicons, README live links, and 6-font full-alphabet JS comparison switcher; ready to commit and push to dev/main. -->
+
+
+---
+
+## 📝 Session Checkpoint: 2026-11-18 (Sawala Ligar Mono Variant: Plan Clarification, Implementation & Iteration 2 Review GO)
+
+- **Active Memory Path:** `.agents/instructions/memory.instructions.md`
+- **Current SDLC Phase:** Phase 4: Code Review Complete (Iteration 2 `GO`) ➔ Gate: Tier 2 Human Approval (`>= 2 Approvals`) & GitHub Actions CI Compilation
+- **Active Artifacts:**
+  - `docs/discovery/sawala-ligar-mono-discovery.md` — Status: ✅ Finalized (committed at `60a007f`)
+  - `docs/spec/sawala-ligar-mono-spec.md` — Status: ✅ Approved (`v1.1.0`, committed at `60a007f`)
+  - `docs/audit/sawala-ligar-mono-spec-clarification.md` — Status: ✅ Finalized (Readiness Score: 100/100, committed at `60a007f`)
+  - `docs/audit/sawala-ligar-mono-plan-clarification.md` — Status: ✅ Finalized (Readiness Score: 100/100, committed at `60a007f`)
+  - `docs/plan/sawala-ligar-mono-plan.md` — Status: 🔄 In Progress (`v1.1.0`, `TASK-001`–`TASK-010` implemented, `TASK-011` `APPROVAL` open pending human sign-off)
+  - `docs/reviews/sawala-ligar-mono-review.md` — Status: ✅ Approved (Iteration 2 `GO`: `0 [Important]`, `0 [Nit]`, `3 [Pre-existing]`; Tier 2 `[MANDATORY HUMAN AUDIT REQUIRED]`)
+- **Achieved Milestones:**
+  - Refined and clarified `docs/plan/sawala-ligar-mono-plan.md` (`PLAN-CLARIFY-001`, 100/100 readiness), locking binary `.ttf` compilation exclusively to GitHub Actions while keeping local engine/static checks deterministic.
+  - Added `[buildPlans.SawalaLigarMono]` (`private-build-plans.toml:152-248`) inheriting `ss20`, `default-calt`, `29` `design` + `27` `italic` keys with explicit `italic.k = "cursive-serifless"`, verified directly against `packages/param/src/variant.mjs` & `ligation.mjs` (`variantsResolved=535, calt=35` across all 3 plans, `0` errors).
+  - Updated `.github/workflows/build.yml` (`- SawalaLigarMono`, `timeout-minutes: 150`) and `.github/workflows/patch-nerd-font.yml` (`Sawala*.zip`, `${VARIANT}-*.zip` exact-prefix filter, `timeout-minutes: 150`, and `VARIANT="all"` `CUSTOM_NAME` collision guard at lines `211-236`).
+  - Updated `README.md` (all 6 variants including TOC anchor sync at line `35` -> `237`) and `docs/ARCHITECTURE.md` (`<fmt>::SawalaMono[NL] / Ligar` at line `71`), keeping `SawalaMono`, `SawalaMonoNL`, `packages/*`, `verdafile.mjs`, `index.html`, and `web-docs/` untouched (`CON-003`).
+  - Completed Iteration 1 adversarial review (`NO-GO`: 2 `[Important]`, 2 `[Nit]`), remediated all 4 findings via `/to-code`, and verified Iteration 2 `GO` (`20/20` README anchors valid, `7/7` Node `CUSTOM_NAME` assertions passed, `2/2` `yaml.safe_load` valid, `git diff --shortstat`: `6 files changed, 190 insertions(+), 64 deletions(-)`, `git diff --check` clean).
+- **Dead-Ends (Do NOT Repeat):**
+  - **Attempted:** Generic `CUSTOM_NAME` substitution matching only `"Mono"` under `VARIANT="all"` and editing a `README.md` heading (`line 237`) without updating its matching Table of Contents anchor (`line 35`).
+  - **Reason:** Generic `"Mono"` replacement breaks `"SawalaMono NF"` into `"SawalaLigar Mono NF"` and causes cross-variant name collision when `CUSTOM_NAME` includes `'NL'` or `'Ligar'` under `VARIANT="all"`; out-of-sync TOC links silently break in-page navigation.
+  - **Correct Solution:** Replace `" Mono"` before `"Mono"` and fail-fast when `VARIANT="all"` receives `'NL'`/`'Ligar'` tokens in `CUSTOM_NAME`; run an internal anchor check whenever `README.md` headings change. Also remember local host lacks `node_modules`/`docker` (defer live TTF/Docker builds to GitHub Actions per `PLAN-CLARIFY-001`).
+- **Updated Files:**
+  - `private-build-plans.toml` — Added `[buildPlans.SawalaLigarMono]` (`ss20`, `default-calt`, `italic.k = "cursive-serifless"`)
+  - `.github/workflows/build.yml` — Added `SawalaLigarMono` dispatch option and raised `timeout-minutes` to `150`
+  - `.github/workflows/patch-nerd-font.yml` — Added `SawalaLigarMono` support, exact `${VARIANT}-*.zip` isolation, `150m` timeout, and `CUSTOM_NAME` multi-variant guard
+  - `README.md` — Documented `Sawala Ligar Mono` and `Sawala Ligar Mono NF` across TOC, variant tables, release assets, and Build Methods A–D
+  - `docs/ARCHITECTURE.md` — Added `SawalaLigarMono` build target reference without implying non-existent `SawalaLigarMonoNL`
+  - `docs/plan/sawala-ligar-mono-plan.md` — Updated task completion (`TASK-001`–`TASK-010`) while keeping `status: "In Progress"` and `TASK-011` open for human approval
+  - `docs/reviews/sawala-ligar-mono-review.md` — Created Iteration 1 audit (`NO-GO`) and updated Iteration 2 delta audit (`GO`, `0` blocking findings, Tier 2 human gate)
+  - `.agents/instructions/memory.instructions.md` — Appended session checkpoint for 2026-11-18
+- **Decisions Made:**
+  - Locked `SawalaLigarMono` Wave 1 scope strictly to `SawalaLigarMono` + `SawalaLigarMono NF`; deferred `Sawala Ligar Mono NL`, `index.html`, and `web-docs/` out of Wave 1 (`CON-003`).
+  - Confirmed CI-only binary TTF compilation and Nerd Font patching on GitHub Actions (`PLAN-CLARIFY-001`) instead of local Windows execution.
+  - Agreed `README.md` needs no extra `/to-docs` pass now; defer `/to-docs` until post-CI Release Notes or optional PR description if desired.
+- **Next Action / Pending:**
+  - Obtain `>= 2` human approvals (Tier 2 `[MANDATORY HUMAN AUDIT REQUIRED]` for `.github/workflows/*`) and close `TASK-011`.
+  - Selectively stage and commit working-tree files (`private-build-plans.toml`, `.github/workflows/build.yml`, `.github/workflows/patch-nerd-font.yml`, `README.md`, `docs/ARCHITECTURE.md`, `docs/plan/sawala-ligar-mono-plan.md`, `docs/reviews/sawala-ligar-mono-review.md`, `.agents/instructions/memory.instructions.md`).
+  - Push and trigger `.github/workflows/build.yml` (`variant: SawalaLigarMono` or `all`) and `.github/workflows/patch-nerd-font.yml` on GitHub Actions to verify runtime `AC-002`–`AC-004`.
+
+<!-- checkpoint-tail: Completed SawalaLigarMono implementation and Iteration 2 review (Verdict: GO, 0 blocking findings); ready for Tier 2 human sign-off, commit, and GitHub Actions CI build/patch verification. -->

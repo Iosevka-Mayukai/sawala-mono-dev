@@ -17,6 +17,7 @@ on:
           - all
           - SawalaMono
           - SawalaMonoNL
+          - SawalaLigarMono
       patch_mode:
         description: 'Nerd Font patch preset'
         required: true
@@ -47,7 +48,7 @@ jobs:
   patch:
     name: Patch Font with Nerd Fonts Patcher
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 150
 
     steps:
       - name: Checkout Repository
@@ -87,16 +88,14 @@ jobs:
           mkdir -p raw_archives in_raw in out archives
 
           echo "Downloading base font archives for release: $TARGET_TAG (Variant: $VARIANT)"
-          gh release download "$TARGET_TAG" --pattern "*SawalaMono*.zip" --dir raw_archives
+          gh release download "$TARGET_TAG" --pattern "Sawala*.zip" --dir raw_archives
 
           # Exclude any previously uploaded Nerd Font patched archives
           rm -f raw_archives/*NF*.zip raw_archives/*-NF-*.zip
 
-          # Filter base archives by selected variant
-          if [ "$VARIANT" = "SawalaMono" ]; then
-            rm -f raw_archives/*SawalaMonoNL*.zip
-          elif [ "$VARIANT" = "SawalaMonoNL" ]; then
-            find raw_archives -type f -name "*.zip" ! -name "*SawalaMonoNL*.zip" -delete
+          # Filter base archives by selected variant using exact prefix delimiter
+          if [ "$VARIANT" != "all" ]; then
+            find raw_archives -type f -name "*.zip" ! -name "${VARIANT}-*.zip" -delete
           fi
 
           ZIP_COUNT=$(find raw_archives -name "*.zip" | wc -l)
@@ -127,7 +126,7 @@ jobs:
           echo "Selected Font Scope: $SCOPE | Variant: $VARIANT"
 
           if [ "$VARIANT" = "all" ]; then
-            VARIANTS=("SawalaMono" "SawalaMonoNL")
+            VARIANTS=("SawalaMono" "SawalaMonoNL" "SawalaLigarMono")
           else
             VARIANTS=("$VARIANT")
           fi
@@ -210,12 +209,26 @@ jobs:
             fi
 
             if [ -n "$CUSTOM_NAME" ]; then
+              if [ "$VARIANT" = "all" ] && { [[ "$CUSTOM_NAME" == *"NL"* ]] || [[ "$CUSTOM_NAME" == *"Ligar"* ]]; }; then
+                echo "::error::Do not include variant-specific tokens ('NL' or 'Ligar') in custom_name when variant='all'. Use a single variant or pass a base name such as 'Sawala Mono NF'."
+                exit 1
+              fi
               VARIANT_CUSTOM_NAME="$CUSTOM_NAME"
-              if [ "$VARIANT" = "all" ] && [ "$v" = "SawalaMonoNL" ] && [[ "$CUSTOM_NAME" != *"NL"* ]]; then
+              if [ "$VARIANT" = "all" ] && [ "$v" = "SawalaMonoNL" ]; then
                 if [[ "$CUSTOM_NAME" == *" NF" ]]; then
                   VARIANT_CUSTOM_NAME="${CUSTOM_NAME% NF} NL NF"
                 else
                   VARIANT_CUSTOM_NAME="${CUSTOM_NAME} NL"
+                fi
+              elif [ "$VARIANT" = "all" ] && [ "$v" = "SawalaLigarMono" ]; then
+                if [[ "$CUSTOM_NAME" == *" Mono"* ]]; then
+                  VARIANT_CUSTOM_NAME="${CUSTOM_NAME/ Mono/ Ligar Mono}"
+                elif [[ "$CUSTOM_NAME" == *"Mono"* ]]; then
+                  VARIANT_CUSTOM_NAME="${CUSTOM_NAME/Mono/LigarMono}"
+                elif [[ "$CUSTOM_NAME" == *" NF" ]]; then
+                  VARIANT_CUSTOM_NAME="${CUSTOM_NAME% NF} Ligar NF"
+                else
+                  VARIANT_CUSTOM_NAME="${CUSTOM_NAME} Ligar"
                 fi
               fi
               echo "[$v] Custom Font Name Override: $VARIANT_CUSTOM_NAME"

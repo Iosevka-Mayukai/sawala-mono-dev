@@ -51,6 +51,7 @@ n = "earless-corner-straight-serifless"
 paren = "large-contour"
 t = "flat-hook-short-neck"
 u = "toothless-rounded-serifless"
+y = "cursive-serifless"
 zero = "tall-reverse-slashed"
 
 [buildPlans.SawalaMono.widths.Normal]
@@ -123,6 +124,7 @@ n = "earless-corner-straight-serifless"
 paren = "large-contour"
 t = "flat-hook-short-neck"
 u = "toothless-rounded-serifless"
+y = "cursive-serifless"
 zero = "tall-reverse-slashed"
 
 [buildPlans.SawalaMonoNL.widths.Normal]
@@ -146,3 +148,101 @@ angle = 9.4
 css = "italic"
 menu = "italic"
 shape = "italic"
+
+###################################################################################################
+# 3. Sawala Ligar Mono (Selective-Curly Variant with Rich Programming Ligatures)
+###################################################################################################
+[buildPlans.SawalaLigarMono]
+family = "Sawala Ligar Mono"
+spacing = "normal"
+serifs = "sans"
+noCvSs = true
+exportGlyphNames = false
+
+[buildPlans.SawalaLigarMono.ligations]
+inherits = "default-calt"
+
+[buildPlans.SawalaLigarMono.variants]
+inherits = "ss20"
+
+[buildPlans.SawalaLigarMono.variants.design]
+one = "no-base-long-top-serif"
+four = "closed-serifless"
+seven = "curly-serifless"
+zero = "reverse-slashed"
+a = "double-storey-tailed"
+b = "toothed-serifless"
+d = "toothed-serifless"
+f = "flat-hook-serifed"
+g = "double-storey"
+i = "serifed"
+j = "flat-hook-serifed"
+k = "straight-serifless"
+l = "serifed"
+m = "earless-corner-double-arch-serifless"
+n = "straight-serifless"
+p = "eared-serifless"
+q = "straight-serifless"
+r = "serifed"
+s = "serifless"
+t = "flat-hook"
+u = "toothed-serifless"
+v = "straight-serifless"
+w = "straight-serifless"
+x = "curly-serifless"
+y = "straight-turn-serifless"
+z = "curly-serifless"
+punctuation-dot = "round"
+paren = "large-contour"
+brace = "curly-flat-boundary"
+
+[buildPlans.SawalaLigarMono.variants.italic]
+one = "no-base-long-top-serif"
+four = "closed-serifless"
+zero = "reverse-slashed"
+a = "single-storey-tailed"
+b = "toothed-serifless"
+d = "toothed-serifless"
+f = "flat-hook-tailed"
+g = "single-storey-serifless"
+i = "serifed-semi-tailed"
+j = "flat-hook-serifed"
+k = "cursive-serifless"
+l = "serifed-semi-tailed"
+m = "earless-corner-double-arch-serifless"
+n = "earless-corner-straight-serifless"
+p = "earless-corner-serifless"
+q = "earless-corner-straight-serifless"
+r = "base-serifed"
+s = "serifless"
+t = "flat-hook"
+u = "toothed-serifless"
+v = "curly-serifless"
+w = "curly-serifless"
+x = "curly-serifless"
+y = "cursive-serifless"
+z = "curly-serifless"
+paren = "large-contour"
+brace = "curly-flat-boundary"
+
+[buildPlans.SawalaLigarMono.widths.Normal]
+shape = 500
+menu = 5
+css = "normal"
+
+[buildPlans.SawalaLigarMono.widths.SemiExtended]
+shape = 548
+menu = 6
+css = "semi-expanded"
+
+[buildPlans.SawalaLigarMono.slopes.Upright]
+angle = 0
+shape = "upright"
+menu = "upright"
+css = "normal"
+
+[buildPlans.SawalaLigarMono.slopes.Italic]
+angle = 9.4
+shape = "italic"
+menu = "italic"
+css = "italic"
