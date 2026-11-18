@@ -1,7 +1,7 @@
 ---
 goal: Repository Architecture and Clean Architecture Seams Documentation
 date_created: 2026-11-09
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 status: 'Active'
 tags: ["architecture", "clean-architecture", "polya-topography", "system-map", "iosevka-sawalamono"]
 ---
@@ -17,23 +17,25 @@ This document serves as the canonical architectural map of the repository. It ou
 
 ## 1. Executive Overview & Domain Context
 
-- **System Purpose:** Iosevka Sawala Mono is a tailored, developer-centric monospace coding typeface built upon the modular Iosevka (v34.9.1) parametric font compilation engine. The engine transforms declarative typographical parameters, variant selections, and Patel glyph vector scripts into production-ready OpenType/TrueType font packages across four canonical distributions:
+- **System Purpose:** Iosevka Sawala Mono is a tailored, developer-centric monospace coding typeface built upon the modular Iosevka (v34.9.1) parametric font compilation engine. The engine transforms declarative typographical parameters, variant selections, and Patel glyph vector scripts into production-ready OpenType/TrueType font packages across six canonical distributions:
   1. **`Sawala Mono`**: Standard monospace family featuring rich, context-aware programming ligatures (`=>`, `!==`, `->`, `::`, etc.).
   2. **`Sawala Mono NL`**: *No Ligatures* variant designed for developers requiring strict symbolic separation without contextual character merging.
-  3. **`Sawala Mono NF`**: *Nerd Font* distribution injecting ~10,000+ developer and powerline icons into `Sawala Mono`.
-  4. **`Sawala Mono NL NF`**: *Nerd Font No Ligatures* distribution combining the unligated glyph structure with developer icons.
+  3. **`Sawala Ligar Mono`**: Selective-curly (`ss20`-derived) monospace family featuring expressive curved diagonals and `default-calt` programming ligatures.
+  4. **`Sawala Mono NF`**: *Nerd Font* distribution injecting ~10,000+ developer and powerline icons into `Sawala Mono`.
+  5. **`Sawala Mono NL NF`**: *Nerd Font No Ligatures* distribution combining the unligated glyph structure with developer icons.
+  6. **`Sawala Ligar Mono NF`**: *Nerd Font* distribution injecting ~10,000+ developer and powerline icons into `Sawala Ligar Mono`.
 - **Domain Ubiquitous Language:**
   - **Glyph / Contour / Anchor:** Fundamental geometric entities representing outline paths, on/off-curve coordinates, and attachment points for diacritics.
-  - **Variant:** Discrete design choices for individual glyphs (e.g., `double-storey-tailed` `'a'` in design / `single-storey-earless-corner-tailed` in italic, `reverse-slashed` `'0'` in design / `tall-reverse-slashed` in italic, `toothless-corner-serifless` `'b'`/`'d'`, `serifed-semi-tailed` `'i'`/`'l'` in italic, inheriting `ss03` baseline) defined in `params/variants.toml` and selected in `private-build-plans.toml`.
+  - **Variant:** Discrete design choices for individual glyphs (e.g., `double-storey-tailed` `'a'` in design / `single-storey-earless-corner-tailed` in italic, `reverse-slashed` `'0'` in design / `tall-reverse-slashed` in italic, `toothless-corner-serifless` `'b'`/`'d'`, `serifed-semi-tailed` `'i'`/`'l'` in italic, inheriting `ss03` baseline for `SawalaMono`/`SawalaMonoNL` or `ss20` baseline for `SawalaLigarMono`) defined in `params/variants.toml` and selected in `private-build-plans.toml`.
   - **Ligation / CALT:** Contextual Alternates OpenType features transforming programming symbol sequences into cohesive ligature glyphs.
-  - **Build Plan:** Declarative specification specifying family name, weights, slopes, widths, export formats, and variant substitutions. Defined as dual sibling plans: `[buildPlans.SawalaMono]` and `[buildPlans.SawalaMonoNL]`.
+  - **Build Plan:** Declarative specification specifying family name, weights, slopes, widths, export formats, and variant substitutions. Defined as three plans: `[buildPlans.SawalaMono]`, `[buildPlans.SawalaMonoNL]`, and `[buildPlans.SawalaLigarMono]`.
   - **Width Grades:** Two configured advance width grades: `Normal` (shape: 500, menu: 5, css: "normal") and `SemiExtended` (shape: 548, menu: 6, css: "semi-expanded").
   - **Slopes:** Two typographical slopes: `Upright` (angle: 0°, upright geometry) and `Italic` (angle: 9.4°, true cursive italic forms).
   - **Font Scopes:** Packaging scopes for compilation and patching: `core` (8 Normal coding weights), `extended-core` (8 SemiExtended coding weights), and `all` (all 36 weights across the matrix).
   - **Verda Task Graph:** Reactive, self-tracking dependency build engine (implemented in `verdafile.mjs`) orchestrating compilation rules across worker threads.
   - **Nerd Font Patching:** Decoupled containerized post-processing pipeline using FontForge to inject developer symbols into pre-compiled TrueType fonts.
 - **Target Environments:** Desktop developer operating systems (Windows, macOS, Linux terminals and IDEs), web typography (self-hosted WOFF2 webfonts), and static GitHub Pages documentation (`index.html`, `web-docs/`).
-- **Licensing & Distribution Boundary:** Licensed under the SIL Open Font License 1.1 (`LICENSE.md`), permitting free use, modification, and redistribution across all four font distributions.
+- **Licensing & Distribution Boundary:** Licensed under the SIL Open Font License 1.1 (`LICENSE.md`), permitting free use, modification, and redistribution across all six font distributions.
 
 ---
 
@@ -66,13 +68,13 @@ This document serves as the canonical architectural map of the repository. It ou
 │ [ build.yml (manual) ]      [ patch-nerd-font.yml (manual) ]   [ pages.yml (push/main) ]
 └──────────────┬───────────────────────────────┬────────────────────────────┬────────────┘
                │ npm run build --              │ gh release download        │ stage _site/
-               │ <fmt>::SawalaMono[NL]         │ -> fontforge patch         │ (static copy)
+               │ <fmt>::SawalaMono[NL] / Ligar │ -> fontforge patch         │ (static copy)
                ▼                               ▼                            ▼
 ┌──────────────────────────────┐ ┌──────────────────────────────┐ ┌──────────────────────┐
 │  Primary Compiler Pipeline   │ │ Nerd Font Container Patcher  │ │ Static Web Showcase  │
 │ [ Docker: iosevka-builder ]  │ │ [ Docker: nerdfonts/patcher] │ │ [ index + web-docs ] │
 │ • verdafile.mjs (Task Graph) │ │ • Scope: core|ext-core|all   │ │ • Zero-build ES/CSS  │
-│ • SawalaMono & SawalaMonoNL  │ │ • Injects ~10,000+ dev icons │ │ • Tier A WOFF2 fonts │
+│ • SawalaMono / NL / Ligar    │ │ • Injects ~10,000+ dev icons │ │ • Tier A WOFF2 fonts │
 │ • ot-builder + ttfautohint   │ │ • Enforces --mono & PN=2     │ │ • Strict CSP + .noj. │
 └──────────────┬───────────────┘ └──────────────┬───────────────┘ └──────────┬───────────┘
                │                                │                            │
@@ -81,13 +83,14 @@ This document serves as the canonical architectural map of the repository. It ou
 │     Base Font Packages       │ │   Nerd Font Distributions    │ │  GitHub Pages Live   │
 │ • dist/SawalaMono (TTF/WOFF2)│ │ • SawalaMono-NF-*.zip        │ │ • Landing + 3 Guides │
 │ • dist/SawalaMonoNL          │ │ • SawalaMonoNL-NF-*.zip      │ │ • Interactive Tester │
+│ • dist/SawalaLigarMono       │ │ • SawalaLigarMono-NF-*.zip   │ │   (Sawala Mono/NL)   │
 └──────────────┬───────────────┘ └──────────────┬───────────────┘ └──────────────────────┘
                │                                │
                └───────────────┬────────────────┘
                                ▼
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                         GitHub Releases / Distribution Hub                             │
-│        [ Sawala Mono | Sawala Mono NL | Sawala Mono NF | Sawala Mono NL NF ]           │
+│  [ Sawala Mono | Sawala Mono NL | Sawala Ligar Mono | ...NF | ...NL NF | ...Ligar NF ] │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -113,7 +116,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 ### 4.1 Layer Breakdown
 
 - **Domain Layer (`packages/glyph/`, `packages/geometry/`, `params/`, `private-build-plans.toml`):**
-  - **Contains:** Pure geometric models (`Point`, `Segment`, `Bezier`, `Box`), mathematical curve utilities (`quadify`, `spiro-pen-expand`), foundational glyph data structures (`Glyph`, `Store`, `Relation`), declarative domain tables (`variants.toml`, `parameters.toml`, `ligation-set.toml`), and the active dual-plan specifications (`[buildPlans.SawalaMono]` and `[buildPlans.SawalaMonoNL]`).
+  - **Contains:** Pure geometric models (`Point`, `Segment`, `Bezier`, `Box`), mathematical curve utilities (`quadify`, `spiro-pen-expand`), foundational glyph data structures (`Glyph`, `Store`, `Relation`), declarative domain tables (`variants.toml`, `parameters.toml`, `ligation-set.toml`), and the active build plan specifications (`[buildPlans.SawalaMono]`, `[buildPlans.SawalaMonoNL]`, and `[buildPlans.SawalaLigarMono]`).
   - **Invariant:** Zero dependencies on external file serialization formats, CLI flags, or OpenType binary tables.
 - **Application Layer (`packages/font-glyphs/`, `packages/font-otl/`, `packages/param/`, `packages/font-kits/`, `packages/geometry-cache/`, `packages/util/`):**
   - **Contains:** Parametric character drawing scripts in Patel DSL (`letter/*.ptl`, `symbol/*.ptl`), OpenType feature compilers (`gsub-ligation.ptl`, `gsub-cv-ss.ptl`), parameter resolver (`variant.mjs`, `ligation.mjs`, `subset-filter.mjs`), high-level geometry kits (`boole-kit`, `spiro-kit`), math/interpolation helpers (`packages/util/`), and caching workers.
@@ -138,7 +141,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 #### Phase A: Base Font Compilation (`build.yml` or Local Docker)
 ```text
 1. Trigger / Build Invocation
-   └── User or CI executes `npm run build -- ttf::all` (or specific `ttf::SawalaMono` / `ttf::SawalaMonoNL`).
+   └── User or CI executes `npm run build -- ttf::all` (or `ttf::SawalaMono` / `ttf::SawalaMonoNL` / `ttf::SawalaLigarMono`).
 2. Plan Ingestion & Parameter Resolution
    └── `verdafile.mjs` reads `build-plans.toml` and overlays `private-build-plans.toml`.
    └── `packages/param` validates variants against `params/variants.toml` and resolves weights/widths.
@@ -146,7 +149,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
    └── `verda` invokes `patel-c` to compile `.ptl` scripts in `packages/font-glyphs`.
    └── Glyph contours are evaluated using `packages/geometry` and stored in `packages/glyph`.
 4. OpenType Layout Feature Assembly
-   └── `packages/font-otl` compiles GSUB lookup tables (ligatures for SawalaMono; bypassed for SawalaMonoNL) and GPOS mark positioning.
+   └── `packages/font-otl` compiles GSUB lookup tables (ligatures for SawalaMono and SawalaLigarMono; bypassed for SawalaMonoNL) and GPOS mark positioning.
 5. OpenType Data Conversion, Pruning & Post-Processing (`packages/font/src/index.mjs`, `build-font/index.mjs`)
    └── `cleanup/` eliminates unreachable glyphs; `otd-conv/` maps domain glyphs into OTD using `@iosevka/geometry-cache`.
    └── `hb-compat-ligature/`, `post-processing/`, `ttfa-controls/`, and `validate/metrics.mjs` finalize tables, hinting controls, and monospace invariants.
@@ -154,7 +157,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
    └── `font-io/` (`ot-builder`) compiles OTD into TrueType binary (`.ttf`) alongside gzipped `@msgpack/msgpack` charmap and geometry cache updates.
    └── `ttfautohint` processes TrueType instructions using generated `ttfaControls` for crisp rendering.
 7. Base Output Delivery
-   └── Compiled fonts are saved to `dist/SawalaMono/` and `dist/SawalaMonoNL/`, packaged into `.zip` archives, and published to GitHub Releases.
+   └── Compiled fonts are saved to `dist/SawalaMono/`, `dist/SawalaMonoNL/`, and `dist/SawalaLigarMono/`, packaged into `.zip` archives, and published to GitHub Releases.
 ```
 
 #### Phase B: Decoupled Nerd Font Patching (`patch-nerd-font.yml`, ADR-0002)
@@ -162,12 +165,12 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 1. On-Demand Dispatch Trigger
    └── Operator triggers `patch-nerd-font.yml` targeting a published release tag (e.g., `latest` or `v1.0.0`).
 2. Release Asset Acquisition
-   └── Workflow downloads base TrueType archives (`SawalaMono-<tag>.zip`, `SawalaMonoNL-<tag>.zip`) via `gh release download`.
+   └── Workflow downloads base TrueType archives (`SawalaMono-<tag>.zip`, `SawalaMonoNL-<tag>.zip`, `SawalaLigarMono-<tag>.zip`) via `gh release download` (`--pattern "Sawala*.zip"`).
 3. Parallel Containerized Patching
    └── Docker runner executes `nerdfonts/patcher:latest` with `--mono` flag and parallel workers (`PN=2`).
    └── Injects Font Awesome, Material Design Icons, Octicons, and Powerline glyphs into base fonts.
 4. Release Re-Attachment
-   └── Patched fonts are bundled into `SawalaMono-NF-<tag>.zip` and `SawalaMonoNL-NF-<tag>.zip`.
+   └── Patched fonts are bundled into `SawalaMono-NF-<tag>.zip`, `SawalaMonoNL-NF-<tag>.zip`, and `SawalaLigarMono-NF-<tag>.zip`.
    └── Uploaded directly to the existing GitHub Release via `gh release upload --clobber`.
 ```
 
@@ -206,7 +209,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 │   ├── ISSUE_TEMPLATE/      # Issue templates (bug, feature, character/variant/ligation requests)
 │   ├── PULL_REQUEST_TEMPLATE/ # PR templates (character addition & variant checklists)
 │   └── workflows/
-│       ├── build.yml        # CI/CD compiler pipeline for Sawala Mono & Sawala Mono NL
+│       ├── build.yml        # CI/CD compiler pipeline for Sawala Mono, Sawala Mono NL & Sawala Ligar Mono
 │       ├── pages.yml        # Automated GitHub Pages deployment for static web showcase (CON-008)
 │       └── patch-nerd-font.yml # Decoupled containerized Nerd Font patching pipeline (ADR-0002)
 ├── doc/                     # Essential font variant & ligation reference documentation
@@ -255,7 +258,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 ├── index.html               # Root GitHub Pages interactive showcase landing page
 ├── sawala-mono-hero-img.jpg # Hero & Open Graph preview banner image
 ├── build-plans.toml         # Upstream baseline build plans (Required by verdafile per ADR-0001)
-├── private-build-plans.toml # Dual build plan specification (SawalaMono & SawalaMonoNL)
+├── private-build-plans.toml # Active build plan specifications (SawalaMono, SawalaMonoNL & SawalaLigarMono)
 ├── package.json             # Root npm monorepo manifest and script definitions
 ├── biome.json               # Biome linter & formatter configuration
 ├── DESIGN.md                # Linear-inspired product canvas tokens & specimen design system
@@ -271,7 +274,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 | `packages/glyph/` | Glyph, contour, and metric domain models | Entities (Core Domain) | None | Pure JS; no build tools or IO imports |
 | `packages/geometry/` | Vector math, points, curves, and transformations | Entities (Core Domain) | None | Pure mathematical functions |
 | `params/` | Declarative typography parameters (TOML) | Entities (Core Domain) | None | Pure data tables; syntax validated via TOML parser |
-| `private-build-plans.toml` | Sawala Mono & Sawala Mono NL specifications | Entities (Core Domain) | None | Must define valid variant keys from `variants.toml` |
+| `private-build-plans.toml` | Sawala Mono, Sawala Mono NL & Sawala Ligar Mono specifications | Entities (Core Domain) | None | Must define valid variant keys from `variants.toml` |
 | `packages/font-glyphs/` | Glyph outline drawing rules (Patel DSL) | Use Cases | `packages/geometry`, `packages/glyph`, `packages/param` | Written in `.ptl`; compiled by `patel-c` |
 | `packages/font-otl/` | OpenType Layout feature assembly | Use Cases | `packages/glyph`, `packages/param` | Defines GSUB/GPOS lookup tables |
 | `packages/param/` | Variant and metric resolution | Use Cases | `params/`, `packages/util` | Interprets build plans against parameter tables |
@@ -292,7 +295,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 
 - **Build Engine Orchestrator:** `verdafile.mjs` — Bootstraps the `verda` reactive task graph, defines build targets (`ttf::*`, `woff2::*`), and manages parallel node worker jobs.
 - **Font Worker Entrypoint:** `packages/font/src/index.mjs` (delegating to `build-font/index.mjs`) — Per-variant font assembly pipeline invoked by `verdafile.mjs` to resolve parameters, load/save gzipped MessagePack geometry caches, and serialize `.ttf` binaries.
-- **Sawala Mono Dual Specifications:** `private-build-plans.toml` — Defines the active configurations for both `SawalaMono` and `SawalaMonoNL`, their variant mappings, width grades, and slope settings.
+- **Sawala Mono Build Specifications:** `private-build-plans.toml` — Defines the active configurations for `SawalaMono`, `SawalaMonoNL`, and `SawalaLigarMono`, their variant mappings, width grades, and slope settings.
 - **Baseline Build Plan (ADR-0001):** `build-plans.toml` — Upstream build plan retained to satisfy `verdafile.mjs:157,159` parsing requirements.
 - **Root Monorepo Manifest:** `package.json` — Defines workspaces (`packages/*`, `tools/*`), dependencies (`verda`, `ot-builder`, `patel`), and lifecycle scripts (`npm run build`, `npm run lint`, `npm run clean`, `npm run bump-ver`).
 - **Linter & Formatter Config:** `biome.json` — Governs code formatting and linting rules across 97 scoped `.mjs` files (`packages/*/src/**/*.mjs`, `tools/*/src/**/*.mjs`, `verdafile.mjs`).
@@ -300,7 +303,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 - **Static Showcase Entry & Orchestrator:** `index.html`, `.nojekyll`, and `web-docs/js/main.js` — Serves the zero-build interactive landing page, loads Tier A WOFF2 webfonts, and initializes modular UI controllers and subpage helpers.
 - **Container Compiler Context:** `docker/Dockerfile` and `docker/build.sh` — Defines the portable Linux build environment with `ttfautohint`. By default, `ENTRYPOINT` runs `/build.sh` (which downloads upstream `be5invis/Iosevka` tarballs into `/iosevka` and overlays `private-build-plans.toml`); fork compilation in CI and local builds overrides `--entrypoint bash` to build `/work` directly.
 - **CI/CD Compiler Workflow:** `.github/workflows/build.yml` — Orchestrates container builds (`--entrypoint bash` on `/work`) and publishes base font release archives.
-- **Nerd Font Patch Pipeline:** `.github/workflows/patch-nerd-font.yml` — Decoupled containerized patcher pipeline using Docker (`nerdfonts/patcher:latest`) to generate and attach `Sawala Mono NF` assets.
+- **Nerd Font Patch Pipeline:** `.github/workflows/patch-nerd-font.yml` — Decoupled containerized patcher pipeline using Docker (`nerdfonts/patcher:latest`) to generate and attach `Sawala Mono NF`, `Sawala Mono NL NF`, and `Sawala Ligar Mono NF` assets.
 - **GitHub Pages Deploy Workflow:** `.github/workflows/pages.yml` — Stages `index.html`, `.nojekyll`, `sawala-mono-hero-img.jpg`, and `web-docs/` into `_site/` and deploys to GitHub Pages on pushes to `main`.
 - **Licensing Manifest:** `LICENSE.md` — SIL Open Font License 1.1 governing redistribution and modification rights.
 
@@ -326,7 +329,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 | **`check:fast` (Web)** | `< 5s` | Edits to `index.html` or `web-docs/` | `node -e "const fs=require('fs'),{execFileSync}=require('child_process');for(const f of fs.readdirSync('web-docs/js'))if(f.endsWith('.js'))execFileSync(process.execPath,['--check','web-docs/js/'+f])"` |
 | **`check:task`** | `< 90s` | End of each Vertical Tracer Bullet / Task | `npx @biomejs/biome check . && npm ls --workspaces` |
 | **`check:task` (Web)** | `< 30s` | Web Showcase / Design Token changes | `.agents/skills/impeccable/scripts/impeccable.cmd detect --json` |
-| **`check:full`** | `< 5m` | Macro Phase Checkpoint / `/to-review` / CI | `docker run --rm -v ${PWD}:/work --entrypoint bash iosevka-builder:latest -c "npm ci && npm run build -- ttf::SawalaMono ttf::SawalaMonoNL"` |
+| **`check:full`** | `< 5m` | Macro Phase Checkpoint / `/to-review` / CI | `docker run --rm -v ${PWD}:/work --entrypoint bash iosevka-builder:latest -c "npm ci && npm run build -- ttf::SawalaMono ttf::SawalaMonoNL ttf::SawalaLigarMono"` |
 
 > [!NOTE]
 > `biome.json` scopes `npx @biomejs/biome check .` exclusively to `packages/*/src/**/*.mjs`, `tools/*/src/**/*.mjs`, and `verdafile.mjs` (97 files). The `@iarna/toml` parse check in `check:fast` requires dependencies installed via `npm ci` (locally or inside the Docker builder). Static showcase assets (`index.html`, `web-docs/css/*.css`, `web-docs/js/*.js`) are outside Biome's include globs and are verified via `node --check`, `impeccable detect --json`, and browser/DOM assertions.
@@ -338,7 +341,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 | **Biome Lint Diagnostics (`.mjs` scope)** | `<= 3 errors / <= 5 warnings` (baseline upstream drift in `packages/font-kits` & `packages/util`) | Must not grow (`<= Ceiling 3e / 5w`, target `0`) | `npx @biomejs/biome check .` |
 | **Unused Upstream File Bloat** | `0 MB` (Excised per Spec REQ-001–006) | Must not regress (`<= 0`) | Repository file auditor |
 | **Workspace Resolution** | `0 errors` | Must remain 0 | `npm ls --workspaces` |
-| **Dual-Variant Build Integrity** | `100% valid TTF/WOFF2 output for both variants` | Must not fail | `verda -f verdafile.mjs ttf::SawalaMono ttf::SawalaMonoNL` |
+| **Multi-Variant Build Integrity** | `100% valid TTF/WOFF2 output for all active variants` | Must not fail | `verda -f verdafile.mjs ttf::SawalaMono ttf::SawalaMonoNL ttf::SawalaLigarMono` |
 
 ### 8.4 Approved Rule Exceptions (Time-Bounded)
 
@@ -352,7 +355,7 @@ Presentation & Static Web Showcase (Zero-Build Runtime)
 ## 9. Architectural Health & Known Seams
 
 - **Primary Seams (Extension Points):**
-  - **Dual Build Plans:** `private-build-plans.toml` provides the declarative entry points for customizing glyph shapes, ligature rules, and metric slopes for both `SawalaMono` and `SawalaMonoNL`.
+  - **Build Plans:** `private-build-plans.toml` provides the declarative entry points for customizing glyph shapes, ligature rules, and metric slopes for `SawalaMono`, `SawalaMonoNL`, and `SawalaLigarMono`.
   - **Glyph Variant Library:** `params/variants.toml` serves as the catalog of available character variations; new shape options can be introduced here.
   - **Patel Glyph Outlines:** `packages/font-glyphs/src/` contains the parametric outlines; adding new character blocks or language support takes place in this layer.
   - **Decoupled Patching Scope:** `.github/workflows/patch-nerd-font.yml` exposes parameter seams (`variant`, `font_scope`, `patch_mode`, `custom_name`) for generating specialized Nerd Font subfamilies.

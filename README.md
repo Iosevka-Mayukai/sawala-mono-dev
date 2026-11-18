@@ -32,7 +32,7 @@ A clean, ergonomic monospace coding typeface built on top of [Iosevka](https://g
 - [Building from Source](#building-from-source)
   - [Prerequisites](#prerequisites)
   - [Method A: GitHub Actions on Your Fork (Automated Cloud CI)](#method-a-github-actions-on-your-fork-automated-cloud-ci)
-  - [Method B: Generating Nerd Font (Sawala Mono NF / Sawala Mono NL NF) on Your Fork](#method-b-generating-nerd-font-sawala-mono-nf--sawala-mono-nl-nf-on-your-fork)
+  - [Method B: Generating Nerd Font (Sawala Mono NF / Sawala Mono NL NF / Sawala Ligar Mono NF) on Your Fork](#method-b-generating-nerd-font-sawala-mono-nf--sawala-mono-nl-nf--sawala-ligar-mono-nf-on-your-fork)
   - [Method C: Containerized Docker Build (Recommended)](#method-c-containerized-docker-build-recommended)
   - [Method D: Native Local Build](#method-d-native-local-build)
 - [Architecture & Customization](#architecture--customization)
@@ -49,17 +49,20 @@ In modern software development, code is written for people first and compilers s
 - **Human-Centric Reading:** High-distinction glyph shapes (such as clear slashed zeros, distinct brackets, and unambiguous punctuation) keep symbols crisp even at small font sizes.
 - **Natural Pronunciation:** The open three-syllable name (`Sa-wa-la`) is easy to pronounce globally and sits comfortably alongside monospace staples like *Iosevka*, *Fira*, and *Cascadia*.
 - **Dedicated Family Namespace:** Registered under its own font family name so it installs cleanly side-by-side with upstream Iosevka without font naming conflicts.
+- **Selective-Curly Sibling (*Sawala Ligar Mono*):** The *Ligar* line takes its name from the Sundanese word ***ligar*** (*blooming*, *opening gracefully*), softening selected diagonal strokes into fluid, expressive curves while retaining Sawala's monospace ergonomics and programming ligatures.
 
 ---
 
 ## Font Variants
 
-| Variant               | Description                                                                       | Recommended Environments                              |
-| :-------------------- | :-------------------------------------------------------------------------------- | :---------------------------------------------------- |
-| **Sawala Mono**       | Standard variant with rich programming ligatures (`=>`, `!==`, `->`, `::`, etc.). | Modern IDEs (VS Code, JetBrains IntelliJ / WebStorm). |
-| **Sawala Mono NL**    | *No Ligatures* variant for strict symbolic separation.                            | Developers preferring literal operator glyphs.        |
-| **Sawala Mono NF**    | *Nerd Font* patched variant featuring full Powerline and developer icons.         | Terminal emulators, Neovim, Tmux, Starship prompt.    |
-| **Sawala Mono NL NF** | *Nerd Font* patched *No Ligatures* variant with Powerline and developer icons.    | Terminals for developers preferring literal symbols.  |
+| Variant                 | Description                                                                                      | Recommended Environments                                         |
+| :---------------------- | :----------------------------------------------------------------------------------------------- | :--------------------------------------------------------------- |
+| **Sawala Mono**         | Standard variant with rich programming ligatures (`=>`, `!==`, `->`, `::`, etc.).                | Modern IDEs (VS Code, JetBrains IntelliJ / WebStorm).            |
+| **Sawala Mono NL**      | *No Ligatures* variant for strict symbolic separation.                                           | Developers preferring literal operator glyphs.                   |
+| **Sawala Ligar Mono**   | Selective-curly (`ss20`-derived) variant with expressive curves and rich programming ligatures.  | Developers & writers preferring warmer, curved diagonals.        |
+| **Sawala Mono NF**      | *Nerd Font* patched variant featuring full Powerline and developer icons.                        | Terminal emulators, Neovim, Tmux, Starship prompt.               |
+| **Sawala Mono NL NF**   | *Nerd Font* patched *No Ligatures* variant with Powerline and developer icons.                   | Terminals for developers preferring literal symbols.             |
+| **Sawala Ligar Mono NF**| *Nerd Font* patched *Sawala Ligar Mono* variant with Powerline and developer icons.              | Terminals & Neovim setups using the selective-curly aesthetic.   |
 
 ---
 
@@ -70,8 +73,10 @@ In modern software development, code is written for people first and compilers s
 1. Download the release `.zip` archive for your preferred variant from the [GitHub Releases](https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases) page:
    - **`SawalaMono-<version>.zip`**: Standard variant with programming ligatures.
    - **`SawalaMonoNL-<version>.zip`**: No Ligatures variant for strict symbol separation.
+   - **`SawalaLigarMono-<version>.zip`**: Selective-curly variant with programming ligatures.
    - **`SawalaMono-NF-<version>.zip`**: Nerd Font patched variant (with ligatures).
    - **`SawalaMonoNL-NF-<version>.zip`**: Nerd Font patched No Ligatures variant.
+   - **`SawalaLigarMono-NF-<version>.zip`**: Nerd Font patched selective-curly variant (with ligatures).
 2. Extract the downloaded archive.
 3. Install the font files:
    - **Windows:** Select all `.ttf` files $\to$ right-click $\to$ select **"Install for all users"** (recommended on Windows 10/11 to avoid per-user permission issues in Java runtimes and JetBrains IDEs).
@@ -183,7 +188,7 @@ Add to your `settings.json` under `profiles.defaults`:
 ```
 
 > [!TIP]
-> When using the Nerd Font patched variants in terminal emulators or Neovim, configure the font family as `'Sawala Mono NF'` (or `'Sawala Mono NL NF'` for the No Ligatures version).
+> When using the Nerd Font patched variants in terminal emulators or Neovim, configure the font family as `'Sawala Mono NF'` (`'Sawala Ligar Mono NF'` for the selective-curly variant, or `'Sawala Mono NL NF'` for the No Ligatures version).
 
 ---
 
@@ -218,7 +223,7 @@ You can build Sawala Mono entirely in the cloud with zero local toolchain setup 
    - In the left sidebar, select **Build Sawala Mono Font**.
    - Click the **Run workflow** dropdown button on the right:
      - **Branch**: Select your working branch (e.g. `main` or `dev`).
-     - **Variant to build (`variant`)**: Choose `all` (default, compiles both `SawalaMono` and `SawalaMonoNL`), `SawalaMono` (standard with ligatures), or `SawalaMonoNL` (no ligatures).
+     - **Variant to build (`variant`)**: Choose `all` (default, compiles `SawalaMono`, `SawalaMonoNL`, and `SawalaLigarMono`), `SawalaMono` (standard with ligatures), `SawalaMonoNL` (no ligatures), or `SawalaLigarMono` (selective-curly with ligatures).
      - **Format output (`format`)**: Choose `ttf` (default), `woff2`, or `contents`.
      - **Publish as a GitHub Release? (`create_release`)**: `true` (default) or `false`. *(Required if you plan to run Method B for Nerd Font patching).*
      - **Release version tag (`version`)**: Enter a custom version tag (e.g. `v1.0.0`) or leave empty for an automatic timestamp tag (`vYYYY.MM.DD-HHMMSS`).
@@ -227,9 +232,9 @@ You can build Sawala Mono entirely in the cloud with zero local toolchain setup 
 5. **Download Your Compiled Fonts:**
    - When the build job completes (~5-10 minutes depending on runner queue), open the run summary.
    - Scroll down to the **Artifacts** section to download the generated `Sawala-Mono-Packages.zip`.
-   - If release publishing was enabled (`create_release: true`), the packaged font archives (`SawalaMono-<version>.zip` and `SawalaMonoNL-<version>.zip`) will be published directly to your repository's **Releases** page.
+   - If release publishing was enabled (`create_release: true`), the packaged font archives (`SawalaMono-<version>.zip`, `SawalaMonoNL-<version>.zip`, and `SawalaLigarMono-<version>.zip`) will be published directly to your repository's **Releases** page.
 
-### Method B: Generating Nerd Font (Sawala Mono NF / Sawala Mono NL NF) on Your Fork
+### Method B: Generating Nerd Font (Sawala Mono NF / Sawala Mono NL NF / Sawala Ligar Mono NF) on Your Fork
 
 To patch an existing release with programming and developer glyphs (Powerline, Font Awesome, Octicons, devicons) using the containerized Nerd Font patcher workflow:
 
@@ -244,14 +249,14 @@ To patch an existing release with programming and developer glyphs (Powerline, F
    - In the left sidebar, select **Patch Nerd Font**.
    - Click the **Run workflow** dropdown and configure the parameters:
      - **GitHub Release Tag to patch (`release_tag`)**: Enter the target release tag (default: `latest`, or a specific tag like `v1.0.0`).
-     - **Variant to patch (`variant`)**: Choose `all` (default, patches both variants), `SawalaMono` (with ligatures), or `SawalaMonoNL` (no ligatures).
+     - **Variant to patch (`variant`)**: Choose `all` (default, patches all configured variants), `SawalaMono` (with ligatures), `SawalaMonoNL` (no ligatures), or `SawalaLigarMono` (selective-curly with ligatures).
      - **Nerd Font patch preset (`patch_mode`)**: Choose `complete` (default, ~10,000+ developer and powerline glyphs) or `default` (Powerline core only).
      - **Font scope to patch (`font_scope`)**: Choose `core` (default, 8 Normal coding weights in ~6-8 mins per variant), `extended-core` (8 SemiExtended coding weights in ~6-8 mins per variant), or `all` (all 36 weights per variant).
-     - **Custom font family name override (`custom_name`)**: Optional custom family name override (e.g. `Sawala Mono NF` or `Sawala Mono NL NF`, or leave empty for auto-naming).
+     - **Custom font family name override (`custom_name`)**: Optional custom family name override (e.g. `Sawala Mono NF`, `Sawala Mono NL NF`, or `Sawala Ligar Mono NF`, or leave empty for auto-naming).
    - Click **Run workflow** to initiate the containerized patching pipeline.
 
 3. **Download Patched Fonts:**
-   - Once the patching pipeline finishes, the workflow automatically attaches the per-variant archives (`SawalaMono-NF-<tag>.zip`, `SawalaMonoNL-NF-<tag>.zip`, or `*-Extended-NF-<tag>.zip`) directly to the specified GitHub Release and uploads them to the workflow **Artifacts** (`Sawala-Mono-NF-Packages`).
+   - Once the patching pipeline finishes, the workflow automatically attaches the per-variant archives (`SawalaMono-NF-<tag>.zip`, `SawalaMonoNL-NF-<tag>.zip`, `SawalaLigarMono-NF-<tag>.zip`, or `*-Extended-NF-<tag>.zip`) directly to the specified GitHub Release and uploads them to the workflow **Artifacts** (`Sawala-Mono-NF-Packages`).
 
 ### Method C: Containerized Docker Build (Recommended)
 
@@ -268,11 +273,14 @@ docker run --rm -v "${PWD}:/work" --entrypoint bash iosevka-builder:latest -c "n
 # No Ligatures variant:
 docker run --rm -v "${PWD}:/work" --entrypoint bash iosevka-builder:latest -c "npm ci && npm run build -- ttf::SawalaMonoNL"
 
-# Both variants simultaneously:
-docker run --rm -v "${PWD}:/work" --entrypoint bash iosevka-builder:latest -c "npm ci && npm run build -- ttf::SawalaMono ttf::SawalaMonoNL"
+# Selective-curly variant (with ligatures):
+docker run --rm -v "${PWD}:/work" --entrypoint bash iosevka-builder:latest -c "npm ci && npm run build -- ttf::SawalaLigarMono"
+
+# All variants simultaneously:
+docker run --rm -v "${PWD}:/work" --entrypoint bash iosevka-builder:latest -c "npm ci && npm run build -- ttf::SawalaMono ttf::SawalaMonoNL ttf::SawalaLigarMono"
 ```
 
-Compiled binaries will be generated inside `./dist/SawalaMono/TTF/` and `./dist/SawalaMonoNL/TTF/`.
+Compiled binaries will be generated inside `./dist/SawalaMono/TTF/`, `./dist/SawalaMonoNL/TTF/`, and `./dist/SawalaLigarMono/TTF/`.
 
 ### Method D: Native Local Build
 
@@ -288,8 +296,11 @@ npm run build -- ttf::SawalaMono
 # Compile No Ligatures variant
 npm run build -- ttf::SawalaMonoNL
 
-# Compile both variants simultaneously
-npm run build -- ttf::SawalaMono ttf::SawalaMonoNL
+# Compile selective-curly variant
+npm run build -- ttf::SawalaLigarMono
+
+# Compile all variants simultaneously
+npm run build -- ttf::SawalaMono ttf::SawalaMonoNL ttf::SawalaLigarMono
 ```
 
 ---
