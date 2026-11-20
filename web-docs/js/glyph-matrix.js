@@ -21,7 +21,7 @@ export const GLYPH_CATALOG = Object.freeze([
 		name: "DIGIT ZERO",
 		category: "digits",
 		variantName: "reverse-slashed (upright) · tall-reverse-slashed (italic)",
-		tomlSource: "private-build-plans.toml:37,54",
+		tomlSource: "private-build-plans.toml:37,55",
 		rationale: "Crisp reverse-slashed interior stroke eliminates ambiguity with capital Latin O at 12px."
 	},
 	{
@@ -382,8 +382,8 @@ export const GLYPH_CATALOG = Object.freeze([
 		unicodeHex: "U+0079",
 		name: "LATIN SMALL LETTER Y",
 		category: "latin",
-		variantName: "straight-turn-serifless",
-		tomlSource: "private-build-plans.toml:36",
+		variantName: "straight-turn-serifless (upright) · cursive-serifless (italic)",
+		tomlSource: "private-build-plans.toml:36,54",
 		rationale: "Straight-turn descender tail avoids collision with adjacent baseline punctuation."
 	},
 	{

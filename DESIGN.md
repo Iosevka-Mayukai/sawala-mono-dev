@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Linear-Sawala-Mono-Design
-description: "A near-black product-focused documentation canvas built around Linear's design system (#010102 canvas, four-step surface ladder, hairline borders, and signature lavender-blue accent #5e6ad2), tailored for Iosevka Sawala Mono font specimen, interactive ligature playground, and technical documentation across all four distributions (Sawala Mono, Sawala Mono NL, Sawala Mono NF, Sawala Mono NL NF). Monospace tokens and code contexts strictly dogfood Sawala Mono with full OpenType ligature support."
+description: "A near-black product-focused documentation canvas built around Linear's design system (#010102 canvas, four-step surface ladder, hairline borders, and signature lavender-blue accent #5e6ad2), tailored for Iosevka Sawala Mono font specimen, interactive ligature playground, and technical documentation across all six distributions (Sawala Mono, Sawala Mono NL, Sawala Ligar Mono, Sawala Mono NF, Sawala Mono NL NF, Sawala Ligar Mono NF). Monospace tokens and code contexts strictly dogfood Sawala Mono and Sawala Ligar Mono with full OpenType ligature support."
 
 colors:
   primary: "#5e6ad2"
@@ -110,7 +110,7 @@ typography:
     lineHeight: 1.30
     letterSpacing: 0.4px
   mono:
-    fontFamily: "Sawala Mono, Sawala Mono NL, Iosevka Sawala Mono, ui-monospace, SF Mono, Menlo, monospace"
+    fontFamily: "Sawala Mono, Sawala Mono NL, Sawala Ligar Mono, Iosevka Sawala Mono, Iosevka Sawala Ligar Mono, ui-monospace, SF Mono, Menlo, Consolas, monospace"
     fontSize: 14px
     fontWeight: 400
     lineHeight: 1.65
@@ -411,11 +411,13 @@ Linear's custom sans is proprietary; **Inter** at weights 500 / 600 / 700 or **G
 
 - Max content width sits around 1280px.
 - Card grids are 3-up at desktop, 2-up at tablet, 1-up at mobile.
-- Distribution tier grid is structured as 4-up at desktop-xl (or 2×2 at desktop/tablet, 1-up at mobile), encompassing all four compiled targets:
+- Distribution tier grid is structured as 3-up (`3×2`) at desktop (`> 1200px`), 2-up (`2×3`) at tablet (`<= 1200px`), and 1-up (`1×6`) at mobile (`<= 768px`), encompassing all six compiled targets:
   1. **`Sawala Mono`** (Standard with tailored ligatures)
   2. **`Sawala Mono NL`** (No Ligatures for symbolic separation)
-  3. **`Sawala Mono NF`** (Nerd Font patched with ligatures)
-  4. **`Sawala Mono NL NF`** (Nerd Font patched without ligatures)
+  3. **`Sawala Ligar Mono`** (Selective-curly ergonomic variant with tailored ligatures)
+  4. **`Sawala Mono NF`** (Nerd Font patched with ligatures)
+  5. **`Sawala Mono NL NF`** (Nerd Font patched without ligatures)
+  6. **`Sawala Ligar Mono NF`** (Selective-curly Nerd Font patched with ligatures)
 - Specimen & playground panels span full content width — they are the protagonists.
 
 ### Whitespace Philosophy
@@ -491,19 +493,21 @@ Linear's depth is carried by the surface ladder + hairline borders. The brand re
 
 ### Distribution & Variant Tabs
 
-**`variant-switcher-tab`** (aliases `pricing-tab-selected` / `pricing-tab-default`) — Pill-toggle for switching distributions across all 4 release targets (`Sawala Mono`, `Sawala Mono NL`, `Sawala Mono NF`, `Sawala Mono NL NF`).
+**`variant-switcher-tab`** (aliases `pricing-tab-selected` / `pricing-tab-default`) — Pill-toggle for switching distributions across all 6 release targets (`Sawala Mono`, `Sawala Mono NL`, `Sawala Ligar Mono`, `Sawala Mono NF`, `Sawala Mono NL NF`, `Sawala Ligar Mono NF`).
 
 - Default: `{colors.canvas}` background, `{colors.ink-subtle}` text, rounded `{rounded.pill}`, padding 6px 14px.
 - Selected: `{colors.surface-2}` background, `{colors.ink}` text — selected = surface lift.
 
 ### Cards & Containers
 
-**`distribution-card`** (aliases `pricing-card`) — Distribution showcase card for the 4 compiled release targets. Each card details features, recommended usage, target archive filename, and quick-download actions:
+**`distribution-card`** (aliases `pricing-card`) — Distribution showcase card for the 6 compiled release targets. Each card details features, recommended usage, target archive filename, and quick-download actions:
 
 - **`Sawala Mono`** — Base variant with rich programming ligatures (`=>`, `!==`, `->`). Archive: `SawalaMono-${SUFFIX}.zip`.
 - **`Sawala Mono NL`** — *No Ligatures* variant for strict symbolic separation. Archive: `SawalaMonoNL-${SUFFIX}.zip`.
+- **`Sawala Ligar Mono`** — Selective-curly ergonomic variant with rich programming ligatures (`=>`, `!==`, `->`). Archive: `SawalaLigarMono-${SUFFIX}.zip`.
 - **`Sawala Mono NF`** — *Nerd Font* patched variant with ligatures + Powerline/developer icons. Archive: `SawalaMono-NF-${TARGET_TAG}.zip` (or `SawalaMono-Extended-NF-${TARGET_TAG}.zip` for SemiExtended width).
 - **`Sawala Mono NL NF`** — *Nerd Font* patched variant without ligatures + Powerline/developer icons. Archive: `SawalaMonoNL-NF-${TARGET_TAG}.zip` (or `SawalaMonoNL-Extended-NF-${TARGET_TAG}.zip` for SemiExtended width).
+- **`Sawala Ligar Mono NF`** — Selective-curly *Nerd Font* patched variant with ligatures + Powerline/developer icons. Archive: `SawalaLigarMono-NF-${TARGET_TAG}.zip` (or `SawalaLigarMono-Extended-NF-${TARGET_TAG}.zip` for SemiExtended width).
 - Card styling: Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.lg}`, padding 24px. 1px `{colors.hairline}` border.
 
 **`distribution-card-featured`** (aliases `pricing-card-featured`) — Highlighted distribution card (e.g. `Sawala Mono` as the flagship standard, or `Sawala Mono NF` for terminal users) — surface lift to surface-2 (`{colors.surface-2}` background, 1px `{colors.hairline-strong}` border).
@@ -556,13 +560,16 @@ Linear's depth is carried by the surface ladder + hairline borders. The brand re
 **Release Archive Naming Convention (CI/CD Ground Truth):**
 
 - Standard Builds ([`.github/workflows/build.yml`](file:///.github/workflows/build.yml) / artifact `Sawala-Mono-Packages`):
-  - `SawalaMono-${SUFFIX}.zip` (e.g., `SawalaMono-v1.0.0.zip` or `SawalaMono-20261111.zip`)
-  - `SawalaMonoNL-${SUFFIX}.zip` (e.g., `SawalaMonoNL-v1.0.0.zip` or `SawalaMonoNL-20261111.zip`)
+  - `SawalaMono-${SUFFIX}.zip` (e.g., `SawalaMono-v1.1.0.zip` or `SawalaMono-20261119.zip`)
+  - `SawalaMonoNL-${SUFFIX}.zip` (e.g., `SawalaMonoNL-v1.1.0.zip` or `SawalaMonoNL-20261119.zip`)
+  - `SawalaLigarMono-${SUFFIX}.zip` (e.g., `SawalaLigarMono-v1.1.0.zip` or `SawalaLigarMono-20261119.zip`)
 - Nerd Font Patched Builds ([`.github/workflows/patch-nerd-font.yml`](file:///.github/workflows/patch-nerd-font.yml) / artifact `Sawala-Mono-NF-Packages`):
   - `SawalaMono-NF-${TARGET_TAG}.zip` (Core Normal width)
   - `SawalaMonoNL-NF-${TARGET_TAG}.zip` (Core Normal width, No Ligatures)
+  - `SawalaLigarMono-NF-${TARGET_TAG}.zip` (Core Normal width, Selective-curly)
   - `SawalaMono-Extended-NF-${TARGET_TAG}.zip` (Extended-Core SemiExtended width)
   - `SawalaMonoNL-Extended-NF-${TARGET_TAG}.zip` (Extended-Core SemiExtended width, No Ligatures)
+  - `SawalaLigarMono-Extended-NF-${TARGET_TAG}.zip` (Extended-Core SemiExtended width, Selective-curly)
 
 ### Navigation & Footer
 

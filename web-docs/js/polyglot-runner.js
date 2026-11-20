@@ -1,8 +1,30 @@
 /**
  * Iosevka Sawala Mono — Polyglot Code Specimen Runner Controller
- * Manages the 5-language interactive code specimen in the Hero section (REQ-002, AC-004).
+ * Manages the 5-language interactive code specimen and 3-way font variant selector
+ * (Standard, Ligar, NL) in the Hero section (REQ-002, REQ-003, AC-003, AC-004).
  * Languages: TypeScript, Rust, Go, Python, Lua.
  */
+
+export const POLYGLOT_VARIANTS = Object.freeze({
+	standard: Object.freeze({
+		id: "standard",
+		label: "Standard",
+		ligatureMode: "standard",
+		statusText: "Sawala Mono · calt: 1"
+	}),
+	ligar: Object.freeze({
+		id: "ligar",
+		label: "Ligar",
+		ligatureMode: "standard",
+		statusText: "Sawala Ligar Mono · calt: 1"
+	}),
+	nl: Object.freeze({
+		id: "nl",
+		label: "NL",
+		ligatureMode: "nl",
+		statusText: "Sawala Mono NL · calt: 0"
+	})
+});
 
 export const POLYGLOT_SNIPPETS = Object.freeze({
 	typescript: {
@@ -128,12 +150,14 @@ export function buildLineNumbersMarkup(code) {
  * @returns {boolean}
  */
 export function selectLanguage(langKey, root = document) {
-	const snippet = POLYGLOT_SNIPPETS[langKey] || POLYGLOT_SNIPPETS.typescript;
+	const snippet = Object.hasOwn(POLYGLOT_SNIPPETS, langKey)
+		? POLYGLOT_SNIPPETS[langKey]
+		: POLYGLOT_SNIPPETS.typescript;
 	const codeEl = root.querySelector("#polyglot-code");
 	const gutterEl = root.querySelector("#polyglot-line-numbers");
 	const filenameEl = root.querySelector("#polyglot-filename");
 	const highlightsEl = root.querySelector("#polyglot-highlights");
-	const panelEl = root.querySelector("#polyglot-tabpanel");
+	const panelEl = root.querySelector("#polyglot-viewport");
 	const tabButtons = root.querySelectorAll("[data-polyglot-tab]");
 
 	if (!codeEl) {
@@ -261,14 +285,45 @@ export async function copyTextWithFallback(text, targetEl = null) {
 }
 
 /**
+ * Switches the active Polyglot Runner font family while keeping data-ligatures strictly binary ("standard" | "nl").
+ * @param {string|null|undefined} variant
+ * @param {Document|HTMLElement} [root=document]
+ * @returns {"standard"|"ligar"|"nl"}
+ */
+export function selectPolyglotVariant(variant, root = document) {
+	const meta = Object.hasOwn(POLYGLOT_VARIANTS, variant)
+		? POLYGLOT_VARIANTS[variant]
+		: POLYGLOT_VARIANTS.standard;
+	const variantBtns = root.querySelectorAll("[data-polyglot-variant]");
+	const viewportEl = root.querySelector("#polyglot-viewport");
+	const statusEl = root.querySelector("#polyglot-variant-status");
+
+	variantBtns.forEach(btn => {
+		const isSelected = btn.getAttribute("data-polyglot-variant") === meta.id;
+		btn.classList.toggle("is-selected", isSelected);
+		btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+	});
+
+	if (viewportEl) {
+		viewportEl.setAttribute("data-font-variant", meta.id);
+		viewportEl.setAttribute("data-ligatures", meta.ligatureMode);
+	}
+
+	if (statusEl) {
+		statusEl.textContent = meta.statusText;
+	}
+
+	return meta.id;
+}
+
+/**
  * Initializes the Polyglot Code Specimen Runner event listeners and default state.
  * @param {Document|HTMLElement} [root=document]
  */
 export function initPolyglotRunner(root = document) {
 	const tablist = root.querySelector("#polyglot-tablist");
 	const tabs = Array.from(root.querySelectorAll("[data-polyglot-tab]"));
-	const caltToggleBtn = root.querySelector("#polyglot-calt-toggle");
-	const viewportEl = root.querySelector("#polyglot-viewport");
+	const variantButtons = Array.from(root.querySelectorAll("[data-polyglot-variant]"));
 	const copyBtn = root.querySelector("#polyglot-copy-btn");
 	const copyLabelEl = root.querySelector("#polyglot-copy-label");
 
@@ -308,18 +363,12 @@ export function initPolyglotRunner(root = document) {
 		});
 	});
 
-	if (caltToggleBtn && viewportEl) {
-		caltToggleBtn.addEventListener("click", () => {
-			const isCurrentlyEnabled = caltToggleBtn.getAttribute("aria-pressed") !== "false";
-			const nextEnabled = !isCurrentlyEnabled;
-			caltToggleBtn.setAttribute("aria-pressed", nextEnabled ? "true" : "false");
-			viewportEl.setAttribute("data-ligatures", nextEnabled ? "standard" : "nl");
-			const statusText = caltToggleBtn.querySelector("[data-calt-text]");
-			if (statusText) {
-				statusText.textContent = nextEnabled ? "Sawala Mono · calt: 1" : "Sawala Mono NL · calt: 0";
-			}
+	variantButtons.forEach(btn => {
+		btn.addEventListener("click", () => {
+			const nextVariant = btn.getAttribute("data-polyglot-variant");
+			selectPolyglotVariant(nextVariant, root);
 		});
-	}
+	});
 
 	if (copyBtn) {
 		let resetTimerId = null;
@@ -347,6 +396,7 @@ export function initPolyglotRunner(root = document) {
 	}
 
 	selectLanguage("typescript", root);
+	selectPolyglotVariant("standard", root);
 }
 
 if (typeof document !== "undefined") {

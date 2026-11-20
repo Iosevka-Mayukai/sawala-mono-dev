@@ -1,6 +1,6 @@
 /**
  * Iosevka Sawala Mono — Webfont @font-face Declarations, Typographic Scale & Core Shell
- * Binds the 5 verified Tier A WOFF2 files in web-docs/fonts/sawala-mono/ (CON-003, CON-004)
+ * Binds the 7 verified Tier A WOFF2 files in web-docs/fonts/sawala-mono/ (CON-003, CON-004)
  * and implements DESIGN.md typography & Phase 1 component surfaces (CON-002).
  */
 
@@ -46,6 +46,22 @@
 	font-weight: 400;
 	font-display: swap;
 	src: url("../fonts/sawala-mono/SawalaMonoNL-Regular.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Sawala Ligar Mono";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("../fonts/sawala-mono/SawalaLigarMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Sawala Ligar Mono";
+	font-style: italic;
+	font-weight: 400;
+	font-display: swap;
+	src: url("../fonts/sawala-mono/SawalaLigarMono-Italic.woff2") format("woff2");
 }
 
 /* ==========================================================================
@@ -604,33 +620,21 @@
 	padding: 4px 10px;
 }
 
-.polyglot-runner__calt-toggle {
+.polyglot-runner__variants {
 	display: inline-flex;
+	flex-wrap: wrap;
 	align-items: center;
-	gap: 6px;
+	gap: var(--space-xxs);
+}
+
+.polyglot-runner__variants .variant-switcher-tab {
+	font-size: 12px;
+	padding: 5px 11px;
+}
+
+.polyglot-runner__variant-status {
 	font-family: var(--font-mono);
 	font-size: 12px;
-	color: var(--ink-muted);
-	background-color: var(--surface-2);
-	border: 1px solid var(--hairline);
-	border-radius: var(--radius-sm);
-	padding: 4px 10px;
-	min-height: 32px;
-	transition:
-		border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1),
-		color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.polyglot-runner__calt-toggle:hover {
-	border-color: var(--hairline-strong);
-	color: var(--ink);
-}
-
-.polyglot-runner__calt-toggle[aria-pressed="true"] .calt-indicator {
-	color: var(--semantic-success);
-}
-
-.polyglot-runner__calt-toggle[aria-pressed="false"] .calt-indicator {
 	color: var(--ink-subtle);
 }
 
@@ -678,6 +682,13 @@
 	font-family: var(--font-mono-nl);
 	font-variant-ligatures: none;
 	font-feature-settings: "calt" 0, "liga" 0;
+}
+
+.polyglot-runner__viewport[data-font-variant="ligar"] code,
+.polyglot-runner__viewport[data-font-variant="ligar"] pre {
+	font-family: var(--font-mono-ligar);
+	font-variant-ligatures: normal;
+	font-feature-settings: "calt" 1, "liga" 1;
 }
 
 .polyglot-runner__gutter {
@@ -893,7 +904,6 @@
 
 	.variant-switcher-tab,
 	.polyglot-runner__tab,
-	.polyglot-runner__calt-toggle,
 	.polyglot-runner__copy-btn,
 	.button-primary,
 	.button-secondary {

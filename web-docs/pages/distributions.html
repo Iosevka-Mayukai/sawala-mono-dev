@@ -7,7 +7,7 @@
 	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; font-src 'self'; script-src 'self'; img-src 'self' data: https://img.shields.io; connect-src 'self' https://api.github.com;">
 	<meta name="referrer" content="strict-origin-when-cross-origin">
 	<title>Choosing the Right Sawala Mono Variant — Sawala Mono</title>
-	<meta name="description" content="Technical comparison of the four Sawala Mono distributions (Standard, NL, NF, NL NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
+	<meta name="description" content="Technical comparison of all six Sawala Mono distributions (Sawala Mono, Sawala Mono NL, Sawala Ligar Mono, Sawala Mono NF, Sawala Mono NL NF, and Sawala Ligar Mono NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
 	<link rel="canonical" href="https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/distributions.html">
 	<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 	<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
@@ -19,12 +19,12 @@
 	<meta property="og:site_name" content="Sawala Mono">
 	<meta property="og:url" content="https://iosevka-mayukai.github.io/sawala-mono-dev/web-docs/pages/distributions.html">
 	<meta property="og:title" content="Choosing the Right Sawala Mono Variant — Sawala Mono">
-	<meta property="og:description" content="Technical comparison of the four Sawala Mono distributions (Standard, NL, NF, NL NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
+	<meta property="og:description" content="Technical comparison of all six Sawala Mono distributions (Sawala Mono, Sawala Mono NL, Sawala Ligar Mono, Sawala Mono NF, Sawala Mono NL NF, and Sawala Ligar Mono NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
 	<meta property="og:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
 	<meta property="og:image:alt" content="Sawala Mono coding typeface specimen on a near-black canvas">
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="Choosing the Right Sawala Mono Variant — Sawala Mono">
-	<meta name="twitter:description" content="Technical comparison of the four Sawala Mono distributions (Standard, NL, NF, NL NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
+	<meta name="twitter:description" content="Technical comparison of all six Sawala Mono distributions (Sawala Mono, Sawala Mono NL, Sawala Ligar Mono, Sawala Mono NF, Sawala Mono NL NF, and Sawala Ligar Mono NF): ligation tables, Nerd Font icon coverage, metrics, weights, widths, and release archive names.">
 	<meta name="twitter:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
 
 	<!-- Tier A Webfont Preload (CON-004) -->
@@ -88,9 +88,9 @@
 				</nav>
 				<span class="type-eyebrow">PACKAGING &amp; RELEASES</span>
 				<h1 id="doc-title" class="type-display-lg doc-hero__title">Choosing the Right Sawala Mono Variant</h1>
-				<p class="type-body-lg doc-hero__lead">Detailed technical breakdown of ligation tables, icon coverage, weights, widths, and release archives. All four distributions share one parametric core, so you can mix a ligature IDE font with an icon-rich terminal font without any metric mismatch.</p>
+				<p class="type-body-lg doc-hero__lead">Detailed technical breakdown of ligation tables, icon coverage, weights, widths, and release archives. All six distributions share one parametric core, so you can mix a ligature IDE font with an icon-rich terminal font without any metric mismatch.</p>
 				<div class="doc-hero__meta">
-					<span class="status-badge">4 distributions</span>
+					<span class="status-badge">6 distributions</span>
 					<span class="status-badge">9 weights × 2 widths × 2 slopes</span>
 					<span class="status-badge">SIL OFL 1.1</span>
 				</div>
@@ -109,14 +109,16 @@
 
 				<div class="doc-table-wrap">
 					<table class="doc-table">
-						<caption>Sawala Mono distribution comparison (Standard &amp; Nerd Font patched builds)</caption>
+						<caption>Sawala Mono 6-distribution comparison (Standard, Sawala Ligar Mono &amp; Nerd Font patched builds)</caption>
 						<thead>
 							<tr>
 								<th scope="col">Feature / Spec</th>
 								<th scope="col">Sawala Mono</th>
 								<th scope="col">Sawala Mono NL</th>
+								<th scope="col">Sawala Ligar Mono</th>
 								<th scope="col">Sawala Mono NF</th>
 								<th scope="col">Sawala Mono NL NF</th>
+								<th scope="col">Sawala Ligar Mono NF</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -124,26 +126,34 @@
 								<th scope="row">Primary Use Case</th>
 								<td class="doc-table__featured">Modern IDEs (VS Code, JetBrains)</td>
 								<td>Strict literal coding</td>
+								<td>Selective-curly IDEs (VS Code, JetBrains)</td>
 								<td>Terminal, Neovim, Tmux</td>
 								<td>Terminals without ligatures</td>
+								<td>Selective-curly Terminals, Neovim, Tmux</td>
 							</tr>
 							<tr>
 								<th scope="row">Programming Ligatures</th>
 								<td class="doc-table__featured"><span class="doc-tag doc-tag--yes">Yes · ~50+ calt</span></td>
 								<td><span class="doc-tag">No · noLigation</span></td>
 								<td><span class="doc-tag doc-tag--yes">Yes · ~50+ calt</span></td>
+								<td><span class="doc-tag doc-tag--yes">Yes · ~50+ calt</span></td>
 								<td><span class="doc-tag">No · noLigation</span></td>
+								<td><span class="doc-tag doc-tag--yes">Yes · ~50+ calt</span></td>
 							</tr>
 							<tr>
 								<th scope="row">Nerd Font Icons</th>
 								<td class="doc-table__featured"><span class="doc-tag">No · clean Unicode</span></td>
 								<td><span class="doc-tag">No · clean Unicode</span></td>
+								<td><span class="doc-tag">No · clean Unicode</span></td>
+								<td><span class="doc-tag doc-tag--yes">Yes · 10,000+ glyphs</span></td>
 								<td><span class="doc-tag doc-tag--yes">Yes · 10,000+ glyphs</span></td>
 								<td><span class="doc-tag doc-tag--yes">Yes · 10,000+ glyphs</span></td>
 							</tr>
 							<tr>
 								<th scope="row">Metrics</th>
 								<td class="doc-table__featured">Width 500 · x-H 520 · Cap 735</td>
+								<td>Width 500 · x-H 520 · Cap 735</td>
+								<td>Width 500 · x-H 520 · Cap 735</td>
 								<td>Width 500 · x-H 520 · Cap 735</td>
 								<td>Width 500 · x-H 520 · Cap 735</td>
 								<td>Width 500 · x-H 520 · Cap 735</td>
@@ -154,18 +164,24 @@
 								<td>9.4°</td>
 								<td>9.4°</td>
 								<td>9.4°</td>
+								<td>9.4°</td>
+								<td>9.4°</td>
 							</tr>
 							<tr>
 								<th scope="row">Install Family Name</th>
 								<td class="doc-table__featured"><code>Sawala Mono</code></td>
 								<td><code>Sawala Mono NL</code></td>
+								<td><code>Sawala Ligar Mono</code></td>
 								<td><code>Sawala Mono NF</code></td>
 								<td><code>Sawala Mono NL NF</code></td>
+								<td><code>Sawala Ligar Mono NF</code></td>
 							</tr>
 							<tr>
 								<th scope="row">Recommended Apps</th>
 								<td class="doc-table__featured">VS Code, IntelliJ, WebStorm, Zed</td>
 								<td>Any editor or terminal</td>
+								<td>VS Code, IntelliJ, WebStorm, Zed</td>
+								<td>Kitty, WezTerm, Alacritty, Windows Terminal</td>
 								<td>Kitty, WezTerm, Alacritty, Windows Terminal</td>
 								<td>Kitty, WezTerm, Alacritty, Windows Terminal</td>
 							</tr>
@@ -173,15 +189,19 @@
 								<th scope="row">Normal Archive (500)</th>
 								<td class="doc-table__featured"><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMono-*.zip</a></td>
 								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMonoNL-*.zip</a></td>
+								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaLigarMono-*.zip</a></td>
 								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMono-NF-*.zip</a></td>
 								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMonoNL-NF-*.zip</a></td>
+								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaLigarMono-NF-*.zip</a></td>
 							</tr>
 							<tr>
 								<th scope="row">SemiExtended Archive (548)</th>
 								<td class="doc-table__featured">Bundled in standard ZIP</td>
 								<td>Bundled in standard ZIP</td>
+								<td>Bundled in standard ZIP</td>
 								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMono-Extended-NF-*.zip</a></td>
 								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaMonoNL-Extended-NF-*.zip</a></td>
+								<td><a href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases" class="doc-table__mono" target="_blank" rel="noopener noreferrer">SawalaLigarMono-Extended-NF-*.zip</a></td>
 							</tr>
 						</tbody>
 					</table>
@@ -194,8 +214,8 @@
 				<div class="doc-section__header">
 					<h2 id="weights-title" class="type-headline doc-section__title">Weight Ladder</h2>
 					<p class="type-body doc-section__desc">
-						Every desktop archive ships nine weights in upright and 9.4° italic. This documentation site bundles five
-						full-repertoire Tier A webfonts (400, 400 italic, 600, 700, NL 400) for complete glyph and ligature fidelity;
+						Every desktop archive ships nine weights in upright and 9.4° italic. This documentation site bundles seven
+						full-repertoire Tier A webfonts (Sawala Mono 400, 400 italic, 600, 700, Sawala Mono NL 400, and Sawala Ligar Mono 400, 400 italic) for complete glyph and ligature fidelity;
 						additional weights below preview via browser synthesis.
 					</p>
 				</div>

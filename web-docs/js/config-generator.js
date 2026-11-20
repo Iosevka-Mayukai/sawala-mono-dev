@@ -131,6 +131,10 @@ export const CONFIG_FONT_FAMILIES = Object.freeze({
 		familyName: "Sawala Mono NL",
 		ligaturesEnabled: false
 	},
+	"sawala-ligar-mono": {
+		familyName: "Sawala Ligar Mono",
+		ligaturesEnabled: true
+	},
 	"sawala-mono-nf": {
 		familyName: "Sawala Mono NF",
 		ligaturesEnabled: true
@@ -138,6 +142,10 @@ export const CONFIG_FONT_FAMILIES = Object.freeze({
 	"sawala-mono-nl-nf": {
 		familyName: "Sawala Mono NL NF",
 		ligaturesEnabled: false
+	},
+	"sawala-ligar-mono-nf": {
+		familyName: "Sawala Ligar Mono NF",
+		ligaturesEnabled: true
 	}
 });
 
@@ -148,14 +156,18 @@ export const CONFIG_FONT_FAMILIES = Object.freeze({
  * @returns {{ snippet: object, formattedContent: string, familyMeta: object }}
  */
 export function formatEditorConfig(editorId, familyVariantKey = "sawala-mono") {
-	const snippet = EDITOR_CONFIG_SNIPPETS[editorId] || EDITOR_CONFIG_SNIPPETS.vscode;
-	const familyMeta = CONFIG_FONT_FAMILIES[familyVariantKey] || CONFIG_FONT_FAMILIES["sawala-mono"];
+	const snippet = Object.hasOwn(EDITOR_CONFIG_SNIPPETS, editorId)
+		? EDITOR_CONFIG_SNIPPETS[editorId]
+		: EDITOR_CONFIG_SNIPPETS.vscode;
+	const familyMeta = Object.hasOwn(CONFIG_FONT_FAMILIES, familyVariantKey)
+		? CONFIG_FONT_FAMILIES[familyVariantKey]
+		: CONFIG_FONT_FAMILIES["sawala-mono"];
 
 	let formattedContent = snippet.configContent.replace(/Sawala Mono/g, familyMeta.familyName);
 	if (!familyMeta.ligaturesEnabled) {
 		formattedContent = formattedContent
 			.replace("\"editor.fontLigatures\": true", "\"editor.fontLigatures\": false")
-			.replace("\"Enable_Ligatures\": true", "\"Enable_Ligatures\": false");
+			.replace("Enable ligatures = true", "Enable ligatures = false");
 	}
 
 	return {
