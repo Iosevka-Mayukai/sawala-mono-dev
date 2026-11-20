@@ -21,7 +21,7 @@ export const TERMINAL_PRESETS = Object.freeze({
 		directory: "src/session.ts",
 		gitBranch: "main*",
 		gitDiff: "+14 ~2 -0",
-		runtimeBadge: "v1.0.0 · TS 5.6",
+		runtimeBadge: "v1.1.0 · TS 5.6",
 		duration: "18ms",
 		modeLabel: "NORMAL",
 		cursorPos: "7:24",
@@ -103,7 +103,7 @@ export const TERMINAL_PRESETS = Object.freeze({
 		label: "Tmux + Nerd Font Patcher",
 		windowTitle: "tmux [0:build*] — docker iosevka-builder:latest",
 		directory: "dist/SawalaMono-NF",
-		gitBranch: "v1.0.0",
+		gitBranch: "v1.1.0",
 		gitDiff: "clean",
 		runtimeBadge: "NF Patcher v3.3.0",
 		duration: "1.4s",
@@ -132,11 +132,11 @@ export const TERMINAL_PRESETS = Object.freeze({
 			},
 			{
 				lineNo: 6,
-				html: "<span class=\"term-cm\">[DONE] Packaged archive -&gt; SawalaMono-NF-v1.0.0.zip (0 collisions !== error)</span>"
+				html: "<span class=\"term-cm\">[DONE] Packaged archive -&gt; SawalaMono-NF-v1.1.0.zip (0 collisions !== error)</span>"
 			},
 			{
 				lineNo: 7,
-				html: "<span class=\"term-op\">$</span> <span class=\"term-fn\">sha256sum</span> SawalaMono-NF-v1.0.0.zip <span class=\"term-op\">|&gt;</span> verify-release"
+				html: "<span class=\"term-op\">$</span> <span class=\"term-fn\">sha256sum</span> SawalaMono-NF-v1.1.0.zip <span class=\"term-op\">|&gt;</span> verify-release"
 			}
 		]
 	}
@@ -149,7 +149,9 @@ export const TERMINAL_PRESETS = Object.freeze({
  * @returns {object}
  */
 export function selectTerminalPreset(presetId, root = document) {
-	const preset = TERMINAL_PRESETS[presetId] || TERMINAL_PRESETS.neovim;
+	const preset = Object.hasOwn(TERMINAL_PRESETS, presetId)
+		? TERMINAL_PRESETS[presetId]
+		: TERMINAL_PRESETS.neovim;
 	const tabs = root.querySelectorAll("[data-terminal-preset]");
 	const titleEl = root.querySelector("#terminal-window-title");
 	const dirEl = root.querySelector("#terminal-seg-dir");

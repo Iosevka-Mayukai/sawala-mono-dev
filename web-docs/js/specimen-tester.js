@@ -2,10 +2,31 @@
  * Iosevka Sawala Mono — Live Type Specimen Playground Controller
  * Manages the interactive custom code textarea and reactive controls for Font Size (12–48px),
  * Font Weight (100–900 with Tier A / Tier B handling), Line Height (1.2–2.0),
- * Slope (Upright 0° vs Italic 9.4°), and Variant (Standard vs NL) (REQ-005, AC-008..010).
+ * Slope (Upright 0° vs Italic 9.4°), and Variant (Standard vs Ligar vs NL) (REQ-002, REQ-005, AC-002, AC-008..010).
  */
 
 export const TIER_A_NATIVE_WEIGHTS = Object.freeze(new Set([400, 600, 700]));
+
+export const TIER_A_WEIGHTS_BY_VARIANT = Object.freeze({
+	standard: Object.freeze({
+		upright: new Set([400, 600, 700]),
+		italic: new Set([400])
+	}),
+	nl: Object.freeze({
+		upright: new Set([400]),
+		italic: new Set()
+	}),
+	ligar: Object.freeze({
+		upright: new Set([400]),
+		italic: new Set([400])
+	})
+});
+
+export const SPECIMEN_FAMILY_NAMES = Object.freeze({
+	standard: "Sawala Mono",
+	nl: "Sawala Mono NL",
+	ligar: "Sawala Ligar Mono"
+});
 
 export const WEIGHT_LABELS = Object.freeze({
 	100: "Thin (100)",
@@ -84,6 +105,18 @@ export function normalizeFontWeight(value) {
 }
 
 /**
+ * Normalizes a specimen font variant to the allowed 3-way union ("standard" | "nl" | "ligar").
+ * @param {string|null|undefined} value
+ * @returns {"standard"|"nl"|"ligar"}
+ */
+export function normalizeSpecimenVariant(value) {
+	if (value === "nl" || value === "ligar") {
+		return value;
+	}
+	return "standard";
+}
+
+/**
  * Applies the specimen state to the DOM editor wrapper, textarea, and control indicators.
  * @param {Partial<typeof DEFAULT_SPECIMEN_STATE>} partialState
  * @param {Document|HTMLElement} [root=document]
@@ -95,7 +128,7 @@ export function applySpecimenState(partialState, root = document) {
 		fontWeight: normalizeFontWeight(partialState.fontWeight ?? DEFAULT_SPECIMEN_STATE.fontWeight),
 		lineHeight: clampLineHeight(partialState.lineHeight ?? DEFAULT_SPECIMEN_STATE.lineHeight),
 		slope: partialState.slope === "italic" ? "italic" : "upright",
-		variant: partialState.variant === "nl" ? "nl" : "standard"
+		variant: normalizeSpecimenVariant(partialState.variant ?? DEFAULT_SPECIMEN_STATE.variant)
 	};
 
 	const editorWrapEl = root.querySelector("#specimen-editor-wrap");
@@ -112,7 +145,8 @@ export function applySpecimenState(partialState, root = document) {
 	const summaryEl = root.querySelector("#specimen-status-summary");
 
 	const cssFontStyle = nextState.slope === "italic" ? "italic" : "normal";
-	const isStandardVariant = nextState.variant === "standard";
+	const isLigaturesEnabled = nextState.variant !== "nl";
+	const ligatureMode = isLigaturesEnabled ? "standard" : "nl";
 
 	if (editorWrapEl) {
 		editorWrapEl.style.setProperty("--specimen-font-size", `${nextState.fontSize}px`);
@@ -126,9 +160,10 @@ export function applySpecimenState(partialState, root = document) {
 		textareaEl.style.fontWeight = String(nextState.fontWeight);
 		textareaEl.style.lineHeight = String(nextState.lineHeight);
 		textareaEl.style.fontStyle = cssFontStyle;
-		textareaEl.setAttribute("data-ligature-mode", nextState.variant);
-		textareaEl.style.fontVariantLigatures = isStandardVariant ? "normal" : "none";
-		textareaEl.style.fontFeatureSettings = isStandardVariant
+		textareaEl.setAttribute("data-font-variant", nextState.variant);
+		textareaEl.setAttribute("data-ligature-mode", ligatureMode);
+		textareaEl.style.fontVariantLigatures = isLigaturesEnabled ? "normal" : "none";
+		textareaEl.style.fontFeatureSettings = isLigaturesEnabled
 			? "\"calt\" 1, \"liga\" 1"
 			: "\"calt\" 0, \"liga\" 0";
 		if (!textareaEl.getAttribute("placeholder")) {
@@ -172,14 +207,18 @@ export function applySpecimenState(partialState, root = document) {
 	});
 
 	if (tierBadgeEl) {
-		const isTierA = TIER_A_NATIVE_WEIGHTS.has(nextState.fontWeight);
+		const variantWeights =
+			TIER_A_WEIGHTS_BY_VARIANT[nextState.variant] || TIER_A_WEIGHTS_BY_VARIANT.standard;
+		const slopeWeights = variantWeights[nextState.slope] || variantWeights.upright;
+		const isTierA = slopeWeights.has(nextState.fontWeight);
 		tierBadgeEl.textContent = isTierA
 			? `Tier A Core WOFF2 (${nextState.fontWeight})`
 			: `Tier B Weight (${nextState.fontWeight} · Synthesized from Core)`;
 	}
 
 	if (summaryEl) {
-		const familyName = isStandardVariant ? "Sawala Mono" : "Sawala Mono NL";
+		const familyName =
+			SPECIMEN_FAMILY_NAMES[nextState.variant] || SPECIMEN_FAMILY_NAMES.standard;
 		const slopeLabel = nextState.slope === "italic" ? "Italic 9.4°" : "Upright 0°";
 		summaryEl.textContent = `${familyName} · ${nextState.fontSize}px / ${nextState.lineHeight.toFixed(2)} · Weight ${nextState.fontWeight} · ${slopeLabel}`;
 	}
@@ -254,7 +293,7 @@ export function initSpecimenTester(root = document) {
 		btn.addEventListener("click", () => {
 			const variant = btn.getAttribute("data-specimen-variant");
 			currentState = applySpecimenState(
-				{ ...currentState, variant: variant === "nl" ? "nl" : "standard" },
+				{ ...currentState, variant: normalizeSpecimenVariant(variant) },
 				root
 			);
 		});

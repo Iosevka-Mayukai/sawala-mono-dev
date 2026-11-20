@@ -17,7 +17,7 @@
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="https://iosevka-mayukai.github.io/sawala-mono-dev/">
 	<meta property="og:title" content="Sawala Mono — Code is written for human deliberation">
-	<meta property="og:description" content="Ergonomic coding monospace typeface built on Iosevka with tailored programming ligatures, unambiguous glyphs, and 4 compiled distributions.">
+	<meta property="og:description" content="Ergonomic coding monospace typeface built on Iosevka with tailored programming ligatures, unambiguous glyphs, and 6 compiled distributions.">
 	<meta property="og:image" content="https://iosevka-mayukai.github.io/sawala-mono-dev/sawala-mono-hero-img.jpg">
 	<meta property="og:image:alt" content="Sawala Mono ergonomic coding monospace typeface showcase specimen">
 	<meta name="twitter:card" content="summary_large_image">
@@ -124,7 +124,7 @@
 					<p class="type-body-lg hero-subhead">
 						Derived from the Sundanese word <em>sawala</em> — meaning discussion, deliberation, or intellectual exchange.
 						An ergonomic, high-legibility coding monospace built on Iosevka, tuned for pull request reviews,
-						architectural reasoning, and focused terminal workflows across four distinct distributions.
+						architectural reasoning, and focused terminal workflows across six distinct distributions.
 					</p>
 
 					<div class="hero-actions">
@@ -233,16 +233,37 @@
 
 						<div class="polyglot-runner__meta">
 							<span class="polyglot-runner__filename" id="polyglot-filename">deliberation.ts</span>
-							<button
-								type="button"
-								class="polyglot-runner__calt-toggle"
-								id="polyglot-calt-toggle"
-								aria-pressed="true"
-								title="Toggle OpenType contextual alternates (calt) in this specimen"
+							<div
+								class="polyglot-runner__variants"
+								role="group"
+								aria-label="Polyglot specimen font variant"
 							>
-								<span class="calt-indicator" aria-hidden="true">●</span>
-								<span data-calt-text>Sawala Mono · calt: 1</span>
-							</button>
+								<button
+									type="button"
+									class="variant-switcher-tab is-selected"
+									data-polyglot-variant="standard"
+									aria-pressed="true"
+								>
+									Standard
+								</button>
+								<button
+									type="button"
+									class="variant-switcher-tab"
+									data-polyglot-variant="ligar"
+									aria-pressed="false"
+								>
+									Ligar
+								</button>
+								<button
+									type="button"
+									class="variant-switcher-tab"
+									data-polyglot-variant="nl"
+									aria-pressed="false"
+								>
+									NL
+								</button>
+							</div>
+							<span class="polyglot-runner__variant-status" id="polyglot-variant-status" aria-live="polite">Sawala Mono · calt: 1</span>
 							<button
 								type="button"
 								class="polyglot-runner__copy-btn"
@@ -263,6 +284,7 @@
 						id="polyglot-viewport"
 						role="tabpanel"
 						aria-labelledby="tab-typescript"
+						data-font-variant="standard"
 						data-ligatures="standard"
 					>
 						<div class="polyglot-runner__gutter" id="polyglot-line-numbers" aria-hidden="true">
@@ -803,10 +825,10 @@ const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
 							</div>
 						</div>
 
-						<!-- Variant Toggle (Standard calt vs NL) -->
+						<!-- Variant Toggle (Standard calt vs Ligar vs NL) -->
 						<div class="specimen-control-group">
 							<div class="specimen-control-group__top">
-								<span class="specimen-control-label">Ligation Variant</span>
+								<span class="specimen-control-label">Font Family &amp; Ligation</span>
 							</div>
 							<div class="specimen-pill-row" role="group" aria-label="Specimen font variant toggle">
 								<button
@@ -816,6 +838,14 @@ const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
 									aria-pressed="true"
 								>
 									Sawala Mono (calt)
+								</button>
+								<button
+									type="button"
+									class="variant-switcher-tab"
+									data-specimen-variant="ligar"
+									aria-pressed="false"
+								>
+									Sawala Ligar Mono
 								</button>
 								<button
 									type="button"
@@ -847,6 +877,7 @@ const reviewOutcome = async (pr: PullRequest): Promise&lt;boolean&gt; =&gt; {
 							autocapitalize="off"
 							autocomplete="off"
 							placeholder="The quick brown fox jumps over the lazy dog. 0123456789 =&gt; !== -&gt;"
+							data-font-variant="standard"
 							data-ligature-mode="standard"
 						>// Type anything here to test rendering, ligatures, and weights:
 function calculateHammingDistance(a: string, b: string): number {
@@ -1042,7 +1073,7 @@ function calculateHammingDistance(a: string, b: string): number {
 							</div>
 							<div class="glyph-inspector-field">
 								<span class="glyph-inspector-field__label">Source Declaration</span>
-								<span class="glyph-inspector-field__value" id="glyph-inspector-toml">private-build-plans.toml:37,54</span>
+								<span class="glyph-inspector-field__value" id="glyph-inspector-toml">private-build-plans.toml:37,55</span>
 							</div>
 							<div class="glyph-inspector-field">
 								<span class="glyph-inspector-field__label">Parametric Cell Metrics</span>
@@ -1164,7 +1195,7 @@ function calculateHammingDistance(a: string, b: string): number {
 								</span>
 								<span class="powerline-sep" aria-hidden="true"></span>
 								<span class="powerline-seg">
-									<span id="terminal-seg-runtime">v1.0.0 · TS 5.6</span>
+									<span id="terminal-seg-runtime">v1.1.0 · TS 5.6</span>
 								</span>
 							</div>
 
@@ -1230,7 +1261,7 @@ function calculateHammingDistance(a: string, b: string): number {
 			</div>
 		</section>
 
-		<!-- Section 7: 4-Tier Distribution Matrix (REQ-006, AC-011, AC-012, Wireframe §1.4.1) -->
+		<!-- Section 7: 6-Distribution Matrix (REQ-004, REQ-006, AC-004, AC-011, AC-012) -->
 		<section class="section-block" id="distributions" aria-labelledby="distributions-title">
 			<div class="container">
 				<div class="distributions-toolbar">
@@ -1238,7 +1269,7 @@ function calculateHammingDistance(a: string, b: string): number {
 						<span class="type-eyebrow">PACKAGING &amp; RELEASES</span>
 						<h2 id="distributions-title" class="type-display-md">Choose Your Optimal Distribution</h2>
 						<p class="type-subhead">
-							Four purpose-built packages compiled from the same parametric core so you can pair
+							Six purpose-built packages compiled from the same parametric core so you can pair
 							ligature-enabled IDEs with icon-rich terminal emulators without metric mismatch.
 						</p>
 					</div>
@@ -1263,7 +1294,7 @@ function calculateHammingDistance(a: string, b: string): number {
 					</div>
 				</div>
 
-				<!-- 4-Card Distribution Grid (`distribution-card` & `distribution-card-featured`, DESIGN.md:166, AC-011, AC-012) -->
+				<!-- 6-Card Distribution Grid (`distribution-card` & `distribution-card-featured`, 3x2 desktop) -->
 				<div class="distributions-grid">
 					<!-- Card 1: Sawala Mono (Featured Flagship) -->
 					<article class="distribution-card distribution-card-featured" data-distribution-card="sawala-mono">
@@ -1357,7 +1388,53 @@ function calculateHammingDistance(a: string, b: string): number {
 						</div>
 					</article>
 
-					<!-- Card 3: Sawala Mono NF -->
+					<!-- Card 3: Sawala Ligar Mono -->
+					<article class="distribution-card" data-distribution-card="sawala-ligar-mono">
+						<div class="distribution-card__top">
+							<div class="distribution-card__badge-row">
+								<span class="distribution-card__badge">SELECTIVE-CURLY</span>
+								<span class="type-caption tabular-nums">calt: 1 · ss20</span>
+							</div>
+							<h3 class="distribution-card__title">Sawala Ligar Mono</h3>
+							<div class="distribution-card__subtitle">Curved Diagonals + Ligatures</div>
+							<p class="distribution-card__desc">
+								Derived from <code>ss20</code> with curved diagonals (<code>7</code>, <code>x</code>, <code>z</code>) and cursive italics alongside full programming ligatures.
+							</p>
+							<div class="distribution-card__specimen distribution-card__specimen--ligar">fn(x, z) =&gt; x !== 7 &amp;&amp; z &gt;= 1</div>
+							<div class="distribution-card__specs">
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Ligatures</span>
+									<span class="distribution-card__spec-val">Active (~50+ calt)</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Nerd Font Icons</span>
+									<span class="distribution-card__spec-val">Clean Unicode</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Best For</span>
+									<span class="distribution-card__spec-val">IDEs, Reading &amp; Prose</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Width Scope</span>
+									<span class="distribution-card__spec-val" data-distribution-width-note>Normal Width (500) · Core</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="distribution-card__footer">
+							<a
+								href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases"
+								class="button-secondary distribution-card__cta"
+								data-distribution-download
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<span>Download ZIP</span>
+							</a>
+						</div>
+					</article>
+
+					<!-- Card 4: Sawala Mono NF -->
 					<article class="distribution-card" data-distribution-card="sawala-mono-nf">
 						<div class="distribution-card__top">
 							<div class="distribution-card__badge-row">
@@ -1403,7 +1480,7 @@ function calculateHammingDistance(a: string, b: string): number {
 						</div>
 					</article>
 
-					<!-- Card 4: Sawala Mono NL NF -->
+					<!-- Card 5: Sawala Mono NL NF -->
 					<article class="distribution-card" data-distribution-card="sawala-mono-nl-nf">
 						<div class="distribution-card__top">
 							<div class="distribution-card__badge-row">
@@ -1428,6 +1505,51 @@ function calculateHammingDistance(a: string, b: string): number {
 								<div class="distribution-card__spec-item">
 									<span class="distribution-card__spec-label">Best For</span>
 									<span class="distribution-card__spec-val">Terminals, Pure TUI Shells</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Width Scope</span>
+									<span class="distribution-card__spec-val" data-distribution-width-note>Normal Width (500) · Core</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="distribution-card__footer">
+							<a
+								href="https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases"
+								class="button-secondary distribution-card__cta"
+								data-distribution-download
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<span>Download ZIP</span>
+							</a>
+						</div>
+					</article>
+					<!-- Card 6: Sawala Ligar Mono NF -->
+					<article class="distribution-card" data-distribution-card="sawala-ligar-mono-nf">
+						<div class="distribution-card__top">
+							<div class="distribution-card__badge-row">
+								<span class="distribution-card__badge">NERD FONT + SS20</span>
+								<span class="type-caption tabular-nums">NF + Ligar</span>
+							</div>
+							<h3 class="distribution-card__title">Sawala Ligar Mono NF</h3>
+							<div class="distribution-card__subtitle">Selective-Curly + 10,000+ Icons</div>
+							<p class="distribution-card__desc">
+								Patched with Powerline, Devicons, and Octicons layered over <strong>Sawala Ligar Mono</strong> and full programming ligatures.
+							</p>
+							<div class="distribution-card__specimen distribution-card__specimen--ligar"> main  fn(x) =&gt; z !== 7</div>
+							<div class="distribution-card__specs">
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Ligatures</span>
+									<span class="distribution-card__spec-val">Active (~50+ calt)</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Nerd Font Icons</span>
+									<span class="distribution-card__spec-val">10,000+ Glyphs</span>
+								</div>
+								<div class="distribution-card__spec-item">
+									<span class="distribution-card__spec-label">Best For</span>
+									<span class="distribution-card__spec-val">Neovim, Kitty, WezTerm</span>
 								</div>
 								<div class="distribution-card__spec-item">
 									<span class="distribution-card__spec-label">Width Scope</span>
@@ -1568,8 +1690,10 @@ function calculateHammingDistance(a: string, b: string): number {
 							<select id="config-family-select" class="control-select" aria-label="Target Sawala Mono font family">
 								<option value="sawala-mono" selected>Sawala Mono (Standard)</option>
 								<option value="sawala-mono-nl">Sawala Mono NL (No Ligatures)</option>
+								<option value="sawala-ligar-mono">Sawala Ligar Mono (Selective-Curly)</option>
 								<option value="sawala-mono-nf">Sawala Mono NF (Nerd Font)</option>
 								<option value="sawala-mono-nl-nf">Sawala Mono NL NF (NF + No Lig)</option>
+								<option value="sawala-ligar-mono-nf">Sawala Ligar Mono NF (NF + Selective-Curly)</option>
 							</select>
 						</div>
 					</div>
@@ -1685,7 +1809,7 @@ function calculateHammingDistance(a: string, b: string): number {
 					<li><a href="#specimen" class="site-footer__link">Live Specimen Tester</a></li>
 					<li><a href="#glyphs" class="site-footer__link">Character Inspector</a></li>
 					<li><a href="#terminal" class="site-footer__link">Terminal Mockup</a></li>
-					<li><a href="#distributions" class="site-footer__link">4-Tier Distributions</a></li>
+					<li><a href="#distributions" class="site-footer__link">6 Distributions</a></li>
 					<li><a href="#setup" class="site-footer__link">IDE Config Generator</a></li>
 				</ul>
 			</div>

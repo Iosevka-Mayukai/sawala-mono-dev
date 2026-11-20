@@ -59,6 +59,9 @@
 	--font-mono-nl:
 		"Sawala Mono NL", "Iosevka Sawala Mono NL", ui-monospace, "SF Mono", Menlo, Consolas,
 		monospace;
+	--font-mono-ligar:
+		"Sawala Ligar Mono", "Iosevka Sawala Ligar Mono", ui-monospace, "SF Mono", Menlo,
+		Consolas, monospace;
 
 	/* Radii Scale (DESIGN.md:111-120) */
 	--radius-xs: 4px;

@@ -321,3 +321,35 @@
   - Push and trigger `.github/workflows/build.yml` (`variant: SawalaLigarMono` or `all`) and `.github/workflows/patch-nerd-font.yml` on GitHub Actions to verify runtime `AC-002`–`AC-004`.
 
 <!-- checkpoint-tail: Completed SawalaLigarMono implementation and Iteration 2 review (Verdict: GO, 0 blocking findings); ready for Tier 2 human sign-off, commit, and GitHub Actions CI build/patch verification. -->
+
+
+---
+
+## 📝 Session Checkpoint: 2026-11-19 (Release v1.1.0-release19112026 Published & Release Notes Finalized)
+
+- **Active Memory Path:** `.agents/instructions/memory.instructions.md`
+- **Current SDLC Phase:** Phase 6: Documentation Complete (`/to-docs`) — Release `v1.1.0-release19112026`
+- **Active Artifacts:**
+  - `docs/releases/v1.1.0-release19112026-release-notes.md` — Status: ✅ Finalized (Verified 6/6 download URLs, SHA-256 checksums, and `CONTEXT.md` glossary compliance)
+  - `private-build-plans.toml` — Status: ✅ Updated & Committed (`caa39a8`, `281e2d9`, `c85a7d7`)
+  - `docs/spec/sawala-ligar-mono-spec.md` — Status: ✅ Approved (`v1.1.0`)
+  - `docs/plan/sawala-ligar-mono-plan.md` — Status: ✅ Implemented (`281e2d9`; CI release verified via `v1.1.0-release19112026`)
+  - `docs/reviews/sawala-ligar-mono-review.md` — Status: ✅ Approved (Iteration 2 `GO`)
+- **Achieved Milestones:**
+  - Committed all Wave 1 `SawalaLigarMono` changes (`281e2d9`, `d1dece4`) and refined `[buildPlans.SawalaLigarMono.variants.italic]` in `c85a7d7` (`capital-a = "straight-serifless"`, `m = "earless-rounded-double-arch-serifless"`, `n`/`q = "straight-serifless"`, `p = "eared-serifless"`), following `y = "cursive-serifless"` on `SawalaMono` & `SawalaMonoNL` (`caa39a8`).
+  - Successfully compiled and published all 6 font distribution archives via GitHub Actions under release tag `v1.1.0-release19112026` (`SawalaMono`, `SawalaMonoNL`, `SawalaLigarMono`, `SawalaMono-NF`, `SawalaMonoNL-NF`, `SawalaLigarMono-NF`), validating runtime `AC-002`–`AC-004`.
+  - Authored and verified GitHub Release notes in `docs/releases/v1.1.0-release19112026-release-notes.md` via `/to-docs` with natural English prose, immutable tag-anchored repository links, 6 direct release download links, and verified SHA-256 checksums (`ALL RELEASE NOTES VERIFICATION CHECKS PASSED`).
+- **Dead-Ends (Do NOT Repeat):**
+  - None encountered in this session. *(Tip retained: always inspect `git log` up to `HEAD` before drafting release notes — commit `c85a7d7` refined `SawalaLigarMono` italic glyphs after the initial `v1.1.0` spec was written, and `caa39a8` added italic `y = "cursive-serifless"` to baseline variants).*
+- **Updated Files:**
+  - `docs/releases/v1.1.0-release19112026-release-notes.md` — Created final GitHub Release notes for `v1.1.0-release19112026`
+  - `.agents/instructions/memory.instructions.md` — Appended session checkpoint for 2026-11-19
+- **Decisions Made:**
+  - Used immutable tag URLs (`.../blob/v1.1.0-release19112026/...` and `.../releases/download/v1.1.0-release19112026/...`) in release notes so copy-pasting directly into GitHub Releases produces zero broken relative links.
+  - Documented the 6 published archives in the main distribution table while keeping `extended-core` (`SemiExtended` Nerd Font) noted as an optional fork workflow output.
+- **Next Action / Pending:**
+  - Paste the release notes into `https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases/tag/v1.1.0-release19112026` (if not yet saved on GitHub).
+  - Commit `docs/releases/v1.1.0-release19112026-release-notes.md` and `.agents/instructions/memory.instructions.md`.
+  - Optional Wave 2 follow-up: integrate `Sawala Ligar Mono` / `Sawala Ligar Mono NF` WOFF2 specimens and distribution cards into the live web showcase (`index.html`, `web-docs/`), or run `/to-memory` Compaction Mode when ready (8 session checkpoints now accumulated).
+
+<!-- checkpoint-tail: Published Sawala Mono v1.1.0-release19112026 (all 6 font archives built via GitHub Actions) and finalized verified release notes in docs/releases/v1.1.0-release19112026-release-notes.md; ready to commit docs and plan Wave 2 showcase integration. -->

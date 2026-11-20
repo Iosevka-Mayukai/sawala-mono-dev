@@ -798,6 +798,12 @@
 	font-feature-settings: "calt" 0, "liga" 0;
 }
 
+.specimen-textarea[data-font-variant="ligar"] {
+	font-family: var(--font-mono-ligar);
+	font-variant-ligatures: normal;
+	font-feature-settings: "calt" 1, "liga" 1;
+}
+
 .specimen-textarea::placeholder {
 	color: var(--ink-subtle);
 	opacity: 1;
@@ -1264,7 +1270,7 @@
 }
 
 /* ==========================================================================
-   7. 4-Tier Distribution Matrix (`#distributions`, REQ-006, AC-011, AC-012)
+   7. 6-Distribution Matrix (`#distributions`, REQ-004, AC-004)
    ========================================================================== */
 
 .distributions-toolbar {
@@ -1289,7 +1295,7 @@
 
 .distributions-grid {
 	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-template-columns: repeat(3, minmax(0, 1fr));
 	gap: var(--space-lg);
 	margin-bottom: var(--space-lg);
 }
@@ -1399,6 +1405,12 @@
 	font-family: var(--font-mono-nl);
 	font-variant-ligatures: none;
 	font-feature-settings: "calt" 0, "liga" 0;
+}
+
+.distribution-card__specimen--ligar {
+	font-family: var(--font-mono-ligar);
+	font-variant-ligatures: normal;
+	font-feature-settings: "calt" 1, "liga" 1;
 }
 
 .distribution-card__specs {

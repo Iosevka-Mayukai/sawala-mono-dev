@@ -1,7 +1,7 @@
 /**
- * Iosevka Sawala Mono — 4-Tier Distribution Matrix Controller
+ * Iosevka Sawala Mono — 6-Distribution Matrix Controller
  * Manages release metadata, Normal (500) vs SemiExtended (548) width scopes,
- * and GitHub Releases page links (REQ-006, AC-011, AC-012).
+ * and GitHub Releases page links (REQ-004, REQ-006, AC-004, AC-011, AC-012).
  */
 
 export const RELEASES_PAGE_URL = "https://github.com/Iosevka-Mayukai/sawala-mono-dev/releases";
@@ -42,6 +42,23 @@ export const DISTRIBUTION_TIERS = Object.freeze([
 		specimenPreview: "fn(x) => x !== 0 && x >= 1"
 	},
 	{
+		id: "sawala-ligar-mono",
+		name: "Sawala Ligar Mono",
+		badge: "SELECTIVE-CURLY",
+		subtitle: "Curved Diagonals + Ligatures",
+		description:
+			"Derived from ss20 with curly diagonals (7, x, z) and cursive italics alongside full default-calt programming ligatures.",
+		hasLigatures: true,
+		hasNerdFont: false,
+		recommendedFor: "IDEs & prose favoring warmer, curved letterforms",
+		archiveFilename: "SawalaLigarMono-*.zip",
+		extendedArchiveFilename: "SawalaLigarMono-*.zip",
+		downloadUrl: RELEASES_PAGE_URL,
+		extendedDownloadUrl: RELEASES_PAGE_URL,
+		isFeatured: false,
+		specimenPreview: "fn(x, z) => x !== 7 && z >= 1"
+	},
+	{
 		id: "sawala-mono-nf",
 		name: "Sawala Mono NF",
 		badge: "NERD FONT PATCHED",
@@ -74,6 +91,23 @@ export const DISTRIBUTION_TIERS = Object.freeze([
 		extendedDownloadUrl: RELEASES_PAGE_URL,
 		isFeatured: false,
 		specimenPreview: "\uE0A0 main \uE0B1 = > ! = = - >"
+	},
+	{
+		id: "sawala-ligar-mono-nf",
+		name: "Sawala Ligar Mono NF",
+		badge: "NERD FONT + SS20",
+		subtitle: "Selective-Curly + 10,000+ Icons",
+		description:
+			"Patched via Nerd Fonts with Powerline, Devicons, and Octicons layered over Sawala Ligar Mono and full default-calt ligatures.",
+		hasLigatures: true,
+		hasNerdFont: true,
+		recommendedFor: "Terminals, Neovim & TUI workflows with curved forms",
+		archiveFilename: "SawalaLigarMono-NF-*.zip",
+		extendedArchiveFilename: "SawalaLigarMono-Extended-NF-*.zip",
+		downloadUrl: RELEASES_PAGE_URL,
+		extendedDownloadUrl: RELEASES_PAGE_URL,
+		isFeatured: false,
+		specimenPreview: "\uE0A0 main \uE0B1 fn(x) => z !== 7"
 	}
 ]);
 
@@ -103,7 +137,7 @@ export function resolveDistributionArchive(tierId, widthMode = "normal") {
 }
 
 /**
- * Updates the 4 distribution cards in the DOM when toggling between Normal (500) and SemiExtended (548) width scopes.
+ * Updates the 6 distribution cards in the DOM when toggling between Normal (500) and SemiExtended (548) width scopes.
  * @param {"normal"|"semi-extended"} widthMode
  * @param {Document|HTMLElement} [root=document]
  * @returns {"normal"|"semi-extended"}
@@ -142,7 +176,7 @@ export function setDistributionWidthMode(widthMode, root = document) {
 }
 
 /**
- * Initializes the 4-Tier Distribution Matrix interactive controls (REQ-006, AC-011, AC-012).
+ * Initializes the 6-Distribution Matrix interactive controls (REQ-004, REQ-006, AC-004, AC-011, AC-012).
  * @param {Document|HTMLElement} [root=document]
  */
 export function initDistributionCards(root = document) {
